@@ -37,8 +37,12 @@ contract ConfigurableComplianceService is ComplianceService{
         }
         return true;
     }
-     function checkItem( address to,  string memory item,uint amount) internal view returns(bool){
-        return  checkEqualItem(to, item, amount);
+    function checkItem( address to,  string memory item,uint amount) internal view returns(bool){
+        if(item.indexOf("==") > 0)
+            return  checkEqualItem(to, item, amount);
+         if(item.indexOf("!=") > 0)
+            return  checkNotEqualItem(to, item, amount);
+        return false;
      }
      function checkEqualItem( address to,  string memory item,uint amount) internal view returns(bool){
          string[] memory kv = item.split("==");
@@ -46,6 +50,17 @@ contract ConfigurableComplianceService is ComplianceService{
          string memory value = kv[1];
          bytes32  myvalue = erc780.getClaim(trustedIssuer, to, key.toBytes32());
          if(myvalue == value.toBytes32())
+            return true;
+        return false;
+
+
+     }
+      function checkNotEqualItem( address to,  string memory item,uint amount) internal view returns(bool){
+         string[] memory kv = item.split("!=");
+         string memory key = kv[0];
+         string memory value = kv[1];
+         bytes32  myvalue = erc780.getClaim(trustedIssuer, to, key.toBytes32());
+         if(myvalue != value.toBytes32())
             return true;
         return false;
 
