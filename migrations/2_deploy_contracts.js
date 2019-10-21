@@ -1,9 +1,9 @@
 const ComplianceServiceRegistry = artifacts.require("ComplianceServiceRegistry");
 const TutorialToken = artifacts.require("TutorialToken");
-const ConfiguableComplianceService = artifacts.require("ConfiguableComplianceService");
+const ConfigurableComplianceService = artifacts.require("ConfigurableComplianceService");
 
 module.exports = function(deployer) {
   deployer.deploy(ComplianceServiceRegistry);
-  deployer.deploy(ConfiguableComplianceService);
+  deployer.deploy(ConfigurableComplianceService);
   deployer.deploy(TutorialToken);
 };
