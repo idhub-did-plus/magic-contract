@@ -9,6 +9,7 @@ const mapStateToProps = state => {
     ComplianceConfiguration: state.contracts.ComplianceConfiguration,
     TutorialToken: state.contracts.TutorialToken,
     drizzleStatus: state.drizzleStatus,
+    currentMenu: state.currentMenu,
   };
 };
 
