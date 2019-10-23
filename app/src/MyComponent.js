@@ -11,8 +11,8 @@ export default ({ accounts }) => (
   <div className="App">
     <div>
       <img src={logo} alt="drizzle-logo" />
-      <h1>Drizzle Examples</h1>
-      <p>Examples of how to get started with Drizzle in various situations.</p>
+      <h1>Magic Circle Compliace System</h1>
+      <p>A console for management of compliance system</p>
     </div>
 
     <div className="section">
@@ -21,10 +21,9 @@ export default ({ accounts }) => (
     </div>
 
     <div className="section">
-      <h2>ComplianceServiceRegistry</h2>
+      <h2>Compliance Service Registry</h2>
       <p>
-        This shows a simple ContractData component with no arguments, along with
-        a form to set its value.
+        A  central place for tokens to  appoint their special compliance check logic and if not,  use a default one.
       </p>
       <p>
         <strong>DefaultService: </strong>
@@ -39,20 +38,16 @@ export default ({ accounts }) => (
     <div className="section">
       <h2>ComplianceConfiguration</h2>
       <p>
-        Here we have a form with custom, friendly labels. Also note the token
-        symbol will not display a loading indicator. We've suppressed it with
-        the <code>hideIndicator</code> prop because we know this variable is
-        constant.
+        A place to configure the claim logic for token which use ConfigurableComplianceService
       </p>
-      <p>
+
         <strong>getConfiguration: </strong>
         <ContractForm
           contract="ComplianceConfiguration"
           method="getConfiguration"
           labels={["token address"]}
-        />{" "}
-      
-      </p>
+        />
+    
 
       <h3>Send Tokens</h3>
       <ContractForm
@@ -64,9 +59,7 @@ export default ({ accounts }) => (
     <div className="section">
       <h2>ConfigurableComplianceService</h2>
       <p>
-        Finally this contract shows data types with additional considerations.
-        Note in the code the strings below are converted from bytes to UTF-8
-        strings and the device data struct is iterated as a list.
+        This contract is the current default service of the compliance service registry. 
       </p>
      
     </div>
