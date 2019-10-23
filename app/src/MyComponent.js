@@ -10,7 +10,7 @@ import logo from "./logo.png";
 export default ({ accounts }) => (
   <div className="App">
     <div>
-      <img src={logo} alt="drizzle-logo" />
+      
       <h1>Magic Circle Compliace System</h1>
       <p>A console for management of compliance system</p>
     </div>
@@ -58,6 +58,9 @@ export default ({ accounts }) => (
     </div>
     <div className="section">
       <h2>ConfigurableComplianceService</h2>
+      <p>
+      
+      </p>
       <p>
         This contract is the current default service of the compliance service registry. 
       </p>
