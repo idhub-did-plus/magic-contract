@@ -1,8 +1,7 @@
-import registry from "./contracts/ComplianceServiceRegistry.json";
-import configurable from "./contracts/ConfigurableComplianceService.json";
-import configuration from "./contracts/ComplianceConfiguration.json";
+import ComplianceServiceRegistry from "./contracts/ComplianceServiceRegistry.json";
+import ConfigurableComplianceService from "./contracts/ConfigurableComplianceService.json";
+import ComplianceConfiguration from "./contracts/ComplianceConfiguration.json";
 import TutorialToken from "./contracts/TutorialToken.json";
-
 const options = {
   web3: {
     block: false,
@@ -11,9 +10,9 @@ const options = {
       url: "ws://127.0.0.1:8545",
     },
   },
-  contracts: [registry, configurable, configuration],
+  contracts: [ComplianceServiceRegistry, ConfigurableComplianceService, ComplianceConfiguration, TutorialToken],
   events: {
-    SimpleStorage: ["StorageSet"],
+   
   },
   polls: {
     accounts: 1500,
