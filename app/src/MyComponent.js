@@ -7,81 +7,83 @@ import {
 
 import logo from "./logo.png";
 
-export default ({ accounts }) => (
+export default ({ accounts,currentMenu }) => (
   <div className="App">
+    <ul class="topmenu">
+      <li><a href="#home" class="active">主页</a></li>
+      <li><a href="#news">新闻</a></li>
+      <li><a href="#contact">联系我们</a></li>
+      <li><a href="#about">关于我们</a></li>
+    </ul>
+    <div class="column sidemenu">
+        <ul>
+         
+          <li><a href="#flight">The Flight</a></li>
+          <li><a href="#city" class="active">The City</a></li>
+          <li><a href="#island">The Island</a></li>
+          <li><a href="#food">The Food</a></li>
+          <li><a href="#people">The People</a></li>
+          <li><a href="#history">The History</a></li>
+          <li><a href="#oceans">The Oceans</a></li>
+        </ul>
+    </div>
     <div>
-      <img src={logo} alt="drizzle-logo" />
-      <h1>Drizzle Examples</h1>
-      <p>Examples of how to get started with Drizzle in various situations.</p>
+    <div>
+      
+      <h1>Magic Circle Compliace System</h1>
+      <p>A console for management of compliance system</p>
     </div>
 
     <div className="section">
       <h2>Active Account</h2>
       <AccountData accountIndex={0} units="ether" precision={3} />
     </div>
-
-    <div className="section">
-      <h2>SimpleStorage</h2>
+    <h2>dd{currentMenu}</h2>
+    <div className="section" hidden = {currentMenu != 0}>
+      <h2>Compliance Service Registry</h2>
       <p>
-        This shows a simple ContractData component with no arguments, along with
-        a form to set its value.
+        A  central place for tokens to  appoint their special compliance check logic and if not,  use a default one.
       </p>
       <p>
-        <strong>Stored Value: </strong>
-        <ContractData contract="SimpleStorage" method="storedData" />
+        <strong>DefaultService: </strong>
+        <ContractData contract="ComplianceServiceRegistry" method="getDefaultService"  />
       </p>
-      <ContractForm contract="SimpleStorage" method="set" />
+      <h2>setDefaultService</h2>
+      <ContractForm contract="ComplianceServiceRegistry" method="setDefaultService" labels={["service address"]}  />
+      <h2>register</h2>
+      <ContractForm contract="ComplianceServiceRegistry" method="register" labels={["token address", "compliance service address"]}  />
     </div>
 
-    <div className="section">
-      <h2>TutorialToken</h2>
+    <div className="section" hidden = {currentMenu != 1}>
+      <h2>ComplianceConfiguration</h2>
       <p>
-        Here we have a form with custom, friendly labels. Also note the token
-        symbol will not display a loading indicator. We've suppressed it with
-        the <code>hideIndicator</code> prop because we know this variable is
-        constant.
+        A place to configure the claim logic for token which use ConfigurableComplianceService
       </p>
-      <p>
-        <strong>Total Supply: </strong>
-        <ContractData
-          contract="TutorialToken"
-          method="totalSupply"
-          methodArgs={[{ from: accounts[0] }]}
-        />{" "}
-        <ContractData contract="TutorialToken" method="symbol" hideIndicator />
-      </p>
-      <p>
-        <strong>My Balance: </strong>
-        <ContractData
-          contract="TutorialToken"
-          method="balanceOf"
-          methodArgs={[accounts[0]]}
+
+        <strong>getConfiguration: </strong>
+        <ContractForm
+          contract="ComplianceConfiguration"
+          method="getConfiguration"
+          labels={["token address"]}
         />
-      </p>
+    
+
       <h3>Send Tokens</h3>
       <ContractForm
-        contract="TutorialToken"
-        method="transfer"
-        labels={["To Address", "Amount to Send"]}
+        contract="ComplianceConfiguration"
+        method="setConfiguration"
+        labels={["token address", "configuarion"]}
       />
     </div>
-    <div className="section">
-      <h2>ComplexStorage</h2>
+    <div className="section" hidden = {currentMenu != 2}>
+      <h2>ConfigurableComplianceService</h2>
       <p>
-        Finally this contract shows data types with additional considerations.
-        Note in the code the strings below are converted from bytes to UTF-8
-        strings and the device data struct is iterated as a list.
+      
       </p>
       <p>
-        <strong>String 1: </strong>
-        <ContractData contract="ComplexStorage" method="string1" toUtf8 />
+        This contract is the current default service of the compliance service registry. 
       </p>
-      <p>
-        <strong>String 2: </strong>
-        <ContractData contract="ComplexStorage" method="string2" toUtf8 />
-      </p>
-      <strong>Single Device Data: </strong>
-      <ContractData contract="ComplexStorage" method="singleDD" />
+      </div>
     </div>
   </div>
 );

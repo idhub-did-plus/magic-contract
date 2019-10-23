@@ -1,7 +1,7 @@
-import SimpleStorage from "./contracts/SimpleStorage.json";
-import ComplexStorage from "./contracts/ComplexStorage.json";
+import ComplianceServiceRegistry from "./contracts/ComplianceServiceRegistry.json";
+import ConfigurableComplianceService from "./contracts/ConfigurableComplianceService.json";
+import ComplianceConfiguration from "./contracts/ComplianceConfiguration.json";
 import TutorialToken from "./contracts/TutorialToken.json";
-
 const options = {
   web3: {
     block: false,
@@ -10,13 +10,14 @@ const options = {
       url: "ws://127.0.0.1:8545",
     },
   },
-  contracts: [SimpleStorage, ComplexStorage, TutorialToken],
+  contracts: [ComplianceServiceRegistry, ConfigurableComplianceService, ComplianceConfiguration, TutorialToken],
   events: {
-    SimpleStorage: ["StorageSet"],
+   
   },
   polls: {
     accounts: 1500,
   },
+  currentMenu: 0
 };
 
 export default options;

@@ -4,7 +4,9 @@ contract ComplianceServiceRegistry {
     mapping(address=> address) services;
     address defaultService;
     address owner;
-
+    constructor() public{
+        owner = msg.sender;
+    }
     function register(address token, address service)public {
         require(msg.sender == owner, "only owner is valid!");
         services[token] = service;
@@ -15,6 +17,9 @@ contract ComplianceServiceRegistry {
         require(msg.sender == owner, "only owner is valid!");
         defaultService = service;
 
+    }
+    function getDefaultService()public view returns(address){
+        return defaultService;
     }
     function findService(address token)public view returns(address){
        address rst = services[token];
