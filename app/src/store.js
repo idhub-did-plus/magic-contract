@@ -1,20 +1,8 @@
 import { generateStore, EventActions } from '@drizzle/store'
 import drizzleOptions from './drizzleOptions'
-import { put, takeEvery } from 'redux-saga/effects'
+import {menuReducer} from "./resucers"
 
-
-const TODOS_FETCH = 'MY_APP/TODOS_FETCH'
-const TODOS_RECEIVED = 'MY_APP/TODOS_RECEIVED'
-
-// reducers
-const todosReducer = (state=2, action) => {
- if (action.type === TODOS_RECEIVED) {
-   // update your state
-   return action.todos
- }
- return state;
-}
-const appReducers = { currentMenu: todosReducer }
+const appReducers = { currentMenu: menuReducer }
    const store = generateStore({
     drizzleOptions,
     appReducers,

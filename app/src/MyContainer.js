@@ -1,6 +1,6 @@
 import MyComponent from "./MyComponent";
 import { drizzleConnect } from "@drizzle/react-plugin";
-
+import {chooseMenu} from "./actions";
 const mapStateToProps = state => {
   return {
     accounts: state.accounts,
@@ -12,7 +12,11 @@ const mapStateToProps = state => {
     currentMenu: state.currentMenu,
   };
 };
-
-const MyContainer = drizzleConnect(MyComponent, mapStateToProps);
+function mapDispatchToProps(dispatch) {
+  return {
+    selectMenu: index => dispatch(chooseMenu(index))
+  };
+}
+const MyContainer = drizzleConnect(MyComponent, mapStateToProps, mapDispatchToProps);
 
 export default MyContainer;
