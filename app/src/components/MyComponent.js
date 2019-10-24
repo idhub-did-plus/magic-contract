@@ -45,14 +45,11 @@ export default class MyComponent extends Component {
           </ul>
         </div>
         <div>
-
-
-
           <div className="section" hidden={this.props.currentMenu != 0}>
             <p>Compliance Service Registry</p>
             <p class="ex2">
               A  central place for tokens to  appoint their special compliance check logic and if not,  use a default one.
-          </p>
+            </p>
             <p>
               <strong>DefaultService: </strong>
               <ContractData contract="ComplianceServiceRegistry" method="getDefaultService" />
