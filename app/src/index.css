@@ -78,11 +78,11 @@ code {
   text-decoration: none;
   color: #666;
 }
-.sidemenu li a:hover {
+.sidemenu li p:hover {
   background-color: #555;
   color: white;
 }
-.sidemenu li a.active {
+.sidemenu li p.active {
   background-color: #008CBA;
   color: white;
 }
