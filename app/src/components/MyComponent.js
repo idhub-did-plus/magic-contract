@@ -5,7 +5,6 @@ import {
   ContractForm,
 } from "@drizzle/react-components";
 
-import logo from "./logo.png";
 
 export default class MyComponent extends Component{
   constructor() {

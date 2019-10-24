@@ -1,7 +1,7 @@
-import ComplianceServiceRegistry from "./contracts/ComplianceServiceRegistry.json";
-import ConfigurableComplianceService from "./contracts/ConfigurableComplianceService.json";
-import ComplianceConfiguration from "./contracts/ComplianceConfiguration.json";
-import TutorialToken from "./contracts/TutorialToken.json";
+import ComplianceServiceRegistry from "../contracts/ComplianceServiceRegistry.json";
+import ConfigurableComplianceService from "../contracts/ConfigurableComplianceService.json";
+import ComplianceConfiguration from "../contracts/ComplianceConfiguration.json";
+import TutorialToken from "../contracts/TutorialToken.json";
 const options = {
   web3: {
     block: false,

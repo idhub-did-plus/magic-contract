@@ -4,9 +4,9 @@ import { LoadingContainer } from "@drizzle/react-components";
 
 import "./App.css";
 
-import drizzleOptions from "./drizzleOptions";
-import store from "./store";
-import MyContainer from "./MyContainer";
+import drizzleOptions from "./store/drizzleOptions";
+import store from "./store/store";
+import MyContainer from "./components/MyContainer";
 
 class App extends Component {
   render() {
