@@ -61,6 +61,10 @@ export default class MyComponent extends Component {
               <strong>DefaultService: </strong>
               <ContractData contract="ComplianceServiceRegistry" method="getDefaultService" />
             </p>
+            <p>
+              <strong>owner: </strong>
+              <ContractData contract="ComplianceServiceRegistry" method="getOwner" />
+            </p>
             <h2>setDefaultService</h2>
             <ContractForm contract="ComplianceServiceRegistry" method="setDefaultService" labels={["service address"]} />
             <h2>register</h2>
