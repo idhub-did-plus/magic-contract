@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   AccountData,
   ContractData,
@@ -7,7 +7,23 @@ import {
 
 import logo from "./logo.png";
 
-export default (props) => (
+export default class MyComponent extends Component{
+  constructor() {
+    super();
+    this.state = {
+        title: ""
+    };
+    
+    this.handleChoose = this.handleChoose.bind(this);
+}
+handleChoose(event) {
+    event.preventDefault();
+    let index = parseInt(event.target.id);
+    this.props.selectMenu(index);
+   
+}
+  render() {
+    return (
   <div className="App">
     <ul class="topmenu">
       <li><a href="#home" class="active">主页</a></li>
@@ -18,9 +34,9 @@ export default (props) => (
     <div class="column sidemenu">
         <ul>
          
-          <li ><button onClick="{props.selectMenu(0)}">The Flight</button></li>
-          <li ><a href="{props.selectMenu(1)}" class="active" >The City</a></li>
-          <li ><a href="{props.selectMenu(2)}" >The Island</a></li>
+          <li ><p  id="0" onClick={this.handleChoose}  >The Flight</p></li>
+          <li ><p  id="1" onClick={this.handleChoose}  >The City</p></li>
+          <li ><p  id="2" onClick={this.handleChoose}  >The Island</p></li>
           <li><a href="#food">The Food</a></li>
           <li><a href="#people">The People</a></li>
           <li><a href="#history">The History</a></li>
@@ -38,8 +54,8 @@ export default (props) => (
       <h2>Active Account</h2>
       <AccountData accountIndex={0} units="ether" precision={3} />
     </div>
-    <h2>dd{props.currentMenu}</h2>
-    <div className="section" hidden = {props.currentMenu != 0}>
+    <h2>dd{this.props.currentMenu}</h2>
+    <div className="section" hidden = {this.props.currentMenu != 0}>
       <h2>Compliance Service Registry</h2>
       <p>
         A  central place for tokens to  appoint their special compliance check logic and if not,  use a default one.
@@ -54,7 +70,7 @@ export default (props) => (
       <ContractForm contract="ComplianceServiceRegistry" method="register" labels={["token address", "compliance service address"]}  />
     </div>
 
-    <div className="section" hidden = {props.currentMenu != 1}>
+    <div className="section" hidden = {this.props.currentMenu != 1}>
       <h2>ComplianceConfiguration</h2>
       <p>
         A place to configure the claim logic for token which use ConfigurableComplianceService
@@ -75,7 +91,7 @@ export default (props) => (
         labels={["token address", "configuarion"]}
       />
     </div>
-    <div className="section" hidden = {props.currentMenu != 2}>
+    <div className="section" hidden = {this.props.currentMenu != 2}>
       <h2>ConfigurableComplianceService</h2>
       <p>
       
@@ -86,4 +102,6 @@ export default (props) => (
       </div>
     </div>
   </div>
-);
+    )
+  }
+}
