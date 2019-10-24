@@ -34,9 +34,9 @@ handleChoose(event) {
     <div class="column sidemenu">
         <ul>
          
-          <li ><p  id="0" onClick={this.handleChoose}  >The Flight</p></li>
-          <li ><p  id="1" onClick={this.handleChoose}  >The City</p></li>
-          <li ><p  id="2" onClick={this.handleChoose}  >The Island</p></li>
+          <li ><p  id="0" onClick={this.handleChoose}  class="active">The Flight</p></li>
+          <li ><p  id="1" onClick={this.handleChoose}  class="active">The City</p></li>
+          <li ><p  id="2" onClick={this.handleChoose}  class="active">The Island</p></li>
           <li><a href="#food">The Food</a></li>
           <li><a href="#people">The People</a></li>
           <li><a href="#history">The History</a></li>
