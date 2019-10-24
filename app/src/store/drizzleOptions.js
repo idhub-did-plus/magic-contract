@@ -16,8 +16,7 @@ const options = {
   },
   polls: {
     accounts: 1500,
-  },
-  currentMenu: 0
+  }
 };
 
 export default options;

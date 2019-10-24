@@ -19,6 +19,6 @@ const mapDispatchToProps = dispatch => {
     selectMenu: (index)=>dispatch(chooseMenu(index))
   };
 };
-const MyContainer = drizzleConnect(MyComponent, mapStateToProps,mapDispatchToProps);
+const MyContainer = drizzleConnect(MyComponent, mapStateToProps, mapDispatchToProps);
 
 export default MyContainer;

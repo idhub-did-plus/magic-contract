@@ -7,6 +7,9 @@ contract ComplianceServiceRegistry {
     constructor() public{
         owner = msg.sender;
     }
+    function getOwner()public view returns(address){
+        return owner;
+    }
     function register(address token, address service)public {
         require(msg.sender == owner, "only owner is valid!");
         services[token] = service;
