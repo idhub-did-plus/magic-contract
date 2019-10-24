@@ -121,6 +121,7 @@ library Strings {
         bytes memory _baseBytes = bytes(_base);
         return _baseBytes.length;
     }
+    
     function toBytes32(string memory base) internal
         pure returns (bytes32 result) {
         bytes memory tempEmptyStringTest = bytes(base);
