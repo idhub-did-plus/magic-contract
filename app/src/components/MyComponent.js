@@ -8,10 +8,6 @@ import {
 class SideMenu extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      title: ""
-    };
-
     this.handleChoose = this.handleChoose.bind(this);
   }
   handleChoose(event) {
@@ -37,11 +33,7 @@ class SideMenu extends Component {
 export default class MyComponent extends Component {
   constructor() {
     super();
-    this.state = {
-      title: ""
-    };
-
-  
+   
   }
  
   render() {
@@ -61,8 +53,8 @@ export default class MyComponent extends Component {
         <SideMenu {...this.props}/>
         <div>
           <div className="section" hidden={this.props.currentMenu != 0}>
-            <p>Compliance Service Registry</p>
-            <p class="ex2">
+
+            <p class="desc"><b>   Compliance Service Registry: </b>
               A  central place for tokens to  appoint their special compliance check logic and if not,  use a default one.
             </p>
             <p>
@@ -76,7 +68,7 @@ export default class MyComponent extends Component {
           </div>
 
           <div className="section" hidden={this.props.currentMenu != 1}>
-            <h2>ComplianceConfiguration</h2>
+            <h2>ComplianceConfiguration: </h2>
             <p>
               A place to configure the claim logic for token which use ConfigurableComplianceService
             </p>

@@ -12,10 +12,15 @@
   background-color: bisque;
 
   padding:10px;
-  border:5px solid gray;
+  border:1px solid gray;
 
 }
 p.ex2
 {
 	font:italic bold 12px/30px Georgia,serif;
+}
+p.desc
+{
+  background-color: lightyellow;
+  margin: 1em;
 }
