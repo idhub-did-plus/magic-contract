@@ -24,36 +24,30 @@ handleChoose(event) {
   render() {
     return (
   <div className="App">
-    <ul class="topmenu">
-      <li><a href="#home" class="active">主页</a></li>
-      <li><a href="#news">新闻</a></li>
-      <li><a href="#contact">联系我们</a></li>
-      <li><a href="#about">关于我们</a></li>
-    </ul>
+    
+    <div >
+      <ul class="topmenu">
+        <li><a href="#home" class="active">主页</a></li>
+        <li><a href="#news">新闻</a></li>
+        <li><a href="#contact">联系我们</a></li>
+        <li><a href="#about">关于我们</a></li>
+        <p>Magic Circle Compliace System</p>
+        
+      </ul>
+    </div>
     <div class="column sidemenu">
         <ul>
          
-          <li ><p  id="0" onClick={this.handleChoose}  class="active">The Flight</p></li>
-          <li ><p  id="1" onClick={this.handleChoose}  class="active">The City</p></li>
-          <li ><p  id="2" onClick={this.handleChoose}  class="active">The Island</p></li>
-          <li><a href="#food">The Food</a></li>
-          <li><a href="#people">The People</a></li>
-          <li><a href="#history">The History</a></li>
-          <li><a href="#oceans">The Oceans</a></li>
+          <li ><p  id="0" onClick={this.handleChoose}  class="active">Compliance Service Registry</p></li>
+          <li ><p  id="1" onClick={this.handleChoose}  class="active">Compliance Configuration</p></li>
+          <li ><p  id="2" onClick={this.handleChoose}  class="active">Configurable Compliance Service</p></li>
+
         </ul>
     </div>
     <div>
-    <div>
-      
-      <h1>Magic Circle Compliace System</h1>
-      <p>A console for management of compliance system</p>
-    </div>
+   
 
-    <div className="section">
-      <h2>Active Account</h2>
-      <AccountData accountIndex={0} units="ether" precision={3} />
-    </div>
-    <h2>dd{this.props.currentMenu}</h2>
+
     <div className="section" hidden = {this.props.currentMenu != 0}>
       <h2>Compliance Service Registry</h2>
       <p>
@@ -91,7 +85,7 @@ handleChoose(event) {
       />
     </div>
     <div className="section" hidden = {this.props.currentMenu != 2}>
-      <h2>ConfigurableComplianceService</h2>
+      <h2>Configurable Compliance Service</h2>
       <p>
       
       </p>

@@ -33,6 +33,9 @@ code {
 .topmenu li {
   float: left;
 }
+.topmenu p {
+  float: center;
+}
 .topmenu li a {
   display: inline-block;
   color: white;
