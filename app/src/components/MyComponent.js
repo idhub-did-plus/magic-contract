@@ -5,10 +5,9 @@ import {
   ContractForm,
 } from "@drizzle/react-components";
 
-
-export default class MyComponent extends Component {
-  constructor() {
-    super();
+class SideMenu extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
       title: ""
     };
@@ -23,6 +22,30 @@ export default class MyComponent extends Component {
   }
   render() {
     return (
+      <div class="column sidemenu">
+      <ul>
+
+        <li ><p id="0" onClick={this.handleChoose} class={this.props.currentMenu == 0?"active":""}>Compliance Service Registry</p></li>
+        <li ><p id="1" onClick={this.handleChoose} class={this.props.currentMenu == 1?"active":""}>Compliance Configuration</p></li>
+        <li ><p id="2" onClick={this.handleChoose} class={this.props.currentMenu == 2?"active":""}>Configurable Compliance Service</p></li>
+
+      </ul>
+    </div>
+    )
+  }
+}
+export default class MyComponent extends Component {
+  constructor() {
+    super();
+    this.state = {
+      title: ""
+    };
+
+  
+  }
+ 
+  render() {
+    return (
       <div className="App">
 
         <div >
@@ -35,15 +58,7 @@ export default class MyComponent extends Component {
 
           </ul>
         </div>
-        <div class="column sidemenu">
-          <ul>
-
-            <li ><p id="0" onClick={this.handleChoose} class={this.props.currentMenu == 0?"active":""}>Compliance Service Registry</p></li>
-            <li ><p id="1" onClick={this.handleChoose} class={this.props.currentMenu == 1?"active":""}>Compliance Configuration</p></li>
-            <li ><p id="2" onClick={this.handleChoose} class={this.props.currentMenu == 2?"active":""}>Configurable Compliance Service</p></li>
-
-          </ul>
-        </div>
+        <SideMenu {...this.props}/>
         <div>
           <div className="section" hidden={this.props.currentMenu != 0}>
             <p>Compliance Service Registry</p>
