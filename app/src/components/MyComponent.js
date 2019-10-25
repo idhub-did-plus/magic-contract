@@ -74,13 +74,7 @@ export default class MyComponent extends Component {
               A place to configure the claim logic for token which use ConfigurableComplianceService
             </p>
 
-            <strong>getConfiguration: </strong>
-            <ContractForm
-              contract="ComplianceConfiguration"
-              method="getConfiguration"
-              labels={["token address"]}
-            />
-
+            
 
             <h3>Send Tokens</h3>
             <ContractForm
