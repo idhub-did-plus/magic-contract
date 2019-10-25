@@ -5,6 +5,16 @@
  
 }
 
+.wrapper {
+  text-align: left;
+  max-width: 580px;
+  margin: 4rem auto auto;
+  background-color: coral;
+
+  padding:10px;
+  border:1px solid gray;
+
+}
 .section {
   text-align: left;
   max-width: 720px;

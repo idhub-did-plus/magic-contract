@@ -7,7 +7,7 @@ const options = {
     block: false,
     fallback: {
       type: "ws",
-      url: "ws://localhost:8545",
+      url: "ws://localhost:7545",
     },
   },
   contracts: [ComplianceServiceRegistry, ConfigurableComplianceService, ComplianceConfiguration, TutorialToken],

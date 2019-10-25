@@ -24,6 +24,10 @@ class SideMenu extends Component {
         <li ><p id="0" onClick={this.handleChoose} className={this.props.currentMenu === 0?"active":""}>Compliance Service Registry</p></li>
         <li ><p id="1" onClick={this.handleChoose} className={this.props.currentMenu === 1?"active":""}>Compliance Configuration</p></li>
         <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 2?"active":""}>Configurable Compliance Service</p></li>
+        <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 3?"active":""}>Claim Registry</p></li>
+        <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 4?"active":""}>Distributed Identity</p></li>
+        <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 5?"active":""}>0x management</p></li>
+        <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 6?"active":""}>Token Mint</p></li>
 
       </ul>
     </div>
@@ -51,7 +55,7 @@ export default class MyComponent extends Component {
           </ul>
         </div>
         <SideMenu currentMenu={this.props.currentMenu} selectMenu= {this.props.selectMenu}/>
-        <div>
+        <div className="wrapper">
           <div className="section" hidden={this.props.currentMenu !== 0}>
 
             <p className="desc"><b>   Compliance Service Registry: {this.props.ComplianceServiceRegistry.address}</b>
