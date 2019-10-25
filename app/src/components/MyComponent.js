@@ -6,8 +6,8 @@ import {
 } from "@drizzle/react-components";
 
 class SideMenu extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.handleChoose = this.handleChoose.bind(this);
   }
   handleChoose(event) {
@@ -21,9 +21,9 @@ class SideMenu extends Component {
       <div class="column sidemenu">
       <ul>
 
-        <li ><p id="0" onClick={this.handleChoose} class={this.props.currentMenu == 0?"active":""}>Compliance Service Registry</p></li>
-        <li ><p id="1" onClick={this.handleChoose} class={this.props.currentMenu == 1?"active":""}>Compliance Configuration</p></li>
-        <li ><p id="2" onClick={this.handleChoose} class={this.props.currentMenu == 2?"active":""}>Configurable Compliance Service</p></li>
+        <li ><p id="0" onClick={this.handleChoose} class={this.props.currentMenu === 0?"active":""}>Compliance Service Registry</p></li>
+        <li ><p id="1" onClick={this.handleChoose} class={this.props.currentMenu === 1?"active":""}>Compliance Configuration</p></li>
+        <li ><p id="2" onClick={this.handleChoose} class={this.props.currentMenu === 2?"active":""}>Configurable Compliance Service</p></li>
 
       </ul>
     </div>
@@ -50,28 +50,25 @@ export default class MyComponent extends Component {
 
           </ul>
         </div>
-        <SideMenu {...this.props}/>
+        <SideMenu currentMenu={this.props.currentMenu} selectMenu= {this.props.selectMenu}/>
         <div>
-          <div className="section" hidden={this.props.currentMenu != 0}>
+          <div className="section" hidden={this.props.currentMenu !== 0}>
 
-            <p class="desc"><b>   Compliance Service Registry: </b>
+            <p class="desc"><b>   Compliance Service Registry: {this.props.ComplianceServiceRegistry.address}</b>
               A  central place for tokens to  appoint their special compliance check logic and if not,  use a default one.
             </p>
             <p>
               <strong>DefaultService: </strong>
               <ContractData contract="ComplianceServiceRegistry" method="getDefaultService" />
             </p>
-            <p>
-              <strong>owner: </strong>
-              <ContractData contract="ComplianceServiceRegistry" method="getOwner" />
-            </p>
+           
             <h2>setDefaultService</h2>
             <ContractForm contract="ComplianceServiceRegistry" method="setDefaultService" labels={["service address"]} />
             <h2>register</h2>
             <ContractForm contract="ComplianceServiceRegistry" method="register" labels={["token address", "compliance service address"]} />
           </div>
 
-          <div className="section" hidden={this.props.currentMenu != 1}>
+          <div className="section" hidden={this.props.currentMenu !== 1}>
             <h2>ComplianceConfiguration: </h2>
             <p>
               A place to configure the claim logic for token which use ConfigurableComplianceService
@@ -92,7 +89,7 @@ export default class MyComponent extends Component {
               labels={["token address", "configuarion"]}
             />
           </div>
-          <div className="section" hidden={this.props.currentMenu != 2}>
+          <div className="section" hidden={this.props.currentMenu !== 2}>
             <h2>Configurable Compliance Service</h2>
             <p>
 
