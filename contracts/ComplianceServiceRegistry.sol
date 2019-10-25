@@ -22,6 +22,10 @@ contract ComplianceServiceRegistry {
     function getDefaultService() public view returns (address){
         return defaultService;
     }
+      
+    function getOwner() public view returns (address){
+        return owner;
+    }
     
     function findService(address token) public view returns (address){
         address rst = services[token];
