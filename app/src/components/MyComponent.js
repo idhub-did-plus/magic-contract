@@ -18,12 +18,12 @@ class SideMenu extends Component {
   }
   render() {
     return (
-      <div class="column sidemenu">
+      <div className="column sidemenu">
       <ul>
 
-        <li ><p id="0" onClick={this.handleChoose} class={this.props.currentMenu === 0?"active":""}>Compliance Service Registry</p></li>
-        <li ><p id="1" onClick={this.handleChoose} class={this.props.currentMenu === 1?"active":""}>Compliance Configuration</p></li>
-        <li ><p id="2" onClick={this.handleChoose} class={this.props.currentMenu === 2?"active":""}>Configurable Compliance Service</p></li>
+        <li ><p id="0" onClick={this.handleChoose} className={this.props.currentMenu === 0?"active":""}>Compliance Service Registry</p></li>
+        <li ><p id="1" onClick={this.handleChoose} className={this.props.currentMenu === 1?"active":""}>Compliance Configuration</p></li>
+        <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 2?"active":""}>Configurable Compliance Service</p></li>
 
       </ul>
     </div>
@@ -41,8 +41,8 @@ export default class MyComponent extends Component {
       <div className="App">
 
         <div >
-          <ul class="topmenu">
-            <li><a href="#home" class="active">主页</a></li>
+          <ul className="topmenu">
+            <li><a href="#home" className="active">主页</a></li>
             <li><a href="#news">新闻</a></li>
             <li><a href="#contact">联系我们</a></li>
             <li><a href="#about">关于我们</a></li>
@@ -54,7 +54,7 @@ export default class MyComponent extends Component {
         <div>
           <div className="section" hidden={this.props.currentMenu !== 0}>
 
-            <p class="desc"><b>   Compliance Service Registry: {this.props.ComplianceServiceRegistry.address}</b>
+            <p className="desc"><b>   Compliance Service Registry: {this.props.ComplianceServiceRegistry.address}</b>
               A  central place for tokens to  appoint their special compliance check logic and if not,  use a default one.
             </p>
             <p>

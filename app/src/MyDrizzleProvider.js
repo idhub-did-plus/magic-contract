@@ -1,6 +1,6 @@
 import { Component, Children } from 'react'
 import PropTypes from 'prop-types'
-import { Drizzle, generateStore } from '@drizzle/store'
+
 
 class DrizzleProvider extends Component {
   static propTypes = {
@@ -14,9 +14,7 @@ class DrizzleProvider extends Component {
     drizzleStore: PropTypes.object.isRequired
   }
 
-  constructor(context, props) {
-    super(context, props)
-  }
+ 
 
   getChildContext() {
     const drizzleStore = this.props.drizzle.store
