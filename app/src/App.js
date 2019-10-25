@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import DrizzleProvider from "./components/MyDrizzleProvider";
 import { LoadingContainer  } from "@drizzle/react-components";
 import "./App.css";
-import drizzle from "./store/MyDrizzle"
+import drizzle from "./store/MyDrizzleAndStore"
 
 import MyContainer from "./components/MyContainer";
 

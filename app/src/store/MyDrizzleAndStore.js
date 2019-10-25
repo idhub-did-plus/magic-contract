@@ -1,8 +1,11 @@
 import { generateStore, EventActions } from '@drizzle/store'
 import drizzleOptions from './drizzleOptions'
 import {menuReducer} from "./resucers"
+import { Drizzle} from '@drizzle/store'
 
-const appReducers = { currentMenu: menuReducer }
+
+
+   const appReducers = { currentMenu: menuReducer }
    const store = generateStore({
     drizzleOptions,
     appReducers,
@@ -10,5 +13,5 @@ const appReducers = { currentMenu: menuReducer }
    // appMiddlewares,
     currentMenu: 2  // enable ReduxDevTools!
    })
-   
-   export default store
+   var drizzle = new Drizzle(drizzleOptions, store)
+   export default  drizzle;
