@@ -4,6 +4,7 @@ import {
   ContractData,
   ContractForm,
 } from "@drizzle/react-components";
+import PropTypes from 'prop-types'
 
 class SideMenu extends Component {
   constructor() {
@@ -37,9 +38,10 @@ class SideMenu extends Component {
 export default class MyComponent extends Component {
   constructor() {
     super();
-   
+    
   }
  
+  
   render() {
     return (
       <div className="App">
@@ -54,7 +56,7 @@ export default class MyComponent extends Component {
 
           </ul>
         </div>
-        <SideMenu currentMenu={this.props.currentMenu} selectMenu= {this.props.selectMenu}/>
+        <SideMenu dd={this.context} currentMenu={this.props.currentMenu} selectMenu= {this.props.selectMenu}/>
         <div className="wrapper">
           <div className="section" hidden={this.props.currentMenu !== 0}>
 
@@ -107,3 +109,6 @@ export default class MyComponent extends Component {
     )
   }
 }
+MyComponent.contextTypes = {
+  drizzleStore: PropTypes.object
+};
