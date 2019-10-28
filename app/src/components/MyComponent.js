@@ -14,7 +14,7 @@ import {
   useRouteMatch,
   useParams
 } from "react-router-dom";
-
+import {chooseMenu} from "../store/actions";
 export default function MyComponent() {
   return (
     <Router>
@@ -58,7 +58,12 @@ const mapStateToProps = state => {
     currentMenu: state.currentMenu,
   };
 };
-
+const mapDispatchToProps = dispatch => {
+  return {
+   
+    selectMenu: (index)=>dispatch(chooseMenu(index))
+  };
+};
 
 function About() {
   return <h2>About</h2>;
@@ -206,7 +211,7 @@ class SideMenu extends Component {
 MyComponent.contextTypes = {
   drizzleStore: PropTypes.object
 };
-const DoIt = drizzleConnect(MyComponentInternal, mapStateToProps);
+const DoIt = drizzleConnect(MyComponentInternal, mapStateToProps, mapDispatchToProps);
 function Home() {
   return <DoIt />
 }

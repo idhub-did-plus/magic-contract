@@ -38,4 +38,4 @@ const mapDispatchToProps = dispatch => {
 };
 const MyContainer = drizzleConnect(MyComponent, mapStateToProps, mapDispatchToProps);
 
-export default MyContainer;
+export default MyComponent;
