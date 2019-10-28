@@ -2,28 +2,74 @@
 
 /* Style the header */
 header {
-  background-color: #666;
-  padding: 30px;
-  text-align: center;
-  font-size: 15px;
+  background-color: rgb(73, 107, 134);
   color: white;
+  text-align: center;
+  padding: 0px;
+  
 }
-nav {
+
+.topmenu {
+  list-style-type: none;
+  margin: 1px;
+  padding: 0;
+  overflow: hidden;
+  background-color: #777;
+}
+.topmenu li {
   float: left;
-  width: 30%;
+}
+.topmenu p {
+  float: center;
+}
+.topmenu li a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 16px;
+  text-decoration: none;
+}
+.topmenu li a:hover {
+  background-color: #222;
+}
+.topmenu li a.active {
+  color: white;
+  background-color: #4CAF50;
+}
+.sidemenu {
+  float: left;
+  width: 25%;
   height: 300px; /* only for demonstration, should be removed */
   background: #ccc;
-  padding: 20px;
+  padding: 4px;
+  float: left;
 }
-/* Style the list inside the menu */
-nav ul {
+.sidemenu ul {
   list-style-type: none;
+  margin: 0;
   padding: 0;
 }
+.sidemenu li p {
+  margin-bottom: 4px;
+  display: block;
+  padding: 4px;
+  background-color: #eee;
+  text-decoration: none;
+  color: #666;
+}
+.sidemenu li p:hover {
+  background-color: #555;
+  color: white;
+}
+.sidemenu li p.active {
+  background-color: #008CBA;
+  color: white;
+}
 article {
+  margin: 20px;
   float: left;
-  padding: 20px;
-  width: 60%;
+  padding: 0px;
+  width: 70%;
   background-color: #f1f1f1;
   height: 300px; /* only for demonstration, should be removed */
 }

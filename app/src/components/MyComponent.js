@@ -8,6 +8,7 @@ export default function MyComponent() {
   return (
     <Router>
       <div>
+     
         <ul className="topmenu">
           <li>
             <Link to="/">Home</Link>
@@ -19,7 +20,7 @@ export default function MyComponent() {
             <Link to="/topics">Topics</Link>
           </li>
         </ul>
-
+   
         <Switch>
           <Route path="/about">
             <About />
@@ -110,7 +111,7 @@ class SideMenu extends Component {
   }
   render() {
     return (
-      <div className="column sidemenu">
+      <nav className="sidemenu">
         <ul>
 
           <li ><p id="0" onClick={this.handleChoose} className={this.props.currentMenu === 0 ? "active" : ""}>Compliance Service Registry</p></li>
@@ -122,7 +123,7 @@ class SideMenu extends Component {
           <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 6 ? "active" : ""}>Token Mint</p></li>
 
         </ul>
-      </div>
+      </nav>
     )
   }
 }
@@ -138,13 +139,7 @@ class MyComponentInternal extends Component {
       <div>
       <section>
 
-        <div >
-          <ul className="topmenu">
-
-            <p>Magic Circle Compliace System</p>
-
-          </ul>
-        </div>
+       
         <SideMenu dd={this.context} currentMenu={this.props.currentMenu} selectMenu={this.props.selectMenu} />
         <article className="wrapper">
           <div className="section" hidden={this.props.currentMenu !== 0}>
