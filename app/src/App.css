@@ -1,13 +1,58 @@
-.App {
+
+
+/* Style the header */
+header {
+  background-color: #666;
+  padding: 30px;
   text-align: center;
-  margin: 2rem;
-  border: 1rem;
- 
+  font-size: 15px;
+  color: white;
 }
+nav {
+  float: left;
+  width: 30%;
+  height: 300px; /* only for demonstration, should be removed */
+  background: #ccc;
+  padding: 20px;
+}
+/* Style the list inside the menu */
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+article {
+  float: left;
+  padding: 20px;
+  width: 60%;
+  background-color: #f1f1f1;
+  height: 300px; /* only for demonstration, should be removed */
+}
+
+/* Clear floats after the columns */
+section:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Style the footer */
+footer {
+  background-color: #777;
+  padding: 10px;
+  text-align: center;
+}
+@media (max-width: 600px) {
+  nav, article {
+    width: 100%;
+    height: auto;
+  }
+}
+
+
 
 .wrapper {
   text-align: left;
-  max-width: 580px;
+  max-width: 90%;
   margin: 4rem auto auto;
   background-color: coral;
 
@@ -15,9 +60,9 @@
   border:1px solid gray;
 
 }
-.section {
+.mysection {
   text-align: left;
-  max-width: 720px;
+  max-width: 90%;
   margin: 4rem auto auto;
   background-color: bisque;
 

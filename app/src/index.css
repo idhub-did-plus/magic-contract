@@ -61,6 +61,7 @@ code {
 }
 .sidemenu {
   width: 25%;
+  float: left;
 }
 .content {
   width: 75%;
@@ -73,7 +74,7 @@ code {
 .sidemenu li p {
   margin-bottom: 4px;
   display: block;
-  padding: 8px;
+  padding: 4px;
   background-color: #eee;
   text-decoration: none;
   color: #666;

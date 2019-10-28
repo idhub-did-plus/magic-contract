@@ -1,25 +1,14 @@
-import React, { Component } from "react";
-import {
-  AccountData,
-  ContractData,
-  ContractForm,
-} from "@drizzle/react-components";
-import PropTypes from 'prop-types'
+import { ContractData, ContractForm } from "@drizzle/react-components";
 import { drizzleConnect } from "@drizzle/react-plugin";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams
-} from "react-router-dom";
-import {chooseMenu} from "../store/actions";
+import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import { BrowserRouter as Router, Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
+import { chooseMenu } from "../store/actions";
 export default function MyComponent() {
   return (
     <Router>
       <div>
-        <ul  className="topmenu">
+        <ul className="topmenu">
           <li>
             <Link to="/">Home</Link>
           </li>
@@ -60,8 +49,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-   
-    selectMenu: (index)=>dispatch(chooseMenu(index))
+
+    selectMenu: (index) => dispatch(chooseMenu(index))
   };
 };
 
@@ -122,31 +111,32 @@ class SideMenu extends Component {
   render() {
     return (
       <div className="column sidemenu">
-      <ul>
+        <ul>
 
-        <li ><p id="0" onClick={this.handleChoose} className={this.props.currentMenu === 0?"active":""}>Compliance Service Registry</p></li>
-        <li ><p id="1" onClick={this.handleChoose} className={this.props.currentMenu === 1?"active":""}>Compliance Configuration</p></li>
-        <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 2?"active":""}>Configurable Compliance Service</p></li>
-        <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 3?"active":""}>Claim Registry</p></li>
-        <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 4?"active":""}>Distributed Identity</p></li>
-        <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 5?"active":""}>0x management</p></li>
-        <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 6?"active":""}>Token Mint</p></li>
+          <li ><p id="0" onClick={this.handleChoose} className={this.props.currentMenu === 0 ? "active" : ""}>Compliance Service Registry</p></li>
+          <li ><p id="1" onClick={this.handleChoose} className={this.props.currentMenu === 1 ? "active" : ""}>Compliance Configuration</p></li>
+          <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 2 ? "active" : ""}>Configurable Compliance Service</p></li>
+          <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 3 ? "active" : ""}>Claim Registry</p></li>
+          <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 4 ? "active" : ""}>Distributed Identity</p></li>
+          <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 5 ? "active" : ""}>0x management</p></li>
+          <li ><p id="2" onClick={this.handleChoose} className={this.props.currentMenu === 6 ? "active" : ""}>Token Mint</p></li>
 
-      </ul>
-    </div>
+        </ul>
+      </div>
     )
   }
 }
-  class MyComponentInternal extends Component {
+class MyComponentInternal extends Component {
   constructor() {
     super();
-    
+
   }
- 
-  
+
+
   render() {
     return (
-      <div className="App">
+      <div>
+      <section>
 
         <div >
           <ul className="topmenu">
@@ -155,8 +145,8 @@ class SideMenu extends Component {
 
           </ul>
         </div>
-        <SideMenu dd={this.context} currentMenu={this.props.currentMenu} selectMenu= {this.props.selectMenu}/>
-        <div className="wrapper">
+        <SideMenu dd={this.context} currentMenu={this.props.currentMenu} selectMenu={this.props.selectMenu} />
+        <article className="wrapper">
           <div className="section" hidden={this.props.currentMenu !== 0}>
 
             <p className="desc"><b>   Compliance Service Registry: {this.props.ComplianceServiceRegistry.address}</b>
@@ -166,7 +156,7 @@ class SideMenu extends Component {
               <strong>DefaultService: </strong>
               <ContractData contract="ComplianceServiceRegistry" method="getDefaultService" />
             </p>
-           
+
             <h2>setDefaultService</h2>
             <ContractForm contract="ComplianceServiceRegistry" method="setDefaultService" labels={["service address"]} />
             <h2>register</h2>
@@ -203,7 +193,9 @@ class SideMenu extends Component {
               This contract is the current default service of the compliance service registry.
             </p>
           </div>
-        </div>
+        </article>
+      </section>
+      <footer>mmmm</footer>
       </div>
     )
   }
