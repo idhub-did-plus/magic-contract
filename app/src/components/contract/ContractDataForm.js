@@ -89,7 +89,7 @@ class ContractDataForm extends Component {
 
     return (
         <div>
-            <ContractDataReceiver {...this.props} dataKey={this.state.dataKey} />
+        
       <form
         className="pure-form pure-form-stacked"
         onSubmit={this.handleSubmit}
@@ -120,6 +120,7 @@ class ContractDataForm extends Component {
           Submit
         </button>
       </form>
+      <ContractDataReceiver {...this.props} dataKey={this.state.dataKey} />
       </div>
     );
   }

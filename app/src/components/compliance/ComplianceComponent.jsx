@@ -93,13 +93,13 @@ function Registry(props) {
           {props.drizzle.contracts.ComplianceServiceRegistry.address}
       </p>
       <p>
-        <strong>DefaultService: </strong>
+        <p>Default Service: </p>
         <ContractData contract="ComplianceServiceRegistry" method="getDefaultService" {...props} />
       </p>
 
-      <h2>setDefaultService</h2>
+      <p>set default service</p>
       <ContractForm  {...props} contract="ComplianceServiceRegistry" method="setDefaultService" labels={["service address"]} />
-      <h2>register</h2>
+      <p>register</p>
       <ContractForm  {...props} contract="ComplianceServiceRegistry" method="register" labels={["token address", "compliance service address"]} />
     </div>
   )
@@ -116,7 +116,7 @@ function Configuration(props) {
 <p>
           {props.drizzle.contracts.ComplianceConfiguration.address}
       </p>
-      <strong>getConfiguration: </strong>
+      <p>getConfiguration: </p>
       <ContractDataForm  {...props}
         contract="ComplianceConfiguration"
         method="getConfiguration"
@@ -124,7 +124,7 @@ function Configuration(props) {
       />
 
 
-      <h3>Send Tokens</h3>
+      <p>set token compliace configuation</p>
       <ContractForm  {...props}
         contract="ComplianceConfiguration"
         method="setConfiguration"
