@@ -8,14 +8,13 @@ contract ComplianceServiceRegistry {
     constructor() public {
         owner = msg.sender;
     }
-    
     function register(address token, address service) public {
         require(msg.sender == owner, "only owner is valid!");
         services[token] = service;
     }
     
     function setDefaultService(address service) public {
-        require(msg.sender == owner, "only owner is valid!");
+        //require(msg.sender == owner, "only owner is valid!");
         defaultService = service;
     }
     

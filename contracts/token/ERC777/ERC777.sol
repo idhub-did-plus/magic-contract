@@ -4,7 +4,7 @@ import "./IERC777.sol";
 import "./IERC777Recipient.sol";
 import "./IERC777Sender.sol";
 import "./IERC20.sol";
-import "./SafeMath.sol";
+import "../SafeMath.sol";
 import "./Address.sol";
 import "./IERC1820Registry.sol";
 
