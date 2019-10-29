@@ -4,7 +4,7 @@ const ComplianceConfiguration = artifacts.require("ComplianceConfiguration");
 
 const EthereumClaimsRegistry = artifacts.require("EthereumClaimsRegistry");
 const IdentityRegistry = artifacts.require("IdentityRegistry");
-const EthereumDIDRegistry = artifacts.require("ComplianceConfiguration");
+const EthereumDIDRegistry = artifacts.require("EthereumDIDRegistry");
 const ERC1056 = artifacts.require("ERC1056");
 
 const Strings = artifacts.require("Strings");
