@@ -11,11 +11,9 @@ const Strings = artifacts.require("Strings");
 const TutorialToken = artifacts.require("TutorialToken");
 module.exports = function (deployer) {
 
-
-  deployer.deploy(IdentityRegistry);
-  deployer.deploy(EthereumDIDRegistry);
-
-
+  deployer.deploy(ERC1056, IdentityRegistry.address, EthereumDIDRegistry.address);
+  deployer.deploy(ComplianceConfiguration);
+  deployer.deploy(EthereumClaimsRegistry);
 
 
 }

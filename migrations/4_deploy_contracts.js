@@ -12,9 +12,25 @@ const TutorialToken = artifacts.require("TutorialToken");
 module.exports = function (deployer) {
 
 
-  deployer.deploy(IdentityRegistry);
-  deployer.deploy(EthereumDIDRegistry);
 
+  deployer.deploy(ConfigurableComplianceService,
+    ComplianceConfiguration.address,
+    EthereumClaimsRegistry.address,
+    IdentityRegistry.address,
+    ERC1056.address);
+  deployer.deploy(Strings);
+  deployer.link(Strings, ConfigurableComplianceService);
+
+ 
+
+
+  deployer.deploy(ComplianceServiceRegistry);
+
+
+
+
+
+  deployer.deploy(TutorialToken);
 
 
 
