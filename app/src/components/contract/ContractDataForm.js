@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-
+import ContractDataReceiver from "./ContractDataReceiver"
 const translateType = type => {
   switch (true) {
     case /^uint/.test(type):
@@ -14,7 +14,7 @@ const translateType = type => {
   }
 };
 
-class ContractForm extends Component {
+class ContractDataForm extends Component {
   constructor(props) {
     super(props);
 
@@ -28,7 +28,7 @@ class ContractForm extends Component {
     const abi = this.contracts[this.props.contract].abi;
 
     this.inputs = [];
-    var initialState = {};
+    var initialState = {dataKey:null};
 
     // Iterate over abi for correct function.
     for (var i = 0; i < abi.length; i++) {
@@ -62,7 +62,10 @@ class ContractForm extends Component {
     }
 
     let method = this.contracts[this.props.contract].methods[this.props.method];
-    return method.cacheSend(...convertedInputs);
+    let dataKey = method.cacheCall(...convertedInputs);
+   
+    this.setState({...this.state, dataKey: dataKey});
+    return dataKey;
   }
 
   handleInputChange(event) {
@@ -70,7 +73,7 @@ class ContractForm extends Component {
       event.target.type === "checkbox"
         ? event.target.checked
         : event.target.value;
-    this.setState({ [event.target.name]: value });
+    this.setState({...this.state, [event.target.name]: value });
   }
 
   render() {
@@ -85,6 +88,8 @@ class ContractForm extends Component {
     }
 
     return (
+        <div>
+            <ContractDataReceiver {...this.props} dataKey={this.state.dataKey} />
       <form
         className="pure-form pure-form-stacked"
         onSubmit={this.handleSubmit}
@@ -115,11 +120,12 @@ class ContractForm extends Component {
           Submit
         </button>
       </form>
+      </div>
     );
   }
 }
 
-ContractForm.propTypes = {
+ContractDataForm.propTypes = {
   drizzle: PropTypes.object.isRequired,
   contract: PropTypes.string.isRequired,
   method: PropTypes.string.isRequired,
@@ -128,4 +134,4 @@ ContractForm.propTypes = {
   render: PropTypes.func,
 };
 
-export default ContractForm;
+export default ContractDataForm;

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { chooseMenu } from "../../store/actions"
 import ContractData from "../contract/ContractData";
 import ContractForm from "../contract/ContractForm";
+import ContractDataForm from "../contract/ContractDataForm";
 import { BrowserRouter as Router, NavLink, Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
 
 import { DrizzleContext } from "@drizzle/react-plugin";
@@ -111,7 +112,7 @@ function Configuration(props) {
 </p>
 
       <strong>getConfiguration: </strong>
-      <ContractForm  {...props}
+      <ContractDataForm  {...props}
         contract="ComplianceConfiguration"
         method="getConfiguration"
         labels={["token address"]}
