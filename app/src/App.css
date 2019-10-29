@@ -61,7 +61,7 @@ header {
   background-color: #555;
   color: white;
 }
-.sidemenu li p.active {
+.active {
   background-color: #008CBA;
   color: white;
 }

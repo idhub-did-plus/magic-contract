@@ -1,12 +1,9 @@
 
-import PropTypes from 'prop-types';
-import React, { Component } from "react";
-import { BrowserRouter as Router, Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import ComplianceComponent from "./compliance/ComplianceComponent";
+import Topics from "./token/Topics";
 
-import {chooseMenu} from "../store/actions"
-import SideMenu from "./common/SideMenu"
-import Topics from "./token/Topics"
-import ComplianceComponent from "./compliance/ComplianceComponent"
 export default function ComponentContainer() {
   return (
     <Router>

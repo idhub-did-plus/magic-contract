@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { chooseMenu } from "../../store/actions"
-import SideMenu from "../common/SideMenu"
 import ContractData from "../contract/ContractData";
 import ContractForm from "../contract/ContractForm";
-import { BrowserRouter as Router, Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
+import { BrowserRouter as Router, NavLink, Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
 
 import { DrizzleContext } from "@drizzle/react-plugin";
 class MyComponentInternal extends Component {
@@ -21,19 +20,19 @@ class MyComponentInternal extends Component {
             <nav className="sidemenu">
               <ul>
                 <li>
-                  <Link to="/registry">Compliance Service Registry</Link>
+                  <NavLink to="/registry" activeClassName="active">Compliance Service Registry</NavLink>
                 </li>
                 <li>
-                  <Link to="/configuration">Compliance Configuration</Link>
+                  <NavLink to="/configuration"  activeClassName="active">Compliance Configuration</NavLink>
                 </li>
                 <li>
-                  <Link to="/configurable">Configurable Compliance Service</Link>
+                  <NavLink to="/configurable"  activeClassName="active">Configurable Compliance Service</NavLink>
                 </li>
                 <li>
-                  <Link to="/">Claim Registry</Link>
+                  <NavLink to="/claimRegistry"  >Claim Registry</NavLink>
                 </li>
                 <li>
-                  <Link to="/">Distributed Identity</Link>
+                  <NavLink to="/distributedIdentity"  >Distributed Identity</NavLink>
                 </li>
               </ul>
             </nav>
@@ -47,6 +46,12 @@ class MyComponentInternal extends Component {
                 </Route>
                 <Route path="/configurable">
                   <Configurable {...this.props} />
+                </Route>
+                <Route path="/claimRegistry">
+                  <ClaimRegistry {...this.props} />
+                </Route>
+                <Route path="/distributedIdentity">
+                  <DistributedIdentity {...this.props} />
                 </Route>
               </Switch>
             </article>
@@ -132,6 +137,33 @@ function Configurable(props) {
       </p>
       <p>
         This contract is the current default service of the compliance service registry.
+      </p>
+    </div>
+  )
+}
+
+function ClaimRegistry(props) {
+
+  return (
+    <div className="section" >
+      <h2>ClaimRegistry</h2>
+
+      <p>
+      ClaimRegistry
+      </p>
+    </div>
+  )
+}
+
+
+function DistributedIdentity(props) {
+
+  return (
+    <div className="section" >
+      <h2>DistributedIdentity</h2>
+
+      <p>
+      DistributedIdentity
       </p>
     </div>
   )
