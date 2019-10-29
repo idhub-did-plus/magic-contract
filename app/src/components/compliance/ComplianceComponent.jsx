@@ -89,6 +89,9 @@ function Registry(props) {
       <p className="desc"><b>   Compliance Service Registry: {props.drizzle.contracts.ComplianceServiceRegistry.address}</b>
         A  central place for tokens to  appoint their special compliance check logic and if not,  use a default one.
   </p>
+  <p>
+          {props.drizzle.contracts.ComplianceServiceRegistry.address}
+      </p>
       <p>
         <strong>DefaultService: </strong>
         <ContractData contract="ComplianceServiceRegistry" method="getDefaultService" {...props} />
@@ -110,7 +113,9 @@ function Configuration(props) {
       <p>
         A place to configure the claim logic for token which use ConfigurableComplianceService
 </p>
-
+<p>
+          {props.drizzle.contracts.ComplianceConfiguration.address}
+      </p>
       <strong>getConfiguration: </strong>
       <ContractDataForm  {...props}
         contract="ComplianceConfiguration"
@@ -134,7 +139,7 @@ function Configurable(props) {
     <div className="section" >
       <h2>Configurable Compliance Service</h2>
       <p>
-
+          {props.drizzle.contracts.ConfigurableComplianceService.address}
       </p>
       <p>
         This contract is the current default service of the compliance service registry.

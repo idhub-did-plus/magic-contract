@@ -1,7 +1,8 @@
 
 import React from "react";
-import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, NavLink, Route, Switch } from "react-router-dom";
 import ComplianceComponent from "./compliance/ComplianceComponent";
+import TokenComponent from "./token/TokenComponent";
 import Topics from "./token/Topics";
 
 export default function ComponentContainer() {
@@ -11,19 +12,19 @@ export default function ComponentContainer() {
 
         <ul className="topmenu">
           <li>
-            <Link to="/compliance">Compliance</Link>
+            <NavLink to="/compliance">Compliance</NavLink>
           </li>
           <li>
-            <Link to="/about">About</Link>
+            <NavLink to="/token">TokenComponent</NavLink>
           </li>
           <li>
-            <Link to="/topics">Topics</Link>
+            <NavLink to="/topics">Topics</NavLink>
           </li>
         </ul>
 
         <Switch>
-          <Route path="/about">
-            <About />
+          <Route path="/token">
+            <TokenComponent />
           </Route>
           <Route path="/topics">
             <Topics />
