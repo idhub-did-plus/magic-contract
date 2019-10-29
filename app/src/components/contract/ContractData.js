@@ -66,7 +66,11 @@ class ContractData extends Component {
       drizzleState.contracts[this.props.contract][this.props.method][
         this.state.dataKey
       ].value;
-
+      if(displayData === null){
+        return <li >
+            empty result!
+      </li>
+    }
     // Optionally convert to UTF8
     if (this.props.toUtf8) {
       displayData = drizzle.web3.utils.hexToUtf8(displayData);
