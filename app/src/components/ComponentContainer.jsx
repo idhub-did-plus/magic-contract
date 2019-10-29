@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import React, { Component } from "react";
 import { BrowserRouter as Router, Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
 
-import { DrizzleContext } from "@drizzle/react-plugin";
 import {chooseMenu} from "../store/actions"
 import SideMenu from "./common/SideMenu"
-import Topics from "./Topics"
+import Topics from "./token/Topics"
 import ComplianceComponent from "./compliance/ComplianceComponent"
-export default function MyComponent() {
+export default function ComponentContainer() {
   return (
     <Router>
       <div>
@@ -41,13 +40,6 @@ export default function MyComponent() {
   );
 }
 
-
-const mapDispatchToProps = dispatch => {
-  return {
-
-    selectMenu: (index) => dispatch(chooseMenu(index))
-  };
-};
 
 
 function About() {

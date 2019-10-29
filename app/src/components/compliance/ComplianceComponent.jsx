@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import {chooseMenu} from "../../store/actions"
 import SideMenu from "../common/SideMenu"
-import ContractData from "../new-context-api/ContractData";
-import ContractForm from "../new-context-api/ContractForm";
+import ContractData from "../contract/ContractData";
+import ContractForm from "../contract/ContractForm";
 
 import { DrizzleContext } from "@drizzle/react-plugin";
 class MyComponentInternal extends Component {

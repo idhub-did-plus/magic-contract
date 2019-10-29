@@ -3,9 +3,8 @@ import { DrizzleContext } from "@drizzle/react-plugin";
 
 import "./App.css";
 import drizzle from "./store/MyDrizzleAndStore"
-import MyComponent from "./components/MyComponent";
+import ComponentContainer from "./components/ComponentContainer";
 
-//const drizzle = new Drizzle(drizzleOptions, store);
 class App extends Component {
   render() {
 
@@ -21,7 +20,7 @@ class App extends Component {
             }
 
             return (
-              <MyComponent drizzle={drizzle} drizzleState={drizzleState} />
+              <ComponentContainer drizzle={drizzle} drizzleState={drizzleState} />
             );
           }}
         </DrizzleContext.Consumer>
