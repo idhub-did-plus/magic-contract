@@ -13,6 +13,7 @@ class MyComponentInternal extends Component {
   
   
     render() {
+      
       return (
         <div>
           <section>
@@ -22,7 +23,7 @@ class MyComponentInternal extends Component {
             <article className="wrapper">
               <div className="section" hidden={this.props.currentMenu !== 0}>
   
-                <p className="desc"><b>   Compliance Service Registry: {this.props.ComplianceServiceRegistry.address}</b>
+                <p className="desc"><b>   Compliance Service Registry: {this.props.drizzle.contracts.ComplianceServiceRegistry.address}</b>
                   A  central place for tokens to  appoint their special compliance check logic and if not,  use a default one.
               </p>
                 <p>
@@ -75,12 +76,7 @@ class MyComponentInternal extends Component {
   }
   const mapStateToProps = state => {
     return {
-      accounts: state.accounts,
-      ComplianceServiceRegistry: state.contracts.ComplianceServiceRegistry,
-      ConfigurableComplianceService: state.contracts.ConfigurableComplianceService,
-      ComplianceConfiguration: state.contracts.ComplianceConfiguration,
-      TutorialToken: state.contracts.TutorialToken,
-      drizzleStatus: state.drizzleStatus,
+     
       currentMenu: state.currentMenu,
      
     };
