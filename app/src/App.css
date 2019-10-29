@@ -19,9 +19,7 @@ header {
 .topmenu li {
   float: left;
 }
-.topmenu p {
-  float: center;
-}
+
 .topmenu li a {
   display: inline-block;
   color: white;
@@ -37,12 +35,13 @@ header {
   background-color: #4CAF50;
 }
 .sidemenu {
+  list-style-type: none;
   float: left;
   width: 25%;
   height: 500px; /* only for demonstration, should be removed */
   background: #ccc;
   padding: 4px;
-  float: left;
+
 }
 .sidemenu ul {
   list-style-type: none;
@@ -57,11 +56,18 @@ header {
   text-decoration: none;
   color: #666;
 }
-.sidemenu li p:hover {
-  background-color: #555;
+.sidemenu li a {
+  display: inline-block;
+  color: rgb(12, 115, 146);
+  text-align: center;
+  padding: 10px;
+  text-decoration: none;
+}
+.sidemenu li a:hover {
+  background-color: #1555;
   color: white;
 }
-.active {
+.sidemenu li a.active  {
   background-color: #008CBA;
   color: white;
 }
@@ -83,8 +89,9 @@ section:after {
 
 /* Style the footer */
 footer {
-  background-color: #777;
+  background-color: rgba(119, 119, 119, 0.027);
   padding: 10px;
+  border: darkgrey;
   text-align: center;
 }
 @media (max-width: 600px) {

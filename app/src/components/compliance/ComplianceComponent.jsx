@@ -18,8 +18,8 @@ class MyComponentInternal extends Component {
       <Router>
         <div>
           <section>
-            <nav className="sidemenu">
-              <ul>
+            <nav >
+              <ul className="sidemenu">
                 <li>
                   <NavLink to="/registry" activeClassName="active">Compliance Service Registry</NavLink>
                 </li>
