@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Button } from 'semantic-ui-react'
 import PropTypes from "prop-types";
 import ContractDataReceiver from "./ContractDataReceiver"
 const translateType = type => {
@@ -111,14 +112,12 @@ class ContractDataForm extends Component {
             />
           );
         })}
-        <button
+        <Button primary
           key="submit"
-          className="pure-button"
-          type="button"
           onClick={this.handleSubmit}
         >
-          Submit
-        </button>
+          Fetch
+        </Button>
       </form>
       <ContractDataReceiver {...this.props} dataKey={this.state.dataKey} />
       </div>
