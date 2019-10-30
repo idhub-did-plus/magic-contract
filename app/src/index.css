@@ -13,10 +13,7 @@ code {
     monospace;
 }
 
-.column {
-  float: center;
-  padding: 15px;
-}
+
 .clearfix::after {
   content: "";
   clear: both;

@@ -1,4 +1,11 @@
 
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
 .topmenu {
   list-style-type: none;
   margin: 0;
@@ -7,6 +14,7 @@
 }
 .topmenu li {
   float: left;
+  padding: 0px;
 }
 
 .topmenu li a {
@@ -31,7 +39,8 @@
   margin-left:-300px;
   height: 500px; /* only for demonstration, should be removed */
   background: #ccc;
-  padding: 0px;
+  padding: 4px;
+  padding-top: 0px;
 
 }
 .sidemenu ul {
