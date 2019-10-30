@@ -16,7 +16,7 @@ class MyComponentInternal extends Component {
 
     return (
       <Router>
-        <div>
+        <div id="content">
           <section id="wrap">
             <nav className="sidemenu">
               <ul >
@@ -84,7 +84,7 @@ export default function ComplianceComponent() {
 function Registry(props) {
 
   return (
-    <div className="section">
+    <div className="mysection">
 
       <p className="desc"><b>   Compliance Service Registry: {props.drizzle.contracts.ComplianceServiceRegistry.address}</b>
         A  central place for tokens to  appoint their special compliance check logic and if not,  use a default one.
@@ -108,7 +108,7 @@ function Registry(props) {
 function Configuration(props) {
 
   return (
-    <div className="section">
+    <div className="mysection">
       <h2>ComplianceConfiguration: </h2>
       <p>
         A place to configure the claim logic for token which use ConfigurableComplianceService
@@ -136,7 +136,7 @@ function Configuration(props) {
 function Configurable(props) {
 
   return (
-    <div className="section" >
+    <div className="mysection" >
       <h2>Configurable Compliance Service</h2>
       <p>
           {props.drizzle.contracts.ConfigurableComplianceService.address}
@@ -151,7 +151,7 @@ function Configurable(props) {
 function ClaimRegistry(props) {
 
   return (
-    <div className="section" >
+    <div className="mysection" >
       <h2>ClaimRegistry</h2>
 
       <p>
@@ -165,7 +165,7 @@ function ClaimRegistry(props) {
 function DistributedIdentity(props) {
 
   return (
-    <div className="section" >
+    <div className="mysection" >
       <h2>DistributedIdentity</h2>
 
       <p>

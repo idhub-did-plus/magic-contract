@@ -1,18 +1,7 @@
 
-
-
-header {
-  background-color: rgb(73, 107, 134);
-  color: white;
- 
-  padding: 0px;
-  
-}
-
 .topmenu {
   list-style-type: none;
-
-  padding: 0;
+ margin: 0;
   overflow: hidden;
   background-color: rgba(119, 119, 119, 0.164);
 }
@@ -51,7 +40,7 @@ header {
 }
 .sidemenu li  {
   margin-bottom: 4px;
- 
+  margin-top: 4px;
   padding: 4px;
   background-color: #eee;
   text-decoration: none;
@@ -75,6 +64,11 @@ header {
 #wrap{
   padding-left: 300px;
 }
+#content{
+  padding: 0;
+  margin: 0%;
+  background-color: 0;
+}
 article {
   margin: 0px;
   float:  right;
@@ -84,25 +78,13 @@ article {
   height: 500px; /* only for demonstration, should be removed */
 }
 
-/* Clear floats after the columns */
-section:after {
-  content: "";
-  display: table;
-  clear: both;
-}
 
 /* Style the footer */
 footer {
   background-color: rgba(119, 119, 119, 0.027);
-  padding: 10px;
+  padding: 0px;
   border: darkgrey;
   text-align: center;
-}
-@media (max-width: 600px) {
-  nav, article {
-    width: 100%;
-    height: auto;
-  }
 }
 
 
@@ -112,7 +94,7 @@ footer {
   margin: 0rem auto auto;
   background-color:#eee;
 
-  padding:10px;
+  padding:0px;
   border:1px solid gray;
 
 }

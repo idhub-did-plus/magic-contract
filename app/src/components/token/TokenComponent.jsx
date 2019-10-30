@@ -16,7 +16,7 @@ class MyTokenComponent extends Component {
     return (
       <Router>
         <div>
-        <section id="wrap">
+        <div id="wrap">
             <nav className="sidemenu">
               <ul>
                 <li>
@@ -39,7 +39,7 @@ class MyTokenComponent extends Component {
                 
               </Switch>
             </article>
-          </section>
+          </div>
           <footer>mmmm</footer>
         </div>
       </Router>
@@ -59,7 +59,7 @@ export default function TokenComponent() {
 function TokenCreation(props) {
 
   return (
-    <div className="section">
+    <div className="mysection">
 
       <p className="desc"><b>   Compliance Service Registry: {props.drizzle.contracts.ComplianceServiceRegistry.address}</b>
         A  central place for tokens to  appoint their special compliance check logic and if not,  use a default one.
@@ -71,7 +71,7 @@ function TokenCreation(props) {
 function TokenStatistics(props) {
 
   return (
-    <div className="section">
+    <div className="mysection">
       <h2>ComplianceConfiguration: </h2>
       <p>
         A place to configure the claim logic for token which use ConfigurableComplianceService
