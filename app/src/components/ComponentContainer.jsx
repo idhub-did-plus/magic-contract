@@ -3,6 +3,7 @@ import React from "react";
 import { BrowserRouter as Router, NavLink, Route, Switch } from "react-router-dom";
 import ComplianceComponent from "./compliance/ComplianceComponent";
 import TokenComponent from "./token/TokenComponent";
+import TokenStatisticsComponent from "./token/TokenStatisticsComponent";
 import Topics from "./token/Topics";
 
 export default function ComponentContainer() {
@@ -19,7 +20,7 @@ export default function ComponentContainer() {
               <NavLink to="/token">TokenComponent</NavLink>
             </li>
             <li>
-              <NavLink to="/topics">Topics</NavLink>
+              <NavLink to="/statistics">TokenStatisticsComponent</NavLink>
             </li>
           </ul>
         
@@ -27,8 +28,8 @@ export default function ComponentContainer() {
             <Route path="/token">
               <TokenComponent />
             </Route>
-            <Route path="/topics">
-              <Topics />
+            <Route path="/statistics">
+              <TokenStatisticsComponent />
             </Route>
             <Route path="/compliance">
               <Compliance />

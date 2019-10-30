@@ -112,7 +112,7 @@ class ContractDataForm extends Component {
             />
           );
         })}
-        <Button primary
+        <Button 
           key="submit"
           onClick={this.handleSubmit}
         >
