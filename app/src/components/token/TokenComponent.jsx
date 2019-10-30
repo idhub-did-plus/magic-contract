@@ -16,7 +16,7 @@ class MyTokenComponent extends Component {
     return (
       <Router>
         <div>
-          <section>
+        <section id="wrap">
             <nav className="sidemenu">
               <ul>
                 <li>
