@@ -1,7 +1,7 @@
 
 .topmenu {
   list-style-type: none;
- margin: 0;
+  margin: 0;
   overflow: hidden;
   background-color: rgba(119, 119, 119, 0.164);
 }
@@ -11,13 +11,14 @@
 
 .topmenu li a {
   display: inline-block;
-  color: gray;
+  color: rgba(83, 80, 80, 0.884);
   text-align: center;
   padding: 16px;
   text-decoration: none;
 }
 .topmenu li a:hover {
   background-color: rgba(34, 34, 34, 0.212);
+  color: #eee;
 }
 .topmenu li a.active {
   color: gray;
@@ -78,10 +79,18 @@ article {
   height: 500px; /* only for demonstration, should be removed */
 }
 
-
-/* Style the footer */
-footer {
-  background-color: rgba(119, 119, 119, 0.027);
+.all{
+ 
+}
+.first {
+  float: top;
+  height: 80%;
+}
+ 
+.second {
+  background-color: rgba(53, 141, 122, 0.589);
+  height: 200px;
+ 
   padding: 0px;
   border: darkgrey;
   text-align: center;
@@ -95,7 +104,7 @@ footer {
   background-color:#eee;
 
   padding:0px;
-  border:1px solid gray;
+  border:0px solid gray;
 
 }
 .mysection {

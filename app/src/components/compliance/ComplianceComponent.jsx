@@ -16,7 +16,7 @@ class MyComponentInternal extends Component {
 
     return (
       <Router>
-        <div id="content">
+     
           <section id="wrap">
             <nav className="sidemenu">
               <ul >
@@ -57,8 +57,7 @@ class MyComponentInternal extends Component {
               </Switch>
             </article>
           </section>
-          <footer>mmmm</footer>
-        </div>
+
       </Router>
     )
   }

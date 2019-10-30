@@ -15,7 +15,7 @@ class MyTokenComponent extends Component {
 
     return (
       <Router>
-        <div>
+      
         <div id="wrap">
             <nav className="sidemenu">
               <ul>
@@ -40,8 +40,8 @@ class MyTokenComponent extends Component {
               </Switch>
             </article>
           </div>
-          <footer>mmmm</footer>
-        </div>
+
+       
       </Router>
     )
   }
