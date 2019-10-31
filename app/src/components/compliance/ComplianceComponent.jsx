@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { chooseMenu } from "../../store/action/actions"
+
 import ContractData from "../contract/ContractData";
 import ContractForm from "../contract/ContractForm";
 import ContractDataForm from "../contract/ContractDataForm";
@@ -75,7 +75,7 @@ export default function ComplianceComponent() {
     {drizzleContext => {
       const { drizzle, drizzleState, initialized } = drizzleContext;
 
-      return <MyComponentInternal selectMenu={(index) => drizzle.store.dispatch(chooseMenu(index))} {...mapStateToProps(drizzleState)} drizzle={drizzle} drizzleState={drizzleState} />
+      return <MyComponentInternal  {...mapStateToProps(drizzleState)} drizzle={drizzle} drizzleState={drizzleState} />
     }
     }
   </DrizzleContext.Consumer>

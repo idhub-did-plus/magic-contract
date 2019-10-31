@@ -1,21 +1,7 @@
 import { generateStore, Drizzle, EventActions } from '@drizzle/store'
 import drizzleOptions from './drizzleOptions'
-import {menuReducer} from "./reducer/resucers"
-import {} from "./action/actions"
-import { put, takeEvery } from 'redux-saga/effects'
-
-const TODOS_FETCH = 'MY_APP/TODOS_FETCH'
-const TODOS_RECEIVED = 'MY_APP/TODOS_RECEIVED'
-// fetch data from service using sagas
-function *fetchTodos() {
-   const todos = yield fetch('https://jsonplaceholder.typicode.com/todos')
-   .then(resp => resp.json())
-   yield put({ type: TODOS_RECEIVED, todos })
-  }
-  // app root saga
-  function *appRootSaga() {
-   yield takeEvery(TODOS_FETCH, fetchTodos)
-  }
+import loginReducer from "./login/reducers"
+import loginSaga from "./login/saga"
 
 const contractEventNotifier = store => next => action => {
    if (action.type === EventActions.EVENT_FIRED) {
@@ -29,10 +15,11 @@ const contractEventNotifier = store => next => action => {
    }
    return next(action)
   }
-  const appMiddlewares = [ contractEventNotifier ]
-  const appSagas = [appRootSaga]
 
-   const appReducers = { currentMenu: menuReducer }
+  const appMiddlewares = [ contractEventNotifier ]
+  const appSagas = [loginSaga]
+
+   const appReducers = { login: loginReducer }
    const store = generateStore({
     drizzleOptions,
     appReducers,
