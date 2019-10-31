@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { chooseMenu } from "../../store/actions"
+import { chooseMenu } from "../../store/action/actions"
 import ContractData from "../contract/ContractData";
 import ContractForm from "../contract/ContractForm";
 import ContractDataForm from "../contract/ContractDataForm";

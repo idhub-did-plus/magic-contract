@@ -1,7 +1,7 @@
 import { generateStore, Drizzle, EventActions } from '@drizzle/store'
 import drizzleOptions from './drizzleOptions'
-import {menuReducer} from "./resucers"
-import {} from "./actions"
+import {menuReducer} from "./reducer/resucers"
+import {} from "./action/actions"
 import { put, takeEvery } from 'redux-saga/effects'
 
 const TODOS_FETCH = 'MY_APP/TODOS_FETCH'
