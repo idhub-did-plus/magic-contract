@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { BrowserRouter as Router, NavLink, Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
-import { Button, Form, Checkbox } from 'semantic-ui-react'
+import { Button, Form, Checkbox,Table,TableBody,TableCell,TableRow } from 'semantic-ui-react'
 import { DrizzleContext } from "@drizzle/react-plugin";
 
 import ERC1400 from "../../contracts/ERC1400.json";
@@ -15,6 +15,7 @@ export default class Erc1400Component extends Component {
     this.utils = props.drizzle.web3.utils;
     this.MyContract = MyContract;
     this.formData = { controllers: [] };
+    this.deployedTokens= [];
 
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -34,7 +35,15 @@ export default class Erc1400Component extends Component {
       this.utils.toBN(this.formData.decimals),
       this.formData.controllers,
       this.props.drizzle.contracts.ComplianceServiceRegistry.address, {from:  this.props.drizzleState.accounts[0]}).then(inst=>{
-        window.alert(inst.address)
+       this.deployedTokens.push({
+        name: this.formData.name,
+        symbol: this.formData.symbol,
+        decimals:this.utils.toBN(this.formData.decimals),
+        controllers:this.formData.controllers,
+        registryAddress: this.props.drizzle.contracts.ComplianceServiceRegistry.address,
+        contractAddress: inst.address,
+        deployAccount: this.props.drizzleState.accounts[0]
+      });
       })
     return;
   }
@@ -62,8 +71,40 @@ export default class Erc1400Component extends Component {
       <div className="mysection">
         <h2>Erc1400: </h2>
         <p>A place to deploy erc1400 security token</p>
+        <Table celled>
+    <Table.Header>
+      <Table.Row>
+        <Table.HeaderCell>name</Table.HeaderCell>
+        <Table.HeaderCell>symbol</Table.HeaderCell>
+        <Table.HeaderCell>decimal</Table.HeaderCell>
+        <Table.HeaderCell>controllers</Table.HeaderCell>
+        <Table.HeaderCell>registryService</Table.HeaderCell>
+        <Table.HeaderCell>contractAddess</Table.HeaderCell>
+        <Table.HeaderCell>deployAccount</Table.HeaderCell>
+      </Table.Row>
+    </Table.Header>
+
+    <Table.Body>
+    {this.deployedTokens.map(el =>  
+    <Table.Row>
+        <Table.Cell>{el.name}</Table.Cell>
+        <Table.Cell>{el.symbol}</Table.Cell>
+        <Table.Cell>{el.decimals.toString()}</Table.Cell>
+        <Table.Cell>{el.controllers.toString()}</Table.Cell>
+        <Table.Cell>{el.registryAddress}</Table.Cell>
+        <Table.Cell>{el.contractAddress}</Table.Cell>
+        <Table.Cell>{el.deployAccount.toString()}</Table.Cell>
+      </Table.Row>
+      )}
+    </Table.Body>
+     
+
+   
+  </Table>
+          
+    
         <div
-          onSubmit={this.handleSubmit} onChange={this.handleInputChange}
+          onChange={this.handleInputChange}
         >
           <Form.Field>
             <label>Token Name</label>
