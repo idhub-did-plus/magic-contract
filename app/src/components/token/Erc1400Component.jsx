@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { BrowserRouter as Router, NavLink, Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
-import { Button, Form, Checkbox, Table, TableBody, TableCell, TableRow, Input } from 'semantic-ui-react'
+import { Button, Form, Checkbox, Table, TableBody, TableCell, TableRow } from 'semantic-ui-react'
 import { DrizzleContext } from "@drizzle/react-plugin";
 
 import ERC1400 from "../../contracts/ERC1400.json";
@@ -102,47 +102,38 @@ export default class Erc1400Component extends Component {
         <div
           onChange={this.handleInputChange}
         >
-             <Table fixed>  <Table.Body>
-             <Table.Row>
-             <Table.Cell> <label>Token Name</label></Table.Cell>
-             <Table.Cell>  <input placeholder='name' name="name" /></Table.Cell>
-             <Table.Cell> <label>Tonen Symbol</label></Table.Cell>
-             <Table.Cell><input placeholder='symbol' name="symbol" /></Table.Cell>
-             </Table.Row>
-    
-             <Table.Row>
-             <Table.Cell> <label>decimals</label></Table.Cell>
-             <Table.Cell>  <input placeholder='decimals' type="" name="decimals" /></Table.Cell>
-             <Table.Cell><label>Address of Compliance Service Registry</label></Table.Cell>
-             <Table.Cell> <input type="address" placeholder='CompolianceServiceRegistry' name="registryAddress" disabled value={this.props.drizzle.contracts.ComplianceServiceRegistry.address} ></input></Table.Cell>
-             </Table.Row>
+          <Form.Field>
+            <label>Token Name</label>
+            <input placeholder='name' name="name" />
+          </Form.Field>
+          <Form.Field>
+            <label>Tonen Symbol</label>
+            <input placeholder='symbol' name="symbol" />
+          </Form.Field>
+          <Form.Field>
+            <label>decimals</label>
+            <input placeholder='decimals' type="" name="decimals" />
+          </Form.Field>
+          <Form.Field>
+            <label>Address of Compliance Service Registry</label>
+            <input type="address" placeholder='CompolianceServiceRegistry' name="registryAddress" disabled value={this.props.drizzle.contracts.ComplianceServiceRegistry.address} ></input>
+          </Form.Field>
 
 
-             <Table.Row>
-          
-             <Table.Cell> 
           <div role="list" class="ui list">
             {this.formData.controllers.map(el => <div role="listitem" class="item">{el}</div>)}
 
-          </div></Table.Cell>
-           
-             </Table.Row>
+          </div>
+          <Form.Field>
+            <label>controller</label>
+            <input placeholder='controller' name="controller" />
+          </Form.Field>
+          <Button onClick={this.handleAddController}>add controller</Button>
+          <Form.Field>
+            <Checkbox label='I agree to the Terms and Conditions' />
+          </Form.Field>
 
-             <Table.Row>
-             <Table.Cell>     <label>controller</label></Table.Cell>
-             <Table.Cell>  <input placeholder='controller' name="controller" /></Table.Cell>
-            
-             </Table.Row>
-             <Table.Row>
-
-             <Button onClick={this.handleAddController}>add controller</Button>
-             </Table.Row>
-             </Table.Body>
-          </Table>
-          
-       
           <Button onClick={this.handleSubmit}>Submit</Button>
-       
         </div>
       </div>
     )
