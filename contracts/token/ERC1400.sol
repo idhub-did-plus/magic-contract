@@ -1,4 +1,3 @@
-
 pragma solidity ^0.5.0;
 
 import "./IERC1400.sol";
@@ -355,9 +354,8 @@ contract ERC1400 is IERC1400  {
   * @param _tokenHolder Address for which we want to issue tokens.
   * @param _value Number of tokens issued.
   * @param _data Information attached to the issuance, by the issuer. [CONTAINS THE CONDITIONAL OWNERSHIP CERTIFICATE]
-  * @param _Day is Lockdata.
   */
-  function issueByPartition(bytes32 _partition, address _tokenHolder, uint256 _value, bytes calldata _data,uint _Day)
+  function issueByPartition(bytes32 _partition, address _tokenHolder, uint256 _value, bytes calldata _data)
     external
     onlyOwner
   {
