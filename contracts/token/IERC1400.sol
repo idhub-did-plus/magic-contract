@@ -1,3 +1,4 @@
+
 pragma solidity^0.5.0;
 
 interface IERC1400 {
@@ -36,7 +37,7 @@ interface IERC1400 {
   // Token Issuance
   function isIssuable() external view returns (bool); //ok
   //function issue(address _tokenHolder, uint256 _value, bytes _data) external; //not need
-  function issueByPartition(bytes32 _partition, address _tokenHolder, uint256 _value, bytes calldata _data,uint _Day) external; //ok
+  function issueByPartition(bytes32 _partition, address _tokenHolder, uint256 _value, bytes calldata _data) external; //ok
 
   // Token Redemption
   //function redeem(uint256 _value, bytes _data) external;//not need
