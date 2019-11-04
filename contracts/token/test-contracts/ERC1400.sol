@@ -937,8 +937,8 @@ contract ERC1400 is IERC1400,IERC20{
    * @return A boolean that indicates if the operation was successful.
    */
   function transferFrom(address _holder, address _recipient, uint256 _amount) external returns (bool) {
-    require(_recipient != address(0), "ERC777: transfer to the zero address");
-    require(_holder != address(0), "ERC777: transfer from the zero address");
+    require(_recipient != address(0), "ERC1400: transfer to the zero address");
+    require(_holder != address(0), "ERC1400: transfer from the zero address");
     address _spender = msg.sender;
     _callTokensToSend(_spender,_holder,_recipient,_amount, "", "");
     _approve(_holder,_spender,_allowed[_holder][_spender].sub(_amount));
