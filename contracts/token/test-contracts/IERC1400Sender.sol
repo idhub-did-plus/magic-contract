@@ -9,11 +9,11 @@ interface IERC1400Sender {
      * This function may revert to prevent the operation from being executed.
      */
     function tokensToSend(
-        address operator,
-        address from,
-        address to,
-        uint256 amount,
-        bytes calldata userData,
-        bytes calldata operatorData
+        address _operator,
+        address _from,
+        address _to,
+        uint256 _amount,
+        bytes calldata _userData,
+        bytes calldata _operatorData
     ) external;
 }
