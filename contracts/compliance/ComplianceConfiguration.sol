@@ -1,19 +1,15 @@
 pragma solidity >=0.4.21 <0.6.0;
 
-contract ComplianceConfiguration{
-    address owner;
+import "./ownable/Ownable.sol";
+
+contract ComplianceConfiguration is Ownable{
     mapping(address=>string) configuations;
     
-    constructor() public{
-        owner = msg.sender;
-    }
-    
-    function getConfiguration(address token) public view returns (string memory) {
+    function getConfiguration(address token) public view returns (string) {
         return configuations[token];
     }
     
-    function setConfiguration(address token, string memory configuation) public {
-        require(msg.sender == owner, "only owner is valid!");
+    function setConfiguration(address token, string memory configuation) public onlyOwner {
         configuations[token] = configuation;
     }
 }
