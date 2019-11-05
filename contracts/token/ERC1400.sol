@@ -362,7 +362,7 @@ contract ERC1400 is IERC1400  {
     // Lockdata = wl.getdata(_Day);
     // _PartitionwithLock[_partition] = Lockdata;
     //require(wl.FindPersonal(_tokenHolder) == true); 
-    require(ccs.checkCompliance(address(this),msg.sender,_tokenHolder) ==true);
+    //require(ccs.checkCompliance(address(this),msg.sender,_tokenHolder) ==true);
     _issueByPartition(_partition, msg.sender,_tokenHolder,_value,_data, "");
   }
   /**
