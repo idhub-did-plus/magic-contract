@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 import "./IERC1400.sol";
 import "./SafeMath.sol";
 import "./ComplianceService.sol";
+import "./ComplianceServiceRegistry.sol"
 import "./IERC20.sol";
 
 /**
@@ -11,7 +12,7 @@ import "./IERC20.sol";
  */
 contract ERC1400 is IERC1400,IERC20  {
     
-  ComplianceService cs; 
+  ComplianceServiceRegistry csr; 
     
   using SafeMath for uint256;  
   
@@ -110,7 +111,7 @@ contract ERC1400 is IERC1400,IERC20  {
     string memory symbol,
     uint256 decimals,
     address[] memory controllers,
-    address  ComplianceServiceaddr
+    address  ComplianceServiceRegistryAddr
   )
     public
   {
@@ -122,7 +123,7 @@ contract ERC1400 is IERC1400,IERC20  {
     _isIssuable = true;
     owner = msg.sender;
     _totalSupply = 0;
-    cs = ComplianceService(ComplianceServiceaddr);
+    csr = ComplianceServiceRegistry(ComplianceServiceRegistryAddr);
     _controllers = controllers;
   }
 
@@ -151,7 +152,10 @@ contract ERC1400 is IERC1400,IERC20  {
   }
 
   /**
-   * @dev Get the total number of issued tokens.
+   * @dev Get the total number of 
+   
+   
+   d tokens.
    * @return Total supply of tokens currently in circulation.
    */
   function totalSupply() external view returns (uint256) {
@@ -379,6 +383,7 @@ contract ERC1400 is IERC1400,IERC20  {
     // Lockdata = wl.getdata(_Day);
     // _PartitionwithLock[_partition] = Lockdata;
     //require(wl.FindPersonal(_tokenHolder) == true); 
+    ComplianceService cs = ComplianceService(csr.findService(address(this)));
     require(cs.checkCompliance(address(this),msg.sender,_tokenHolder) ==true);
     _issueByPartition(_partition, msg.sender,_tokenHolder,_value,_data, "");
   }
@@ -704,6 +709,7 @@ contract ERC1400 is IERC1400,IERC20  {
   {
     //require(wl.FindPersonal(_from) == true);
     //require(wl.FindPersonal(_to) == true);
+    ComplianceService cs = ComplianceService(csr.findService(address(this)));
     require(cs.checkCompliance(address(this),_from,_to) == true);
     // require(now >=Lockdata);
     require(_isMultiple(_value));
