@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "./IERC1400.sol";
 import "./SafeMath.sol";
 import "./ComplianceService.sol";
-import "./ComplianceServiceRegistry.sol"
+import "./ComplianceServiceRegistry.sol";
 import "./IERC20.sol";
 
 /**
