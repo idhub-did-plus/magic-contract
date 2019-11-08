@@ -7,7 +7,7 @@ import IdentityRegistry  from "../contracts/IdentityRegistry.json";
 import EthereumDIDRegistry  from "../contracts/EthereumDIDRegistry.json";
 import ERC1056  from "../contracts/ERC1056.json";
 
-import TutorialToken from "../contracts/TutorialToken.json";
+// import TutorialToken from "../contracts/TutorialToken.json";
 const options = {
   web3: {
     block: false,
@@ -16,7 +16,7 @@ const options = {
       url: "ws://localhost:7545",
     },
   },
-  contracts: [EthereumClaimsRegistry,IdentityRegistry, EthereumDIDRegistry,ERC1056, ComplianceServiceRegistry, ConfigurableComplianceService, ComplianceConfiguration, TutorialToken],
+  contracts: [EthereumClaimsRegistry,IdentityRegistry, EthereumDIDRegistry,ERC1056, ComplianceServiceRegistry, ConfigurableComplianceService, ComplianceConfiguration],
   events: {
    
   },

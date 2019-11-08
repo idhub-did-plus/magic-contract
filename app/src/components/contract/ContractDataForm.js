@@ -112,14 +112,20 @@ class ContractDataForm extends Component {
             />
           );
         })}
-        <Button 
+        {/* <Button 
           key="submit"
           onClick={this.handleSubmit}
         >
           Fetch
-        </Button>
+        </Button> */}
+        <ContractDataReceiver {...this.props} dataKey={this.state.dataKey}/>
+        <br/>
+        <button 
+          key="submit"
+          onClick={this.handleSubmit}
+        >Fetch</button>
       </form>
-      <ContractDataReceiver {...this.props} dataKey={this.state.dataKey} />
+      
       </div>
     );
   }

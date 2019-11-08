@@ -111,8 +111,8 @@ function Configuration(props) {
       <h2>ComplianceConfiguration: </h2>
       <p>
         A place to configure the claim logic for token which use ConfigurableComplianceService
-</p>
-<p>
+      </p>
+      <p>
           {props.drizzle.contracts.ComplianceConfiguration.address}
       </p>
       <p>getConfiguration: </p>
