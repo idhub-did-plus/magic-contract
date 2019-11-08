@@ -4,7 +4,7 @@ import { BrowserRouter as Router, NavLink, Route, Switch } from "react-router-do
 import ComplianceComponent from "./compliance/ComplianceComponent";
 import TokenComponent from "./token/TokenComponent";
 import TokenStatisticsComponent from "./token/TokenStatisticsComponent";
-import Topics from "./token/Topics";
+
 
 export default function ComponentContainer() {
   return (
@@ -36,7 +36,7 @@ export default function ComponentContainer() {
             </Route>
           </Switch>
         </div>
-        <div className="second">99999</div>
+       
       </div>
     </Router>
   );
@@ -44,9 +44,6 @@ export default function ComponentContainer() {
 
 
 
-function About() {
-  return <h2>About</h2>;
-}
 
 function Compliance() {
   return <ComplianceComponent />

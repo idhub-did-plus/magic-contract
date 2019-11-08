@@ -2,17 +2,15 @@ pragma solidity ^0.5.0;
 
 import "./IERC1400.sol";
 import "./SafeMath.sol";
-import "./ComplianceService.sol";
-import "./ComplianceServiceRegistry.sol";
-import "./IERC20.sol";
+import "../compliance/ConfigurableComplianceService.sol";
 
 /**
  * @title ERC1400
  * @dev ERC1400 logic
  */
-contract ERC1400 is IERC1400,IERC20  {
+contract ERC1400 is IERC1400  {
     
-  ComplianceServiceRegistry csr; 
+  ConfigurableComplianceService ccs; 
     
   using SafeMath for uint256;  
   
@@ -75,11 +73,6 @@ contract ERC1400 is IERC1400,IERC20  {
   bool public _isIssuable;
   // Indicate whether the token can still be controlled by operators or not anymore.
   bool public _isControllable;
-  //****************************************************************************/
-  //********************** for ERC20 compatibility *****************************/
-  //****************************************************************************/
-  // Mapping from (tokenHolder, spender) to allowed value.
-  mapping (address => mapping (address => uint256)) internal _allowed;
 //   //Calculating the Locking Period
 //   uint256 public Lockdata;
 //   //this mapping about partitions <==> Lockdata 
@@ -111,7 +104,7 @@ contract ERC1400 is IERC1400,IERC20  {
     string memory symbol,
     uint256 decimals,
     address[] memory controllers,
-    address  ComplianceServiceRegistryAddr
+    address  ConfigurableComplianceServiceaddr
   )
     public
   {
@@ -123,7 +116,7 @@ contract ERC1400 is IERC1400,IERC20  {
     _isIssuable = true;
     owner = msg.sender;
     _totalSupply = 0;
-    csr = ComplianceServiceRegistry(ComplianceServiceRegistryAddr);
+    ccs = ConfigurableComplianceService(ConfigurableComplianceServiceaddr);
     _controllers = controllers;
   }
 
@@ -152,10 +145,7 @@ contract ERC1400 is IERC1400,IERC20  {
   }
 
   /**
-   * @dev Get the total number of 
-   
-   
-   d tokens.
+   * @dev Get the total number of issued tokens.
    * @return Total supply of tokens currently in circulation.
    */
   function totalSupply() external view returns (uint256) {
@@ -264,12 +254,9 @@ contract ERC1400 is IERC1400,IERC20  {
     return _isControllable;
   }
  /**
-  * @dev controller initiate transaction compulsory transfer.
-  * @param _partition Name of the partition.
-  * @param _to Token recipient.
-  * @param _value Number of tokens to transfer.
-  * @param _data Information attached to the transfer. [CAN CONTAIN THE DESTINATION PARTITION]
-  * @param _operatorData Information attached to the transfer, by the operator. 
+  * 
+  * 
+  * 
   */
   function controllerTransfer(bytes32 _partition,address _from, address _to, uint256 _value, bytes calldata _data, bytes calldata _operatorData) external onlyOwner{
     if (_balanceOfByPartition[_from][_partition] < _value) {
@@ -282,14 +269,6 @@ contract ERC1400 is IERC1400,IERC20  {
     }
      emit ControllerTransfer(msg.sender,_from,_to,_value,_data,_operatorData);
   }
- /**
-  * @dev controller initiate transaction compulsory redeem.
-  * @param _partition Name of the partition.
-  * @param _tokenHolder Address of a token holder.
-  * @param _value Number of tokens to transfer.
-  * @param _data Information attached to the transfer. [CAN CONTAIN THE DESTINATION PARTITION]
-  * @param _operatorData Information attached to the transfer, by the operator. 
-  */
   function controllerRedeem(bytes32 _partition,address _tokenHolder, uint256 _value, bytes calldata _data, bytes calldata _operatorData) external onlyOwner{
     if (_balanceOfByPartition[_tokenHolder][_partition] < _value){
          uint256 tovalue = _balanceOfByPartition[_tokenHolder][_partition];
@@ -383,8 +362,7 @@ contract ERC1400 is IERC1400,IERC20  {
     // Lockdata = wl.getdata(_Day);
     // _PartitionwithLock[_partition] = Lockdata;
     //require(wl.FindPersonal(_tokenHolder) == true); 
-    ComplianceService cs = ComplianceService(csr.findService(address(this)));
-    require(cs.checkCompliance(address(this),msg.sender,_tokenHolder) ==true);
+    require(ccs.checkCompliance(address(this),msg.sender,_tokenHolder) ==true);
     _issueByPartition(_partition, msg.sender,_tokenHolder,_value,_data, "");
   }
   /**
@@ -709,8 +687,7 @@ contract ERC1400 is IERC1400,IERC20  {
   {
     //require(wl.FindPersonal(_from) == true);
     //require(wl.FindPersonal(_to) == true);
-    ComplianceService cs = ComplianceService(csr.findService(address(this)));
-    require(cs.checkCompliance(address(this),_from,_to) == true);
+    require(ccs.checkCompliance(address(this),_from,_to) == true);
     // require(now >=Lockdata);
     require(_isMultiple(_value));
     require(_balanceOfByPartition[_from][_fromPartition] >= _value, "A4"); // Transfer Blocked - Sender balance insufficient
@@ -815,89 +792,6 @@ contract ERC1400 is IERC1400,IERC20  {
    */
   function totalPartitions() external view returns (bytes32[] memory) {
     return _totalPartitions;
-  }
-  /**
-   * @dev Transfers ownership of the contract to a new account (`newOwner`).
-   */
-  function changeOwner(address _newowner) external onlyOwner{
-    require(_newowner != address(0));
-    owner = _newowner;
-  }
-  /********************** ERC1400 BACKWARDS FUNCTIONS **************************/
-  
- /**
-  * @dev Get balance of a tokenholder for defaultPartitions.
-  * @param _tokenHolder Address for which the balance is returned.
-  * @return Amount of token of partition '_partition' held by '_tokenHolder' in the token contract.
-  */
-  function balanceOf(address _tokenHolder) public view returns (uint256) {
-    for(uint i=0;i<_partitionsOf[_tokenHolder].length;i++){
-        return _balanceOfByPartition[_tokenHolder][_partitionsOf[_tokenHolder][i]];
-    }
-  }
-  /**
-   * @dev Check the value of tokens that an owner allowed to a spender.
-   * @param _owner address The address which owns the funds.
-   * @param _spender address The address which will spend the funds.
-   * @return A uint256 specifying the value of tokens still available for the spender.
-   */
-  function allowance(address _owner, address _spender) external view returns (uint256) {
-    return _allowed[_owner][_spender];
-  }
-  /**
-   * @dev Approve the passed address to spend the specified amount of tokens on behalf of 'msg.sender'.
-   * Beware that changing an allowance with this method brings the risk that someone may use both the old
-   * and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this
-   * race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards:
-   * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
-   * @param _spender The address which will spend the funds.
-   * @param _value The amount of tokens to be spent.
-   * @return A boolean that indicates if the operation was successful.
-   */
-  function approve(address _spender, uint256 _value) external returns (bool) {
-    require(_spender != address(0), "A5"); // Transfer Blocked - Sender not eligible
-    address _holder = msg.sender;
-    _approve(_holder,_spender,_value);
-    return true;
-  }
-  /**
-   * @dev Transfer token for a specified address.
-   * @param _recipient The address to transfer _recipient.
-   * @param _amount The value to be transferred.
-   * @return A boolean that indicates if the operation was successful.
-   */
-  function transfer(address _recipient, uint256 _amount) external returns (bool) {
-    require(_recipient != address(0), "ERC1400: transfer to the zero address");
-    address _from = msg.sender;
-    for(uint i=0;i<_partitionsOf[_from].length;i++){
-        bytes32 partition = _transferByPartition(_partitionsOf[_from][i],_from,_from,_recipient,_amount,"", "",true);
-    }
-    emit Transfer(_from,_recipient,_amount);
-    return true;
-    }
-  /**
-   * @dev Transfer tokens from one address to another.
-   * @param _holder The address which you want to transfer tokens from.
-   * @param _recipient The address which you want to transfer to.
-   * @param _amount The amount of tokens to be transferred.
-   * @return A boolean that indicates if the operation was successful.
-   */
-  function transferFrom(address _holder, address _recipient, uint256 _amount) external returns (bool) {
-    require(_recipient != address(0), "ERC1400: transfer to the zero address");
-    require(_holder != address(0), "ERC1400: transfer from the zero address");
-    address _spender = msg.sender;
-    for(uint i=0;i<_partitionsOf[_holder].length;i++){
-        //require(_isOperatorForPartition(_partitionsOf[_holder][i],_spender,_holder), "A7");
-        _transferByPartition(_partitionsOf[_holder][i],_spender,_holder,_recipient,_amount,"", "",true);   
-    }
-    _approve(_holder,_spender,_allowed[_holder][_spender].sub(_amount));
-    return true;
-    }
-  function _approve(address _holder, address _spender, uint256 _value) private {
-    //require(holder != address(0), "ERC1400: approve from the zero address");
-    require(_spender != address(0), "ERC1400: approve to the zero address");
-    _allowed[_holder][_spender] = _value;
-    emit Approval(_holder,_spender,_value);
   }
 //     /**
 //   * [NOT MANDATORY FOR ERC1400Partition STANDARD]
