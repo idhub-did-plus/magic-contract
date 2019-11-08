@@ -21,6 +21,7 @@ export default class TokenListComponent extends Component {
 
     return (
       <div >
+<<<<<<< HEAD
         {/* <table class="table">
           <thead>
             <tr>
@@ -52,6 +53,10 @@ export default class TokenListComponent extends Component {
           </tbody>
         </table> */}
         <Table fixed style={{marginBottom:'20px'}}>
+=======
+
+        <Table fixed>
+>>>>>>> c7b9e88272945269b9a0268039fc50a223543ccf
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>name</Table.HeaderCell>

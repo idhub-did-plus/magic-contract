@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "truffle-config.js",
+  "proxy":"http://localhost:8080",
   "directories": {
     "test": "test"
   },

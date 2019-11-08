@@ -74,7 +74,11 @@ export default class TokenIssueComponent extends Component {
   render() {
 
     return (
+<<<<<<< HEAD
       <div className="box">
+=======
+      <div>
+>>>>>>> c7b9e88272945269b9a0268039fc50a223543ccf
       
        <TokenListComponent {...this.props} select={this.select}></TokenListComponent>
 
@@ -95,8 +99,13 @@ export default class TokenIssueComponent extends Component {
           </Form.Field>
          
 
+<<<<<<< HEAD
           <button onClick={this.handleSubmit}>Submit</button>
           {/* <Button onClick={this.handleSubmit}>Submit</Button> */}
+=======
+
+          <Button onClick={this.handleSubmit}>Submit</Button>
+>>>>>>> c7b9e88272945269b9a0268039fc50a223543ccf
         </div>
       </div>
     )

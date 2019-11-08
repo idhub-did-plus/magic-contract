@@ -227,6 +227,6 @@ event RedeemedByPartition(bytes32 indexed _partition, address indexed _operator,
 |      CONTRACT       |   ADDRESS   | 
 |  :----------------: | :---------- | 
 | whitelist           |0x992b7942da4f7193e6fd6c3ba7682c7cd6c6c6ab|
-| ERC1400             |0x330df930535ac1ffcf6db3af403434858e48ef69| 
+| ERC1400             |0xbe36ac72913fc9af716e7e734ffa22df82aacfa2| 
 | ERC1400合约发布人     |0xaebcdefdca428533412add0bae65da61c26a4fc3| 
 

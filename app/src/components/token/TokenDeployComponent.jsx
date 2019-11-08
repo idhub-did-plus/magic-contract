@@ -38,7 +38,11 @@ function MyTokenComponent(props) {
                         <NavLink to="/erc770" activeClassName="active">Erc777</NavLink>
                     </li>
                 </ul>
+<<<<<<< HEAD
                 <TokenListComponent {...props} />
+=======
+
+>>>>>>> c7b9e88272945269b9a0268039fc50a223543ccf
                 <Switch>
                     <Route path="/erc20">
                         <Erc20DeployComponent {...props} />
@@ -52,7 +56,11 @@ function MyTokenComponent(props) {
                     </Route>
                 </Switch>
             </Router>
+<<<<<<< HEAD
             
+=======
+            <TokenListComponent {...props} />
+>>>>>>> c7b9e88272945269b9a0268039fc50a223543ccf
         </div>
     )
 }
