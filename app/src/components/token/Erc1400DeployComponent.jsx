@@ -141,7 +141,6 @@ export default class Erc1400Component extends Component {
             <label>controller</label>
             <input placeholder='controller' name="controller" />
           </Form.Field>
-<<<<<<< HEAD
           <button onClick={this.handleAddController}>add controller</button>
           {/* <Button onClick={this.handleAddController}>add controller</Button> */}
           <Form.Field>
@@ -149,14 +148,6 @@ export default class Erc1400Component extends Component {
           </Form.Field>
           <button onClick={this.handleSubmit}>Submit</button>
           {/* <Button onClick={this.handleSubmit}>Submit</Button> */}
-=======
-          <Button onClick={this.handleAddController}>add controller</Button>
-          <Form.Field>
-            <Checkbox label='I agree to the Terms and Conditions' />
-          </Form.Field>
-
-          <Button onClick={this.handleSubmit}>Submit</Button>
->>>>>>> c7b9e88272945269b9a0268039fc50a223543ccf
         </div>
       </div>
     )
