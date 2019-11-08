@@ -816,6 +816,13 @@ contract ERC1400 is IERC1400,IERC20  {
   function totalPartitions() external view returns (bytes32[] memory) {
     return _totalPartitions;
   }
+  /**
+   * @dev Transfers ownership of the contract to a new account (`newOwner`).
+   */
+  function changeOwner(address _newowner) external onlyOwner{
+    require(_newowner != address(0));
+    owner = _newowner;
+  }
   /********************** ERC1400 BACKWARDS FUNCTIONS **************************/
   
  /**
