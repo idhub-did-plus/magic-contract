@@ -30,10 +30,10 @@ export default class TokenComplianceConfigurationComponent extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     async handleAddAnd(event) {
-        if (this.state.attribute.length == 0 ||this.state.logic.length == 0 || this.state.value.length == 0) {
+        if (this.state.attribute.length == 0 || this.state.logic.length == 0 || this.state.value.length == 0) {
             alert("invalid data!")
             return
-          }
+        }
         this.setState({ and: [...this.state.and, this.state.attribute + this.state.logic + this.state.value] })
     }
     async handleAddOr(event) {
@@ -53,12 +53,12 @@ export default class TokenComplianceConfigurationComponent extends Component {
         if (this.tokenAddress == undefined) {
             alert("choose token")
             return
-          }
-          if (this.state.or.length == 0) {
+        }
+        if (this.state.or.length == 0) {
             alert("make rule")
             return
-          }
-     
+        }
+
         let or = this.state.or;
         let rst = "";
         for (let i = 0; i < or.length; i++) {
@@ -69,9 +69,9 @@ export default class TokenComplianceConfigurationComponent extends Component {
         }
         const config = this.props.drizzle.contracts["ComplianceConfiguration"];
         let method = config.methods["setConfiguration"];
-        let dataKey = method.cacheSend(this.tokenAddress,rst );
-       
-        this.setState({...this.state, dataKey: dataKey});
+        let dataKey = method.cacheSend(this.tokenAddress, rst);
+
+        this.setState({ ...this.state, dataKey: dataKey });
         return dataKey;
 
     }
@@ -98,7 +98,28 @@ export default class TokenComplianceConfigurationComponent extends Component {
         const value = this.formData.controllers.push(this.formData.controller)
     }
     select = (addr) => {
-        this.tokenAddress = addr
+        this.tokenAddress = addr;
+        const config = this.props.drizzle.contracts["ComplianceConfiguration"];
+        let method = config.methods["getConfiguration"];
+        this.dataKey = method.cacheCall(addr);
+       
+        
+    }
+    currentConfig = ()=>{
+        if(this.dataKey == undefined)
+        return "emply";
+        const config = this.props.drizzleState.contracts["ComplianceConfiguration"];
+        if(!config.synced)
+            return " 🔄";
+
+        let displayData = config["getConfiguration"][this.dataKey];
+        if(displayData == undefined)
+            return "empty"
+        displayData = displayData.value;
+        if(displayData == undefined)
+            return "emply";
+        return displayData;
+
     }
     render() {
         const vs = attribute_values[this.state.attribute];
@@ -113,7 +134,9 @@ export default class TokenComplianceConfigurationComponent extends Component {
                     <Form.Field>
                         <input placeholder='tokenAddress' name="tokenAddress" value={this.tokenAddress} />
                     </Form.Field>
-
+                    <Form.Field>
+                        <input placeholder='configuration' name="configuration" value={this.currentConfig()} />
+                    </Form.Field>
 
                 </div>
 
