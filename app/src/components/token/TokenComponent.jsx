@@ -3,7 +3,7 @@ import React from "react";
 import { BrowserRouter as Router, NavLink, Route, Switch } from "react-router-dom";
 import TokenDeployComponent from "./TokenDeployComponent";
 import TokenIssueComponent from "./TokenIssueComponent";
-
+import TokenComplianceConfigurationComponent from "./TokenComplianceConfigurationComponent";
 
 export default function TokenComponent() {
   return <DrizzleContext.Consumer>
@@ -27,6 +27,9 @@ function MyTokenComponent(props) {
           <li>
             <NavLink to="/issue" activeClassName="active"> Token Issue</NavLink>
           </li>
+          <li>
+            <NavLink to="/compliance" activeClassName="active"> Token Compliance</NavLink>
+          </li>
 
         </ul>
       </nav>
@@ -37,6 +40,9 @@ function MyTokenComponent(props) {
           </Route>
           <Route path="/issue">
             <TokenIssueComponent {...props} />
+          </Route>
+          <Route path="/compliance">
+            <TokenComplianceConfigurationComponent {...props} />
           </Route>
 
         </Switch>

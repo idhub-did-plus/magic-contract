@@ -70,7 +70,7 @@ export default class TokenListComponent extends Component {
                         if(this.props.select!=undefined)
                             this.props.select(el.contractAddress) 
                     }
-             return  (<Table.Row  onClick={select}>
+             return  (<Table.Row  onClick={select} >
                 <Table.Cell>{el.name}</Table.Cell>
                 <Table.Cell>{el.symbol}</Table.Cell>
                 <Table.Cell>{el.decimals.toString()}</Table.Cell>

@@ -63,7 +63,7 @@ class ContractDataForm extends Component {
     }
 
     let method = this.contracts[this.props.contract].methods[this.props.method];
-    let dataKey = method.cacheCall(...convertedInputs);
+    let dataKey = method.cacheSend(...convertedInputs);
    
     this.setState({...this.state, dataKey: dataKey});
     return dataKey;

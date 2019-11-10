@@ -72,6 +72,15 @@ html {
   background-color: #3F4E7C;
   color: white;
 }
+
+.table tr:hover {
+  background-color: #3F4E7C;
+  color: white;
+}
+.table tr.active  {
+  background-color: #3F4E7C;
+  color: white;
+}
 #wrap{
   padding-left: 300px;
 }
