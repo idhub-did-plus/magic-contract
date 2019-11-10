@@ -12,7 +12,7 @@ export default class TokenComplianceConfigurationComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            token: "",
+       
             attribute: "",
             logic: "",
             value: "",
