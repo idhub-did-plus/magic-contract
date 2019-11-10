@@ -50,7 +50,7 @@ export default class TokenComplianceConfigurationComponent extends Component {
     }
     async handleSubmit(event) {
         event.preventDefault();
-        if (this.this.tokenAddress == undefined) {
+        if (this.tokenAddress == undefined) {
             alert("choose token")
             return
           }
