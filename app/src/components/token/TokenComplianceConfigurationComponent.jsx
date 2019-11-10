@@ -30,9 +30,14 @@ export default class TokenComplianceConfigurationComponent extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     async handleAddAnd(event) {
+        if (this.state.attribute.length == 0 ||this.state.logic.length == 0 || this.state.value.length == 0) {
+            alert("invalid data!")
+            return
+          }
         this.setState({ and: [...this.state.and, this.state.attribute + this.state.logic + this.state.value] })
     }
     async handleAddOr(event) {
+
         let and = this.state.and;
         let rst = "";
         for (let i = 0; i < and.length; i++) {
@@ -45,6 +50,15 @@ export default class TokenComplianceConfigurationComponent extends Component {
     }
     async handleSubmit(event) {
         event.preventDefault();
+        if (this.this.tokenAddress == undefined) {
+            alert("choose token")
+            return
+          }
+          if (this.state.or.length == 0) {
+            alert("make rule")
+            return
+          }
+     
         let or = this.state.or;
         let rst = "";
         for (let i = 0; i < or.length; i++) {
