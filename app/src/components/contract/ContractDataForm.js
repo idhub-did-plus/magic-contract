@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button } from 'semantic-ui-react'
 import PropTypes from "prop-types";
 import ContractDataReceiver from "./ContractDataReceiver"
+import { DrizzleContext } from "@drizzle/react-plugin";
 const translateType = type => {
   switch (true) {
     case /^uint/.test(type):
@@ -140,4 +141,16 @@ ContractDataForm.propTypes = {
   render: PropTypes.func,
 };
 
-export default ContractDataForm;
+export default (props) => {
+  return (
+    <DrizzleContext.Consumer>
+      {drizzleContext => {
+        return (
+          <ContractDataForm {...drizzleContext} {...props} />
+        );
+      }}
+    </DrizzleContext.Consumer>
+
+  )
+}
+

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-
+import { DrizzleContext } from "@drizzle/react-plugin";
 class ContractData extends Component {
   constructor(props) {
     super(props);
@@ -66,9 +66,9 @@ class ContractData extends Component {
       drizzleState.contracts[this.props.contract][this.props.method][
         this.state.dataKey
       ].value;
-      if(displayData === null){
-        return <li >
-            empty result!
+    if (displayData === null) {
+      return <li >
+        empty result!
       </li>
     }
     // Optionally convert to UTF8
@@ -144,4 +144,15 @@ ContractData.propTypes = {
   render: PropTypes.func,
 };
 
-export default ContractData;
+export default (props) => {
+  return (
+    <DrizzleContext.Consumer>
+      {drizzleContext => {
+        return (
+          <ContractData {...drizzleContext} {...props} />
+        );
+      }}
+    </DrizzleContext.Consumer>
+
+  )
+}

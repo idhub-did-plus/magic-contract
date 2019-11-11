@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-
+import { DrizzleContext } from "@drizzle/react-plugin";
 const translateType = type => {
   switch (true) {
     case /^uint/.test(type):
@@ -128,4 +128,16 @@ ContractForm.propTypes = {
   render: PropTypes.func,
 };
 
-export default ContractForm;
+export default (props) => {
+  return (
+    <DrizzleContext.Consumer>
+      {drizzleContext => {
+        return (
+          <ContractForm {...drizzleContext} {...props} />
+        );
+      }}
+    </DrizzleContext.Consumer>
+
+  )
+}
+
