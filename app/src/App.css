@@ -38,7 +38,7 @@ html {
   float: left;
   width: 300px;
   margin-left:-300px;
-  height: 500px; /* only for demonsration, should be removed */
+  height: 600px;
   background: #262E43;
   padding: 4px;
   padding-top: 0px;
@@ -60,15 +60,15 @@ html {
 .sidemenu li a {
   display: inline-block;
   color: #fff;
-  text-align: center;
-  padding:10px 5px;
+  padding:10px 15px;
+  width:100%;
   text-decoration: none;
 }
 .sidemenu li:hover {
   background-color: #3F4E7C;
   color: white;
 }
-.sidemenu li.active  {
+.sidemenu li a.active  {
   background-color: #3F4E7C;
   color: white;
 }
@@ -175,7 +175,6 @@ input{
 } */
 button{
   border-radius: 3px;
-  width:100px;
   padding: 8px;
   margin-bottom: 20px;
   border:none;
@@ -216,4 +215,10 @@ button{
 .fetching{
   position: relative;
   top: -30px;
+}
+.cell{
+  padding:3px!important;
+}
+.btn{
+  padding:4px!important;
 }

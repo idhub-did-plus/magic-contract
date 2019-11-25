@@ -132,34 +132,34 @@ export default class TokenComplianceConfigurationComponent extends Component {
                     onChange={this.handleInputChange}
                 >
                     <Form.Field>
+                        <label>token address</label>
                         <input placeholder='tokenAddress' name="tokenAddress" value={this.tokenAddress} />
                     </Form.Field>
                     <Form.Field>
+                        <label>configuration</label>
                         <input placeholder='configuration' name="configuration" value={this.currentConfig()} />
                     </Form.Field>
 
                 </div>
 
                 <Table >
-
-
                     <Table.Body>
-                        <Table.Row >
-                            <Table.Cell> <Dropdown
+                        <Table.Row>
+                            <Table.Cell className="cell"> <Dropdown
                                 placeholder='Select Attribute'
                                 fluid
                                 selection
                                 options={attribute_options}
                                 onChange={this.handleAttributeChange}
                             /></Table.Cell>
-                            <Table.Cell> <Dropdown
+                            <Table.Cell className="cell"> <Dropdown
                                 placeholder='Select Logic'
                                 fluid
                                 selection
                                 onChange={this.handleLogicChange}
                                 options={logic_options}
                             /></Table.Cell>
-                            <Table.Cell><Dropdown
+                            <Table.Cell className="cell"><Dropdown
                                 placeholder='Select value'
                                 fluid
                                 selection
@@ -194,7 +194,7 @@ export default class TokenComplianceConfigurationComponent extends Component {
                                     <Table.Row >
 
                                         <Table.Cell>{e}</Table.Cell>
-                                        <Table.Cell><Button value="remove" onClick={remove} >remove</Button></Table.Cell>
+                                        <Table.Cell><Button className="btn" value="remove" onClick={remove} >remove</Button></Table.Cell>
 
                                     </Table.Row>
                                 )
@@ -226,7 +226,7 @@ export default class TokenComplianceConfigurationComponent extends Component {
                                     <Table.Row >
 
                                         <Table.Cell>{e}</Table.Cell>
-                                        <Table.Cell><Button value="remove" onClick={remove} >remove</Button></Table.Cell>
+                                        <Table.Cell><Button className="btn" value="remove" onClick={remove} >remove</Button></Table.Cell>
 
                                     </Table.Row>
                                 )
@@ -252,8 +252,7 @@ const country_options = [
 const juris_options = [
     { key: 'j1', text: 'j1', value: 'j1' },
     { key: 'j2', text: 'j2', value: 'j2' },
-    { key: 'j3', text: 'j3', value: 'j3' },
-
+    { key: 'j3', text: 'j3', value: 'j3' }
 ]
 const attribute_options = [
     { key: 'country', text: 'country', value: 'country' },
