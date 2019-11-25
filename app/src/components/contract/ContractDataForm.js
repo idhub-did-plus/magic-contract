@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button } from 'semantic-ui-react'
 import PropTypes from "prop-types";
 import ContractDataReceiver from "./ContractDataReceiver"
+import { DrizzleContext } from "@drizzle/react-plugin";
 const translateType = type => {
   switch (true) {
     case /^uint/.test(type):
@@ -29,7 +30,7 @@ class ContractDataForm extends Component {
     const abi = this.contracts[this.props.contract].abi;
 
     this.inputs = [];
-    var initialState = {dataKey:null};
+    var initialState = { dataKey: null };
 
     // Iterate over abi for correct function.
     for (var i = 0; i < abi.length; i++) {
@@ -49,24 +50,36 @@ class ContractDataForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    try {
+      const convertedInputs = this.inputs.map(input => {
+        if (input.type === "bytes32") {
+          return this.utils.toHex(this.state[input.name]);
+        }
+        if (input.type === "address") {
+          if (!this.utils.isAddress(this.state[input.name])) {
 
-    const convertedInputs = this.inputs.map(input => {
-      if (input.type === "bytes32") {
-        return this.utils.toHex(this.state[input.name]);
+            throw new Error("not an address");
+          }
+
+        }
+        return this.state[input.name];
+      });
+
+      if (this.props.sendArgs) {
+        let method = this.contracts[this.props.contract].methods[this.props.method];
+        return method.cacheSend(...convertedInputs, this.props.sendArgs);
       }
-      return this.state[input.name];
-    });
 
-    if (this.props.sendArgs) {
       let method = this.contracts[this.props.contract].methods[this.props.method];
-      return method.cacheSend(...convertedInputs, this.props.sendArgs);
-    }
+      let dataKey = method.cacheSend(...convertedInputs);
 
-    let method = this.contracts[this.props.contract].methods[this.props.method];
-    let dataKey = method.cacheSend(...convertedInputs);
-   
-    this.setState({...this.state, dataKey: dataKey});
-    return dataKey;
+
+      this.setState({ ...this.state, dataKey: dataKey });
+      return dataKey;
+    } catch (err) {
+      alert(err)
+
+    }
   }
 
   handleInputChange(event) {
@@ -74,7 +87,7 @@ class ContractDataForm extends Component {
       event.target.type === "checkbox"
         ? event.target.checked
         : event.target.value;
-    this.setState({...this.state, [event.target.name]: value });
+    this.setState({ ...this.state, [event.target.name]: value });
   }
 
   render() {
@@ -89,43 +102,43 @@ class ContractDataForm extends Component {
     }
 
     return (
-        <div>
-        
-      <form
-        className="pure-form pure-form-stacked"
-        onSubmit={this.handleSubmit}
-      >
-        {this.inputs.map((input, index) => {
-          var inputType = translateType(input.type);
-          var inputLabel = this.props.labels
-            ? this.props.labels[index]
-            : input.name;
-          // check if input type is struct and if so loop out struct fields as well
-          return (
-            <input
-              key={input.name}
-              type={inputType}
-              name={input.name}
-              value={this.state[input.name]}
-              placeholder={inputLabel}
-              onChange={this.handleInputChange}
-            />
-          );
-        })}
-        {/* <Button 
+      <div>
+
+        <form
+          className="pure-form pure-form-stacked"
+          onSubmit={this.handleSubmit}
+        >
+          {this.inputs.map((input, index) => {
+            var inputType = translateType(input.type);
+            var inputLabel = this.props.labels
+              ? this.props.labels[index]
+              : input.name;
+            // check if input type is struct and if so loop out struct fields as well
+            return (
+              <input
+                key={input.name}
+                type={inputType}
+                name={input.name}
+                value={this.state[input.name]}
+                placeholder={inputLabel}
+                onChange={this.handleInputChange}
+              />
+            );
+          })}
+          {/* <Button 
           key="submit"
           onClick={this.handleSubmit}
         >
           Fetch
         </Button> */}
-        <ContractDataReceiver {...this.props} dataKey={this.state.dataKey}/>
-        <br/>
-        <button 
-          key="submit"
-          onClick={this.handleSubmit}
-        >Fetch</button>
-      </form>
-      
+          <ContractDataReceiver {...this.props} dataKey={this.state.dataKey} />
+          <br />
+          <button
+            key="submit"
+            onClick={this.handleSubmit}
+          >Fetch</button>
+        </form>
+
       </div>
     );
   }
@@ -140,4 +153,16 @@ ContractDataForm.propTypes = {
   render: PropTypes.func,
 };
 
-export default ContractDataForm;
+export default (props) => {
+  return (
+    <DrizzleContext.Consumer>
+      {drizzleContext => {
+        return (
+          <ContractDataForm {...drizzleContext} {...props} />
+        );
+      }}
+    </DrizzleContext.Consumer>
+
+  )
+}
+

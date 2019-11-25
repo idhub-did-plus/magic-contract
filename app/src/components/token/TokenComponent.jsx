@@ -36,7 +36,7 @@ function MyTokenComponent(props) {
       <article className="wrapper">
         <Switch>
           <Route path="/deploy">
-            <TokenDeployComponent {...props} />
+            <TokenDeployComponent  />
           </Route>
           <Route path="/issue">
             <TokenIssueComponent {...props} />

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-
+import { DrizzleContext } from "@drizzle/react-plugin";
 const translateType = type => {
   switch (true) {
     case /^uint/.test(type):
@@ -48,10 +48,17 @@ class ContractForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-
+    try{
     const convertedInputs = this.inputs.map(input => {
       if (input.type === "bytes32") {
         return this.utils.toHex(this.state[input.name]);
+      }
+      if (input.type === "address") {
+        if(!this.utils.isAddress(this.state[input.name])){
+      
+          throw new Error("not an address");
+        }
+      
       }
       return this.state[input.name];
     });
@@ -62,7 +69,11 @@ class ContractForm extends Component {
     }
 
     let method = this.contracts[this.props.contract].methods[this.props.method];
-    return method.cacheSend(...convertedInputs);
+  
+     return method.cacheSend(...convertedInputs);
+    }catch(err){
+      alert(err)
+    }
   }
 
   handleInputChange(event) {
@@ -128,4 +139,16 @@ ContractForm.propTypes = {
   render: PropTypes.func,
 };
 
-export default ContractForm;
+export default (props) => {
+  return (
+    <DrizzleContext.Consumer>
+      {drizzleContext => {
+        return (
+          <ContractForm {...drizzleContext} {...props} />
+        );
+      }}
+    </DrizzleContext.Consumer>
+
+  )
+}
+
