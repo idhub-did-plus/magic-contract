@@ -1,6 +1,6 @@
-pragma solidity >=0.4.21 <0.6.0;
+pragma solidity ^0.4.21;
 
-import "../ownable/Ownable.sol";
+import "./ownable/Ownable.sol";
 
 contract ComplianceConfiguration is Ownable{
     mapping(address=>string) configuations;
