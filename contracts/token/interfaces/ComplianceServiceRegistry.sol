@@ -5,7 +5,7 @@ contract ComplianceServiceRegistry {
     address defaultService;
     address owner;
     
-    function ComplianceServiceRegistry() public {
+    constructor() public {
         owner = msg.sender;
     }
     
