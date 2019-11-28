@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "truffle-config.js",
-  "proxy":"http://localhost:8080",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "develop": "truffle develop"
+    "develop": "truffle develop",
+    "compile": "bash ./compile.sh"
   },
   "repository": {
     "type": "git",

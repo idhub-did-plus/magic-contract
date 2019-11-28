@@ -1,0 +1,14 @@
+{
+    "contractsDir": "contracts/sol-v0.5",
+    "artifactsDir": "app/src/contracts",
+    "contracts": "*",
+    "solcVersion": "0.5.0",
+    "compilerSettings": {
+        "optimizer": { "enabled": true },
+        "outputSelection": {
+            "*": {
+                "*": ["abi", "evm.bytecode.object"]
+            }
+        }
+    }
+}
