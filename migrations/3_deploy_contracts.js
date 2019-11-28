@@ -8,12 +8,10 @@ const EthereumDIDRegistry = artifacts.require("EthereumDIDRegistry");
 const ERC1056 = artifacts.require("ERC1056");
 
 const Strings = artifacts.require("Strings");
-const TutorialToken = artifacts.require("TutorialToken");
-module.exports = function (deployer) {
+// const TutorialToken = artifacts.require("TutorialToken");
 
+module.exports = function (deployer) {
   deployer.deploy(ERC1056, IdentityRegistry.address, EthereumDIDRegistry.address);
   deployer.deploy(ComplianceConfiguration);
   deployer.deploy(EthereumClaimsRegistry);
-
-
 }

@@ -8,14 +8,8 @@ const EthereumDIDRegistry = artifacts.require("EthereumDIDRegistry");
 const ERC1056 = artifacts.require("ERC1056");
 
 const Strings = artifacts.require("Strings");
-const TutorialToken = artifacts.require("TutorialToken");
+// const TutorialToken = artifacts.require("TutorialToken");
 module.exports = function (deployer) {
-
-
   deployer.deploy(IdentityRegistry);
   deployer.deploy(EthereumDIDRegistry);
-
-
-
-
 }
