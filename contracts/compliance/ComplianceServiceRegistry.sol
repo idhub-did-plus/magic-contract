@@ -1,11 +1,11 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.5.0;
 
 contract ComplianceServiceRegistry {
     mapping (address=> address) services;
     address defaultService;
     address owner;
     
-    function ComplianceServiceRegistry() public {
+     constructor() public {
         owner = msg.sender;
     }
     

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.5.0;
 
 import "./ComplianceService.sol";
 import "./ComplianceConfiguration.sol";
@@ -17,7 +17,7 @@ contract ConfigurableComplianceService is ComplianceConfiguration, ComplianceSer
     EthereumDIDRegistryResolverInterface public erc1056;
     address public trustedIssuer;
     
-    function ConfigurableComplianceService (address _erc780, address _erc1484, address _erc1056) public {
+    constructor (address _erc780, address _erc1484, address _erc1056) public {
         // config = ComplianceConfiguration(_config);
         erc780 = EthereumClaimsRegistryInterface(_erc780);
         erc1484 = IdentityRegistryInterface(_erc1484);
@@ -67,8 +67,8 @@ contract ConfigurableComplianceService is ComplianceConfiguration, ComplianceSer
     }
     
     function checkAnd(address checkedAddress, string memory condition) public view returns (bool) {
-        var s = condition.toSlice();
-        var delim = "&&".toSlice();
+        Strings.slice memory s = condition.toSlice();
+         Strings.slice memory delim = "&&".toSlice();
         string[] memory parts = new string[](s.count(delim) + 1);
         for(uint i = 0; i < parts.length; i++) {
             parts[i] = s.split(delim).toString();
@@ -88,7 +88,7 @@ contract ConfigurableComplianceService is ComplianceConfiguration, ComplianceSer
     }
      
     function checkEqualItem(address checkedAddress,  string memory item) public view returns (bool) {
-        var kv = item.toSlice();
+        Strings.slice memory kv = item.toSlice();
         string memory key = kv.split("==".toSlice()).toString();
         string memory value = kv.toString();
         bytes32 myvalue = erc780.getClaim(trustedIssuer, checkedAddress, keccak256(bytes(key)));
@@ -98,7 +98,7 @@ contract ConfigurableComplianceService is ComplianceConfiguration, ComplianceSer
     }
      
     function checkNotEqualItem(address checkedAddress,  string memory item) public view returns (bool) {
-        var kv = item.toSlice();
+         Strings.slice memory kv = item.toSlice();
         string memory key = kv.split("!=".toSlice()).toString();
         string memory value = kv.toString();
         bytes32  myvalue = erc780.getClaim(trustedIssuer, checkedAddress, keccak256(bytes(key)));

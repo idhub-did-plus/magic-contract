@@ -34,8 +34,7 @@
  *      corresponding to the left and right parts of the string.
  */
 
-pragma solidity ^0.4.14;
-
+pragma solidity ^0.5.0;
 library Strings {
     struct slice {
         uint _len;
@@ -83,23 +82,23 @@ library Strings {
         uint ret;
         if (self == 0)
             return 0;
-        if (self & 0xffffffffffffffffffffffffffffffff == 0) {
+        if (self & bytes32(int256(0xffffffffffffffffffffffffffffffff)) == 0) {
             ret += 16;
             self = bytes32(uint(self) / 0x100000000000000000000000000000000);
         }
-        if (self & 0xffffffffffffffff == 0) {
+        if (self & bytes32(int256(0xffffffffffffffff)) == 0) {
             ret += 8;
             self = bytes32(uint(self) / 0x10000000000000000);
         }
-        if (self & 0xffffffff == 0) {
+        if (self & bytes32(int256(0xffffffff)) == 0) {
             ret += 4;
             self = bytes32(uint(self) / 0x100000000);
         }
-        if (self & 0xffff == 0) {
+        if (self & bytes32(int256(0xffff)) == 0) {
             ret += 2;
             self = bytes32(uint(self) / 0x10000);
         }
-        if (self & 0xff == 0) {
+        if (self & bytes32(int256(0xff)) == 0) {
             ret += 1;
         }
         return 32 - ret;
@@ -158,7 +157,7 @@ library Strings {
         // Starting at ptr-31 means the LSB will be the byte we care about
         uint ptr = self._ptr - 31;
         uint end = ptr + self._len;
-        for (l = 0; ptr < end; l++) {
+        for (uint l = 0; ptr < end; l++) {
             uint8 b;
             assembly { b := and(mload(ptr), 0xFF) }
             if (b < 0x80) {
@@ -702,7 +701,7 @@ library Strings {
         uint retptr;
         assembly { retptr := add(ret, 32) }
 
-        for(i = 0; i < parts.length; i++) {
+        for(uint i = 0; i < parts.length; i++) {
             memcpy(retptr, parts[i]._ptr, parts[i]._len);
             retptr += parts[i]._len;
             if (i < parts.length - 1) {

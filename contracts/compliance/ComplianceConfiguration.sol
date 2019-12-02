@@ -1,11 +1,11 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.5.0;
 
 import "./ownable/Ownable.sol";
 
 contract ComplianceConfiguration is Ownable{
     mapping(address=>string) configuations;
     
-    function getConfiguration(address token) public view returns (string) {
+    function getConfiguration(address token) public view returns   (string memory){
         return configuations[token];
     }
     
