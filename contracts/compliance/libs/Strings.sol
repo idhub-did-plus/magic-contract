@@ -78,30 +78,30 @@ library Strings {
      * @param self The value to find the length of.
      * @return The length of the string, from 0 to 32.
      */
-    function len(bytes32 self) internal pure returns (uint) {
-        uint ret;
-        if (self == 0)
-            return 0;
-        if (self & bytes32(int256(0xffffffffffffffffffffffffffffffff)) == 0) {
-            ret += 16;
-            self = bytes32(uint(self) / 0x100000000000000000000000000000000);
+    function len(slice memory self) internal pure returns (uint length) {
+        // Starting at ptr-31 means the LSB will be the byte we care about
+        uint ptr = self._ptr - 31;
+        uint end = ptr + self._len;
+        uint length = 0;
+        for (uint l = 0; ptr < end; l++) {
+            uint8 b;
+            assembly { b := and(mload(ptr), 0xFF) }
+            if (b < 0x80) {
+                ptr += 1;
+            } else if(b < 0xE0) {
+                ptr += 2;
+            } else if(b < 0xF0) {
+                ptr += 3;
+            } else if(b < 0xF8) {
+                ptr += 4;
+            } else if(b < 0xFC) {
+                ptr += 5;
+            } else {
+                ptr += 6;
+            }
+            length = l + 1;
         }
-        if (self & bytes32(int256(0xffffffffffffffff)) == 0) {
-            ret += 8;
-            self = bytes32(uint(self) / 0x10000000000000000);
-        }
-        if (self & bytes32(int256(0xffffffff)) == 0) {
-            ret += 4;
-            self = bytes32(uint(self) / 0x100000000);
-        }
-        if (self & bytes32(int256(0xffff)) == 0) {
-            ret += 2;
-            self = bytes32(uint(self) / 0x10000);
-        }
-        if (self & bytes32(int256(0xff)) == 0) {
-            ret += 1;
-        }
-        return 32 - ret;
+        return length;
     }
 
     /*
