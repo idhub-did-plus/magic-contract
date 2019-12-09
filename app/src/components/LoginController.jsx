@@ -32,12 +32,11 @@ export default class LoginController extends Component {
     }
     var myDate = new Date();
 		var timestamp = myDate.getTime();
-   
     let web3 = this.props.drizzle.web3;
-    let identity = web3.eth.coinbase;
-    var data = web3.fromUtf8(identity + timestamp + this.claim)
-    web3.personal.sign(data, web3.eth.coinbase,(error, signature)=>{
-      var identity = web3.eth.coinbase;
+    let identity =  this.props.drizzleState.accounts[0];
+    var data = web3.utils.fromUtf8(identity + timestamp + this.claim)
+    web3.eth.personal.sign(data, identity,(error, signature)=>{
+      
       let json = this.request(identity, timestamp, this.claim, signature);
       
     });

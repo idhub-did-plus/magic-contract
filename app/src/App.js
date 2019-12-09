@@ -21,7 +21,7 @@ class App extends Component {
               }
 
               return (
-                <LoginController drizzle={drizzle}>
+                <LoginController drizzle={drizzle} drizzleState={drizzleState}>
                   <ComponentContainer drizzle={drizzle} drizzleState={drizzleState} />
                 </LoginController>
               );
