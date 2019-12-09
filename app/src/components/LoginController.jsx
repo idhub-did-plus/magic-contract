@@ -32,12 +32,14 @@ export default class LoginController extends Component {
     }
     var myDate = new Date();
 		var timestamp = myDate.getTime();
-    var data = web3.fromUtf8(web3.eth.coinbase + timestamp + claim)
+   
     let web3 = this.props.drizzle.web3;
+    let identity = web3.eth.coinbase;
+    var data = web3.fromUtf8(identity + timestamp + this.claim)
     web3.personal.sign(data, web3.eth.coinbase,(error, signature)=>{
       var identity = web3.eth.coinbase;
-      request(identity, timestamp, this.claim, signature);
-    
+      let json = this.request(identity, timestamp, this.claim, signature);
+      
     });
 
   }
@@ -57,6 +59,7 @@ export default class LoginController extends Component {
         referrer: 'no-referrer', // *client, no-referrer
       })
       let json = response.json() // parses response to JSON
+      return json;
     } catch (err) {
       alert(err);
     } finally {
