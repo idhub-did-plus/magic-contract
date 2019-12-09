@@ -6,7 +6,8 @@ import TokenComponent from "./token/TokenComponent";
 import TokenStatisticsComponent from "./token/TokenStatisticsComponent";
 
 
-export default function ComponentContainer() {
+export default function ComponentContainer(props) {
+  let claim = props.drizzleState.login.claim;
   return (
     <Router>
       <div className="all">
@@ -18,17 +19,19 @@ export default function ComponentContainer() {
               </div>
               <p className="logoText">MagicCircle</p>
             </li>
-            <li style={{marginLeft:'110px'}}>
+            <li hidden={claim !=="complianceManager"} style={{ marginLeft: '110px' }}>
               <NavLink to="/compliance">Compliance</NavLink>
             </li>
-            <li>
+
+            <li hidden={claim !=="tokenIssuer"} >
               <NavLink to="/token">TokenComponent</NavLink>
             </li>
+
             <li>
               <NavLink to="/statistics">TokenStatisticsComponent</NavLink>
             </li>
           </ul>
-        
+
           <Switch>
             <Route path="/token">
               <TokenComponent />
@@ -41,7 +44,7 @@ export default function ComponentContainer() {
             </Route>
           </Switch>
         </div>
-       
+
       </div>
     </Router>
   );

@@ -2,7 +2,7 @@
 
 import React, { Component, Children } from "react";
 import { DrizzleContext } from "@drizzle/react-plugin";
-import { login } from "../store/login/actions"
+import { loginFinished } from "../store/login/actions"
 import { Dropdown, Button, Checkbox, Table, TableBody, TableCell, TableRow } from 'semantic-ui-react'
 
 
@@ -25,7 +25,7 @@ export default class LoginController extends Component {
     this.claim = text.value;
 
   }
-  login(event) {
+  async login(event) {
     if (this.claim == undefined) {
       alert("choose claim please!")
       return
@@ -35,9 +35,13 @@ export default class LoginController extends Component {
     let web3 = this.props.drizzle.web3;
     let identity =  this.props.drizzleState.accounts[0];
     var data = web3.utils.fromUtf8(identity + timestamp + this.claim)
-    web3.eth.personal.sign(data, identity,(error, signature)=>{
+    web3.eth.personal.sign(data, identity,async (error, signature)=>{
       
-      let json = this.request(identity, timestamp, this.claim, signature);
+      let json = await this.request(identity, timestamp, this.claim, signature);
+      if(json.success){
+        this.props.drizzle.store.dispatch(loginFinished(json));
+      }
+
       
     });
 
@@ -68,7 +72,7 @@ export default class LoginController extends Component {
 
   render() {
     let login = this.props.drizzle.store.getState().login;
-    if (login === true) {
+    if (login.success === true) {
       // Load the dapp.
       return Children.only(this.props.children)
     }
@@ -95,8 +99,8 @@ export default class LoginController extends Component {
 }
 
 const countryOptions = [
-  { key: 'af', value: 'af', text: 'Afghanistan' },
-  { key: 'ax', value: 'ax', text: 'Aland Islands' },
-  { key: 'al', value: 'al', text: 'Albania' },
+  { key: 'complianceManager', value: 'complianceManager', text: 'complianceManager' },
+  { key: 'tokenIssuer', value: 'tokenIssuer', text: 'tokenIssuer' },
+
 ]
 
