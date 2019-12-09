@@ -15,8 +15,11 @@ export default class LoginController extends Component {
     this.login = this.login.bind(this);
 
   }
-  componentDidMount() {
-
+  async componentDidMount() {
+    let json = await this.reentry();
+    if(json.success){
+      this.props.drizzle.store.dispatch(loginFinished(json));
+    }
     //this.props.drizzle.store.dispatch(login());
 
   }
@@ -69,7 +72,29 @@ export default class LoginController extends Component {
 
     }
   }
+  async reentry() {
+    try {
+      let response = await fetch('http://localhost:8080/login?action=reentry', {
+       
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, same-origin, *omit
+        headers: {
+          'user-agent': 'Mozilla/4.0 MDN Example',
+          'content-type': 'application/json'
+        },
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, cors, *same-origin
+        redirect: 'follow', // manual, *follow, error
+        referrer: 'no-referrer', // *client, no-referrer
+      })
+      let json = response.json() // parses response to JSON
+      return json;
+    } catch (err) {
+      alert(err);
+    } finally {
 
+    }
+  }
   render() {
     let login = this.props.drizzle.store.getState().login;
     if (login.success === true) {
