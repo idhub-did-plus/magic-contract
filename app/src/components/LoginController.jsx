@@ -24,8 +24,24 @@ export default class LoginController extends Component {
 
     this.claim = text.value;
 
-  } 
-  login(event){
+  }
+  login(event) {
+    if (this.claim == undefined) {
+      alert("choose claim please!")
+      return
+    }
+    var myDate = new Date();
+		var timestamp = myDate.getTime();
+    var data = web3.fromUtf8(timestamp + web3.eth.coinbase)
+    web3.personal.sign(data, web3.eth.coinbase,(error, signature)=>{
+      var identity = web3.eth.coinbase;
+      ajax.open('get','auth/login?identity='+identity+'&timestamp='+timestamp + "&signature=" + signature);
+      ajax.send(null);
+    });
+
+
+    
+
 
   }
   render() {
@@ -48,8 +64,8 @@ export default class LoginController extends Component {
           options={countryOptions}
           onChange={this.handleClaimChange}
         />
-        <Button 
-        onClick={this.login}
+        <Button
+          onClick={this.login}
         />
       </main>
     )
