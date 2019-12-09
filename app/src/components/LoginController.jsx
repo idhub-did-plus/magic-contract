@@ -90,9 +90,8 @@ export default class LoginController extends Component {
           options={countryOptions}
           onChange={this.handleClaimChange}
         />
-        <Button
-          onClick={this.login}
-        />
+         <button class="ui primary button"  onClick={this.login}>Login</button>
+
       </main>
     )
   }
