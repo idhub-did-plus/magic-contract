@@ -153,10 +153,11 @@ library Strings {
      * @param self The slice to operate on.
      * @return The length of the slice in runes.
      */
-    function len(slice memory self) internal pure returns (uint l) {
+    function len(slice memory self) internal pure returns (uint length) {
         // Starting at ptr-31 means the LSB will be the byte we care about
         uint ptr = self._ptr - 31;
         uint end = ptr + self._len;
+        uint length = 0;
         for (uint l = 0; ptr < end; l++) {
             uint8 b;
             assembly { b := and(mload(ptr), 0xFF) }
@@ -173,7 +174,9 @@ library Strings {
             } else {
                 ptr += 6;
             }
+            length = l + 1;
         }
+        return length;
     }
 
     /*
