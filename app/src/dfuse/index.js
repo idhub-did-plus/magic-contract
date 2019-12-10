@@ -1,8 +1,10 @@
 
-import { createDfuseClient } from "@dfuse/client";
+const { createDfuseClient } = require("@dfuse/client")
+global.fetch = require('node-fetch')
+global.WebSocket = require('ws')
 
 const client = createDfuseClient({
-  apiKey: server_34fcabddfddb74bd5edbacbde9027660,
+  apiKey: "server_34fcabddfddb74bd5edbacbde9027660",
   network: "mainnet.eth.dfuse.io",
 })
 
@@ -38,3 +40,5 @@ const operation = `subscription($cursor: String!) {
     await stream.join()
     await client.release()
   }
+
+  main().catch((error) => console.log("Unexpected error", error))

@@ -17,6 +17,7 @@
     "semantic-ui-react": "^0.88.1"
   },
   "scripts": {
+    "dfuse": "node src/dfuse/index.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
