@@ -18,7 +18,7 @@ function MyTokenComponent(props) {
 
   return (
     <Router>
- <section id="wrap">
+ <section className="SideContainer">
       <nav className="sidemenu">
         <ul >
           <li>

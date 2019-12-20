@@ -37,6 +37,7 @@ html {
   list-style-type: none;
   float: left;
   width: 300px;
+  height: 100%;
   background: #262E43;
   padding: 4px;
   padding-top: 0px;
@@ -85,11 +86,7 @@ html {
   position:relative;
   height:100%;
 }
-#content{
-  padding: 0;
-  margin: 0%;
-  background-color: 0;
-}
+
 article {
   margin: 0px;
   float:  right;
