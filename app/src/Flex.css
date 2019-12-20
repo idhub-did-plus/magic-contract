@@ -1,4 +1,11 @@
 
+.container {
+    display: flex; /* or inline-flex */
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+
 html {
   box-sizing: border-box;
 }
@@ -37,6 +44,8 @@ html {
   list-style-type: none;
   float: left;
   width: 300px;
+  margin-left:-300px;
+  height: 600px;
   background: #262E43;
   padding: 4px;
   padding-top: 0px;
@@ -79,11 +88,8 @@ html {
   background-color: #3F4E7C;
   color: white;
 }
-.SideContainer{
-  display:flex;
-  flex-direction: row;
-  position:relative;
-  height:100%;
+#wrap{
+  padding-left: 300px;
 }
 #content{
   padding: 0;
@@ -100,11 +106,22 @@ article {
 }
 
 .all{
-  display:flex;
-  flex-direction: column;
-  position:relative;
-  height:100%;
+ 
 }
+.first {
+  float: top;
+  height: 80%;
+}
+ 
+.second {
+  background-color: rgba(53, 141, 122, 0.589);
+  height: 200px;
+ 
+  padding: 0px;
+  border: darkgrey;
+  text-align: center;
+}
+
 
 .wrapper {
 

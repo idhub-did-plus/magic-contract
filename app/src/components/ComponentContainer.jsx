@@ -11,7 +11,6 @@ export default function ComponentContainer(props) {
   return (
     <Router>
       <div className="all">
-        <div className="first">
 
           <ul className="topmenu">
             <li>
@@ -43,7 +42,7 @@ export default function ComponentContainer(props) {
               <Compliance />
             </Route>
           </Switch>
-        </div>
+
 
       </div>
     </Router>
