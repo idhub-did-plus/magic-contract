@@ -9,8 +9,8 @@ import TokenStatisticsComponent from "./token/TokenStatisticsComponent";
 export default function ComponentContainer(props) {
   let claim = props.drizzleState.login.claim;
   return (
-    <Router>
-      <div className="all">
+    <Router >
+
 
           <ul className="topmenu">
             <li>
@@ -42,9 +42,10 @@ export default function ComponentContainer(props) {
               <Compliance />
             </Route>
           </Switch>
+          <div className="status"></div>
 
 
-      </div>
+
     </Router>
   );
 }

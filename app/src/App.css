@@ -1,20 +1,62 @@
+.SideContainer{
+  display:flex;
+  align-items: stretch;
+  flex-direction: row;
+  justify-content: stretch;
+  flex: 1 1 auto;
 
-html {
-  box-sizing: border-box;
-}
-*, *::before, *::after {
-  box-sizing: inherit;
+
+  background-color: #181a83;
 }
 
+
+article {
+  margin: 0px;
+
+  padding: 0px;
+
+  background-color: #2F3452;
+ 
+}
+
+
+.wrapper {
+  flex-grow: 1;
+  align-self: stretch;
+  background-color:#2F3452;
+  padding:0px;
+  border:0px solid gray;
+
+}
+.mysection {
+  text-align: left;
+  max-width: 90%;
+  margin-left: 20px;
+  margin-top: 20px;
+  background-color: rgb(39, 48, 88);
+  padding:20px;
+  color:#fff;
+}
+.status{
+  flex: 0 0 80px;
+  background-color:#2F3452;
+}
+.all{
+  display:flex;
+  flex-flow: column;
+  height: 100%;
+  background-color:#2F3452;
+}
 .topmenu {
-  list-style-type: none;
+  flex: 0 1 auto;
+  display: flex;
+
   margin: 0;
-  overflow: hidden;
   background-color: #2F3452;
   padding-left: 8px;
 }
 .topmenu li {
-  float: left;
+  flex: 0 1 auto;
   padding: 0px 10px;
 }
 
@@ -34,11 +76,13 @@ html {
   background-color: #1E2336;
 }
 .sidemenu {
-  list-style-type: none;
-  float: left;
+  display: flex;
+  flex-direction: column;
+
+
   width: 350px;
-  height: 100%;
-  background: #262E43;
+
+  background: #2F3452;
   padding: 4px;
   padding-top: 0px;
 
@@ -80,46 +124,8 @@ html {
   background-color: #3F4E7C;
   color: white;
 }
-.SideContainer{
-  display:flex;
-  flex-direction: row;
-  position:relative;
-  height:100%;
-}
 
-article {
-  margin: 0px;
-  float:  right;
-  padding: 0px;
-  width: 100%;
-  background-color: #f1f1f1;
-  height: 500px; /* only for demonstration, should be removed */
-}
 
-.all{
-  display:flex;
-  flex-direction: column;
-  position:relative;
-  height:100%;
-}
-
-.wrapper {
-
-  margin: 0rem auto auto;
-  background-color:#1D2439;
-  padding:0px;
-  border:0px solid gray;
-
-}
-.mysection {
-  text-align: left;
-  max-width: 90%;
-  margin-left: 20px;
-  margin-top: 20px;
-  background-color: #242945;
-  padding:20px;
-  color:#fff;
-}
 p.ex2
 {
 	font:italic bold 12px/30px Georgia,serif;
@@ -194,7 +200,7 @@ button{
   font-family: \5FAE\8F6F\96C5\9ED1;
 }
 .box{
-  background: #242945;
+  background: #17c4bb;
   padding:20px;
   margin-left: 20px;
   margin-top: 20px;
