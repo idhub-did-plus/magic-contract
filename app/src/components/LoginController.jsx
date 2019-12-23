@@ -17,7 +17,7 @@ export default class LoginController extends Component {
   }
   async componentDidMount() {
     let json = await this.reentry();
-    if(json.success){
+    if(json != undefined &&json.success){
       this.props.drizzle.store.dispatch(loginFinished(json));
     }
     //this.props.drizzle.store.dispatch(login());
@@ -41,7 +41,7 @@ export default class LoginController extends Component {
     web3.eth.personal.sign(data, identity,async (error, signature)=>{
       
       let json = await this.request(identity, timestamp, this.claim, signature);
-      if(json.success){
+      if(json != undefined && json.success){
         this.props.drizzle.store.dispatch(loginFinished(json));
       }
 
