@@ -104,7 +104,8 @@ export default class LoginController extends Component {
 
     return (
       // Display a loading indicator.
-      <main>
+      
+      <main className="login">
         <h1>⚙️</h1>
         <p>Login dapp...</p>
         <Dropdown
