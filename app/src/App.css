@@ -37,7 +37,8 @@ article {
 }
 .status{
   flex: 0 0 80px;
-  background-color:rgb(69, 73, 90);
+  background-color:#2F3452;
+  border:2px solid  #181a83;
 }
 .all{
   display:flex;
