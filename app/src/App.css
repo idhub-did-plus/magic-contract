@@ -4,8 +4,6 @@
   flex-direction: row;
   justify-content: stretch;
   flex: 1 1 auto;
-
-
   background-color: #181a83;
 }
 
@@ -39,7 +37,7 @@ article {
 }
 .status{
   flex: 0 0 80px;
-  background-color:#2F3452;
+  background-color:rgb(69, 73, 90);
 }
 .all{
   display:flex;
