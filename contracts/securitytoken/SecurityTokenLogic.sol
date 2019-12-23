@@ -1,5 +1,6 @@
 pragma solidity 0.5.8;
 
+import "./interfaces/IDataStore.sol";
 import "./interfaces/ITokenStore.sol";
 import "./interfaces/ITokenDocument.sol";
 import "./interfaces/ITokenPartition.sol";
@@ -18,6 +19,11 @@ import "./tokendoc/TokenDocumentStorage.sol";
 
 contract SecurityTokenLogic is SecurityTokenStorage, IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     using SafeMath for uint256;
+
+    modifier checkGranularity(uint256 _value) {
+        require(_value % granularity == 0, "Invalid granularity");
+        _;
+    }
 
 
     /////////////////////////////
@@ -126,21 +132,24 @@ contract SecurityTokenLogic is SecurityTokenStorage, IERC20, IERC1410, IERC1594,
         return _isIssuable();
     }
 
-    function issue(address _tokenHolder, uint256 _value, bytes calldata _data) external {
+    function issue(address _tokenHolder, uint256 _value, bytes calldata _data) external checkGranularity(_value) {
         require(_isIssuable(), "Security Can Not Issue");
         ITokenStore(tokenStore).setBalances(_tokenHolder, _balanceOf(_tokenHolder).add(_value));
         ITokenStore(tokenStore).setTotalSupply(_totalSupply().add(_value));
+        _adjustInvestorCount(address(0), _tokenHolder, _value, _balanceOf(_tokenHolder), 0);
     }
 
     // Token Redemption
-    function redeem(uint256 _value, bytes calldata _data) external {
+    function redeem(uint256 _value, bytes calldata _data) external checkGranularity(_value) {
         ITokenStore(tokenStore).setBalances(msg.sender, _balanceOf(msg.sender).sub(_value));
         ITokenStore(tokenStore).setTotalSupply(_totalSupply().sub(_value));
+        _adjustInvestorCount(msg.sender, address(0), _value, 0, _balanceOf(msg.sender));
     }
 
-    function redeemFrom(address _tokenHolder, uint256 _value, bytes calldata _data) external{
+    function redeemFrom(address _tokenHolder, uint256 _value, bytes calldata _data) external checkGranularity(_value) {
         ITokenStore(tokenStore).setBalances(_tokenHolder, _balanceOf(_tokenHolder).sub(_value));
         ITokenStore(tokenStore).setTotalSupply(_totalSupply().sub(_value));
+        _adjustInvestorCount(_tokenHolder, address(0), _value, 0, _balanceOf(_tokenHolder));
     }
 
 
@@ -152,12 +161,12 @@ contract SecurityTokenLogic is SecurityTokenStorage, IERC20, IERC1410, IERC1594,
         tokenController.isControllable(msg.sender);
     }
 
-    function controllerTransfer(address _from, address _to, uint256 _value, bytes calldata _data, bytes calldata _operatorData) external {
+    function controllerTransfer(address _from, address _to, uint256 _value, bytes calldata _data, bytes calldata _operatorData) external checkGranularity(_value) {
         tokenController.controllerTransfer(_from, _to, _value, _data, _operatorData);
         emit ControllerTransfer(msg.sender, _from, _to, _value, _data, _operatorData);
     }
 
-    function controllerRedeem(address _tokenHolder, uint256 _value, bytes calldata _data, bytes calldata _operatorData) external {
+    function controllerRedeem(address _tokenHolder, uint256 _value, bytes calldata _data, bytes calldata _operatorData) external checkGranularity(_value) {
         tokenController.controllerRedeem(_tokenHolder, _value, _data, _operatorData);
         emit ControllerRedemption(msg.sender, _tokenHolder, _value, _data, _operatorData);
     }
@@ -219,6 +228,7 @@ contract SecurityTokenLogic is SecurityTokenStorage, IERC20, IERC1410, IERC1594,
         bytes calldata _data
     ) 
         external 
+        checkGranularity(_value) 
         returns (bytes32) 
     {
         // _data = bytes(uint160(msg.sender));
@@ -235,6 +245,7 @@ contract SecurityTokenLogic is SecurityTokenStorage, IERC20, IERC1410, IERC1594,
         bytes calldata _operatorData
     ) 
         external 
+        checkGranularity(_value) 
         returns (bytes32)
     {
         require(tokenPartition.isOperator(msg.sender, _from) || 
@@ -253,6 +264,7 @@ contract SecurityTokenLogic is SecurityTokenStorage, IERC20, IERC1410, IERC1594,
     ) 
         external 
         view 
+        checkGranularity(_value) 
         returns (byte, bytes32, bytes32) 
     {
         tokenPartition.canTransferByPartition(_from, _to, _partition, _value, _data);
@@ -290,12 +302,12 @@ contract SecurityTokenLogic is SecurityTokenStorage, IERC20, IERC1410, IERC1594,
     }
 
     // Issuance / Redemption
-    function issueByPartition(bytes32 _partition, address _tokenHolder, uint256 _value, bytes calldata _data) external {
+    function issueByPartition(bytes32 _partition, address _tokenHolder, uint256 _value, bytes calldata _data) external checkGranularity(_value) {
         tokenPartition.issueByPartition(_partition, _tokenHolder, _value, _data);
         emit IssuedByPartition(_partition, _tokenHolder, _value, _data);
     }
 
-    function redeemByPartition(bytes32 _partition, uint256 _value, bytes calldata _data) external {
+    function redeemByPartition(bytes32 _partition, uint256 _value, bytes calldata _data) external checkGranularity(_value) {
         tokenPartition.redeemByPartition(_partition, msg.sender, _value, _data);
         emit RedeemedByPartition(_partition, msg.sender, msg.sender, _value, _data, _data);
     }
@@ -308,6 +320,7 @@ contract SecurityTokenLogic is SecurityTokenStorage, IERC20, IERC1410, IERC1594,
         bytes calldata _operatorData
     ) 
         external 
+        checkGranularity(_value) 
     {
         require(tokenPartition.isOperator(msg.sender, _tokenHolder) || 
             tokenPartition.isOperatorForPartition(_partition, msg.sender, _tokenHolder), 
@@ -405,6 +418,7 @@ contract SecurityTokenLogic is SecurityTokenStorage, IERC20, IERC1410, IERC1594,
     ) 
         internal 
         view 
+        checkGranularity(_value) 
         returns(byte, bytes32) 
     {
         // bool isInvalid = false;
@@ -444,6 +458,7 @@ contract SecurityTokenLogic is SecurityTokenStorage, IERC20, IERC1410, IERC1594,
         bytes memory _data
     ) 
         internal 
+        checkGranularity(_value) 
         // view 
         // returns(byte, bytes32) 
     {
@@ -470,6 +485,8 @@ contract SecurityTokenLogic is SecurityTokenStorage, IERC20, IERC1410, IERC1594,
         // Use the local variables to avoid the stack too deep error
         isValid = isForceValid ? true : (isInvalid ? false : isValid);
 
+        _adjustInvestorCount(_from, _to, _value, _balanceOf(_to), _balanceOf(_from));
+
         if (isValid == true) {
             uint[] memory amounts = new uint[](2);
             amounts[0] = _balanceOf(_from).sub(_value);
@@ -486,6 +503,45 @@ contract SecurityTokenLogic is SecurityTokenStorage, IERC20, IERC1410, IERC1594,
         //     return (0x50, bytes32(0));
         // return (status, appCode);
         // return (isValid, isValid ? bytes32(StatusCodes.code(StatusCodes.Status.TransferSuccess)): appCode);
+    }
+
+    function _adjustInvestorCount(
+        address _from,
+        address _to,
+        uint256 _value,
+        uint256 _balanceTo,
+        uint256 _balanceFrom
+    )
+        internal 
+    {
+        // uint256 holderCount = _holderCount;
+        if ((_value == 0) || (_from == _to)) {
+            return;
+        }
+        // Check whether receiver is a new token holder
+        if ((_balanceTo == 0) && (_to != address(0))) {
+            holderCount = holderCount.add(1);
+            if (!_isExistingInvestor(_to)) {
+                IDataStore(address(tokenStore)).insertAddress(INVESTORSKEY, _to);
+                //KYC data can not be present if added is false and hence we can set packed KYC as uint256(1) to set added as true
+                IDataStore(address(tokenStore)).setUint256(_getKey(WHITELIST, _to), uint256(1));
+            }
+        }
+        // Check whether sender is moving all of their tokens
+        if (_value == _balanceFrom) {
+            holderCount = holderCount.sub(1);
+        }
+        return;
+    }
+
+    function _isExistingInvestor(address _investor) internal view returns(bool) {
+        uint256 data = IDataStore(address(tokenStore)).getUint256(_getKey(WHITELIST, _investor));
+        //extracts `added` from packed `whitelistData`
+        return uint8(data) == 0 ? false : true;
+    }
+
+    function _getKey(bytes32 _key1, address _key2) internal pure returns(bytes32) {
+        return bytes32(keccak256(abi.encodePacked(_key1, _key2)));
     }
 }
 

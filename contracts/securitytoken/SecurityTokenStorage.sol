@@ -17,6 +17,9 @@ contract SecurityTokenStorage {
     uint8 internal constant DATA_KEY = 6;
     uint8 internal constant WALLET_KEY = 7;
 
+    bytes32 internal constant WHITELIST = "WHITELIST";
+    bytes32 internal constant INVESTORSKEY = 0xdf3a8dd24acdd05addfc6aeffef7574d2de3f844535ec91e8e0f3e45dba96731; //keccak256(abi.encodePacked("INVESTORS"))
+
     ITokenStore public tokenStore;
     ITokenDocument public tokenDocument;
     ITokenPartition public tokenPartition;
@@ -30,6 +33,12 @@ contract SecurityTokenStorage {
         uint8[] types;
         uint256[] indexes;
     }
+
+    address public owner;
+
+    uint256 public granularity;
+    // Number of investors with non-zero balance
+    uint256 public holderCount;
 
     address[] public modules;
     mapping(address => Module) public modulesByAddress;
