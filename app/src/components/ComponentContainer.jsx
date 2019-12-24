@@ -26,6 +26,7 @@ export default function ComponentContainer(props) {
       })
       let json = response.json() // parses response to JSON
       alert(json)
+      window.location.reload(true);
       
     } catch (err) {
       alert(err);
