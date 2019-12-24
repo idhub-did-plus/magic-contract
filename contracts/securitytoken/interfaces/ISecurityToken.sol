@@ -7,6 +7,9 @@ import "./ITokenController.sol";
 
 interface ISecurityToken {
 
+    function owner() external view returns (address);
+    function holderCount() external view returns (uint256);
+
     /////////////////////////////
     // ERC20Interfaces
     /////////////////////////////
