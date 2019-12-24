@@ -4,10 +4,36 @@ import { BrowserRouter as Router, NavLink, Route, Switch } from "react-router-do
 import ComplianceComponent from "./compliance/ComplianceComponent";
 import TokenComponent from "./token/TokenComponent";
 import TokenStatisticsComponent from "./token/TokenStatisticsComponent";
-
+import {Button } from 'semantic-ui-react'
 
 export default function ComponentContainer(props) {
   let claim = props.drizzleState.login.claim;
+  async function logout() {
+     
+    try {
+      let response = await fetch('http://localhost:8080/logout', {
+       
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'include', // include, same-origin, *omit
+        headers: {
+          'user-agent': 'Mozilla/4.0 MDN Example',
+          'content-type': 'application/json'
+        },
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, cors, *same-origin
+        redirect: 'follow', // manual, *follow, error
+        referrer: 'no-referrer', // *client, no-referrer
+      })
+      let json = response.json() // parses response to JSON
+      alert(json)
+      
+    } catch (err) {
+      alert(err);
+    } finally {
+
+    }
+  
+  }
   return (
     <Router >
 
@@ -28,6 +54,10 @@ export default function ComponentContainer(props) {
 
             <li>
               <NavLink to="/statistics">TokenStatisticsComponent</NavLink>
+            </li>
+            <li>
+            <NavLink to=""  onClick={logout}>logout</NavLink>
+            
             </li>
           </ul>
 

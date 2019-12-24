@@ -1,11 +1,8 @@
 import React, { Component } from "react";
-
-import { BrowserRouter as Router, NavLink, Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
-import { Dropdown, DropdownItem, Form, Button, Table, TableBody, TableCell, TableRow } from 'semantic-ui-react'
-import { deployFinished1400 } from "../../store/token/actions";
-
-import ERC1400 from "../../contracts/ERC1400.json";
+import { Button, Dropdown, Form, Table } from 'semantic-ui-react';
 import TokenListComponent from "./TokenListComponent";
+
+
 var contract = require("@truffle/contract");
 
 export default class TokenComplianceConfigurationComponent extends Component {
