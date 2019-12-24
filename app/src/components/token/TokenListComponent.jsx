@@ -51,7 +51,7 @@ export default class TokenListComponent extends Component {
             })}
           </tbody>
         </table> */}
-        <Table fixed style={{marginBottom:'20px'}}>
+        <Table compact size='small' collapsing>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>name</Table.HeaderCell>

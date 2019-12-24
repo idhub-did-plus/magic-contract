@@ -68,7 +68,7 @@ export default class Erc1400Component extends Component {
       let response = await fetch("http://localhost:8080/saveDeployedToken", {
         body: JSON.stringify(token), // must match 'Content-Type' header
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, same-origin, *omit
+        credentials: 'include', // include, same-origin, *omit
         headers: {
           'user-agent': 'Mozilla/4.0 MDN Example',
           'content-type': 'application/json'
@@ -78,7 +78,7 @@ export default class Erc1400Component extends Component {
         redirect: 'follow', // manual, *follow, error
         referrer: 'no-referrer', // *client, no-referrer
       })
-      let json = response.json() // parses response to JSON
+      let json = await response.json() // parses response to JSON
     } catch (err) {
       alert(err);
     } finally {
