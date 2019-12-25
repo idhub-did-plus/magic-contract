@@ -143,9 +143,7 @@ export default class Erc1400Component extends Component {
           </Form.Field>
           <button onClick={this.handleAddController}>add controller</button>
           {/* <Button onClick={this.handleAddController}>add controller</Button> */}
-          <Form.Field>
-            <Checkbox label='I agree to the Terms and Conditions' />
-          </Form.Field>
+        
           <button onClick={this.handleSubmit}>Submit</button>
           {/* <Button onClick={this.handleSubmit}>Submit</Button> */}
         </div>
