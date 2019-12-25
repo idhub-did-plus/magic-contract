@@ -20,6 +20,8 @@ class MyTokenComponent extends Component {
     super(props);
     let identity = this.props.drizzleState.accounts[0];
     mytokens(identity).then((tokens)=>{
+      if(tokens == undefined)
+        return;
       this.props.drizzle.store.dispatch(tokenLoaded(tokens))
     });
    

@@ -25,7 +25,7 @@ export default function ComponentContainer(props) {
         referrer: 'no-referrer', // *client, no-referrer
       })
       let json = response.json() // parses response to JSON
-      alert(json)
+//      alert(json)
       window.location.reload(true);
       
     } catch (err) {

@@ -139,7 +139,7 @@ export default class TokenComplianceConfigurationComponent extends Component {
 
                 </div>
 
-                <Table >
+                <Table collapsing>
                     <Table.Body>
                         <Table.Row>
                             <Table.Cell className="cell"> <Dropdown
