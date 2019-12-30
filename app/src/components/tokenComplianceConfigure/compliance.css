@@ -1,0 +1,202 @@
+.configure,.swiper-container,.swiper-wrapper,.swiper-slide{
+    color:#fff;
+    height: 100%;
+    background:rgba(22,25,32,1);;
+}
+.swiper-slide .bg{
+    width: 382px;
+    height: 388px;
+    background: url('../../assets//question\ bg@2x.png') no-repeat;
+    background-size: cover;
+     float: right; 
+}
+.questionBox{
+    width:58%;
+    height:300px;
+    /* overflow: hidden; */
+    position: absolute;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    margin: auto;
+}
+.questionBox .question{
+    width: 90%;
+    height: 280px;
+}
+.question{
+    padding:10px 20px;
+}
+.question h2{
+    font-weight: 200;
+}
+.question h2 span:nth-child(1){
+    color:#2C91EA;
+}
+.question h2 span:nth-child(2){
+    display: inline-block;
+    width:16px;
+    height: 14px;
+    background: url('../../assets/question\ arrow@2x.png') no-repeat;
+    background-size: 80%;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.question .detail{
+    font-size: 16px;
+    padding-left: 40px;
+}
+.question .input{
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border-radius: 0;
+    border:none;
+    padding-left: 20px;
+    margin-left: 40px;
+    margin-top: 30px;
+    width:340px;
+    height: 40px;
+    background:url('../../assets/1577338881\(1\).jpg') rgba(44,145,234,0.08) no-repeat;
+    background-size: 100%;
+}
+.question .next{
+    width:120px;
+    height:38px;
+    line-height: 38px;
+    text-align: center;
+    font-size: 18px;
+    margin-left: 40px;
+    margin-top: 30px;
+    background:linear-gradient(112deg,rgba(50,160,255,1) 0%,rgba(75,210,255,1) 100%);
+    cursor:pointer;
+}
+.question .show{
+    width: 340px;
+    padding: 20px 0 20px 20px;
+    margin-left: 40px;
+    background:rgba(44,145,234,0.08);
+    position: relative;
+}
+.question .show .del{
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background: url("../../assets/delete@2x.png") no-repeat;
+    background-size: 100%;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.question .condition{
+    width: 405px;
+    margin-left: 40px;
+    margin-top: 10px;
+    background:rgba(44,145,234,0.08);
+    position: relative;
+    padding-left: 20px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+.question .condition .del{
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background: url("../../assets/delete@2x.png") no-repeat;
+    background-size: 100%;
+    position: absolute;
+    right: 10px;
+    top: 13px;
+}
+.question .select:nth-child(3){
+    margin-left: 40px;
+    margin-top: 10px;
+}
+.question .select{
+    display: inline-block;
+    padding:0 10px;
+    margin-bottom: 20px;
+    margin-right: 10px;
+    width: 102px;
+    height: 40px;
+    line-height: 40px;
+    outline: none;
+    background:rgba(44,145,234,0.08);
+    border:none;
+    color:#fff;
+    box-shadow: none;
+    position: relative;
+}
+.question .select:nth-of-type(3){
+    width: 172px;
+}
+.question .select .icon{
+    width: 9px;
+    height: 5px;
+    background: url("../../assets//Triangle\ @2x.png") no-repeat;
+    background-size: cover;
+    float: right;
+    margin-top: 17px;
+    cursor: pointer;
+}
+.question .select ul{
+    position: absolute;
+    z-index: 10;
+    width:122px;
+    margin: 0;
+    padding:0;
+    background: rgba(44,145,234,0.08);
+    top:50px;
+    left:0;
+    border:1px solid #000;
+}
+.question .select:nth-of-type(3) ul{
+    width: 192px;
+}
+.question .select ul li{
+    list-style: none;
+    height:20px;
+    line-height: 20px;
+    font-size: 12px;
+    padding:10px;
+}
+.question .select ul li:hover{
+    background-color: rgba(44,145,234,0.2);
+}
+.question .add{
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background: url("../../assets/+@2x.png") no-repeat;
+    background-size: cover;
+    margin-left: 20px;
+    position: relative;
+    top: 5px;
+}
+.question .andOrBox{
+    display: inline-block;
+    width: 100px;
+    height: 31px;
+    margin-left: 30px;
+    position: relative;
+    top: 6px;
+    padding-top: 9px;
+}
+.question .andOrBox .and{
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background: url("../../assets/and@2x.png") no-repeat;
+    background-size: cover;
+}
+.question .andOrBox .or{
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background: url("../../assets/or@2x.png") no-repeat;
+    background-size: cover;
+    margin-left: 10px;
+}

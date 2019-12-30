@@ -1,0 +1,236 @@
+
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+.sidemenu {
+  list-style-type: none;
+  float: left;
+  width: 300px;
+  margin-left:-300px;
+  height: 600px;
+  background: #262E43;
+  padding: 4px;
+  padding-top: 0px;
+
+}
+.sidemenu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.sidemenu li  {
+  margin-bottom: 4px;
+  margin-top: 4px;
+  padding: 4px;
+  background-color:#262E43;
+  text-decoration: none;
+  color: #666;
+}
+.sidemenu li a {
+  display: inline-block;
+  color: #fff;
+  padding:10px 15px;
+  width:100%;
+  text-decoration: none;
+}
+.sidemenu li:hover {
+  background-color: #3F4E7C;
+  color: white;
+}
+.sidemenu li a.active  {
+  background-color: #3F4E7C;
+  color: white;
+}
+
+.table tr:hover {
+  background-color: #3F4E7C;
+  color: white;
+}
+.table tr.active  {
+  background-color: #3F4E7C;
+  color: white;
+}
+#wrap{
+  padding-left: 300px;
+}
+#content{
+  padding: 0;
+  margin: 0%;
+  background-color: 0;
+}
+article {
+  margin: 0px;
+  float:  right;
+  padding: 0px;
+  width: 100%;
+  background-color: #f1f1f1;
+  height: 500px; /* only for demonstration, should be removed */
+}
+
+.all{
+ background:rgba(22,25,32,1);
+ height:100%;
+}
+.first {
+  float: top;
+}
+ 
+.second {
+  width:100%;
+  height:85%;
+  background: url("../../assets/bg@2x.png") no-repeat;
+  background-size: 60%;
+  background-position: center right;
+  overflow: hidden;
+}
+.textBox{
+  width:55%;
+  height: 50%;
+  margin-top: 8%;
+  margin-left: 100px;
+}
+.textBox div:nth-child(1){
+  width:431px;
+  height:100px;
+  font-size:50px;
+  color:rgba(255,255,255,1);
+  line-height:100px;
+  margin:0!important;
+}
+.textBox div:nth-child(2){
+  width:90%;
+  margin-top: 30px;
+  font-size:22px;
+  color:rgba(161,169,186,1);
+  line-height:41px;
+  margin: 0!important;
+  font-weight: 200!important;
+}
+.textBox div:nth-child(3){
+  width:40%;
+  height:40px;
+  line-height: 40px;
+  text-align: center;
+  background:linear-gradient(112deg,rgba(50,160,255,1) 0%,rgba(75,210,255,1) 100%);
+  color:rgba(255,255,255,1);
+  margin-top: 60px;
+}
+.textBox div:nth-child(3) span{
+  display: inline-block;
+  width: 14px;
+  height: 12px;
+  margin-left: 10px;
+}
+.textBox div:nth-child(3) span img{
+  width: 100%;
+  height:100%;
+}
+.wrapper {
+
+  margin: 0rem auto auto;
+  background-color:#1D2439;
+  padding:0px;
+  border:0px solid gray;
+
+}
+.mysection {
+  text-align: left;
+  max-width: 90%;
+  margin-left: 20px;
+  margin-top: 20px;
+  background-color: #242945;
+  padding:20px;
+  color:#fff;
+}
+p.ex2
+{
+	font:italic bold 12px/30px Georgia,serif;
+}
+p.desc
+{
+  margin: 1em;
+}
+label{
+  color:#fff!important;
+  display: block;
+  padding-bottom:8px;
+}
+label::before{
+  margin-top: 1px;
+}
+input{
+  border: 1px solid #BBB;
+  padding: 8px 5px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  background: #242945;
+  color:#fff;
+  border-radius: 3px;
+  padding-left:5px;
+  width:310px;
+  display: block;
+  font-size: 12px;
+  /* -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s */
+}
+/* input:focus{
+      border-color: #66afe9;
+      outline: 0;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+      box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+} */
+button{
+  border-radius: 3px;
+  padding: 8px;
+  margin-bottom: 20px;
+  border:none;
+  display: inline-block;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  background: #3F4E7C;
+  background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+  background: -moz-linear-gradient(top, #00adee, #00678e);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#00678e');
+}
+.logo{
+  width:40px;
+  height:40px;
+  background: url("../../plogo.png");
+  background-size: cover;
+  display: inline-block;
+  margin-top: 8px;
+}
+.logoText{
+  display: inline-block;
+  color:#fff;
+  position: relative;
+  top:-13px;
+  padding-left: 10px;
+  font-family: \5FAE\8F6F\96C5\9ED1;
+}
+.box{
+  background: #242945;
+  padding:20px;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+.fetching{
+  position: relative;
+  top: -30px;
+}
+.cell{
+  padding:3px!important;
+}
+.btn{
+  padding:4px!important;
+}

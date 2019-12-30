@@ -4,6 +4,8 @@ import './index.css';
 import 'semantic-ui-css/semantic.min.css'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+//引入swiper的样式文件
+import 'swiper/dist/css/swiper.min.css'
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

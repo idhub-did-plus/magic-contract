@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import { DrizzleContext } from "@drizzle/react-plugin";
+import { BrowserRouter as Router, NavLink, Route, Switch } from "react-router-dom";
 
-import "./App.css";
+// import "./App.css";
 import drizzle from "./store/MyDrizzleAndStore"
 import ComponentContainer from "./components/ComponentContainer";
-import LoginController from "./components/LoginController";
+import LoginController from "./components/LoginController/LoginController";
+import Home from "./components/home/Home"
+import TokenManage from "./components/TokenManage/TokenManage"
+import Compliance from "./components/tokenComplianceConfigure/compliance"
 
 class App extends Component {
   render() {
@@ -19,10 +23,14 @@ class App extends Component {
               if (!initialized) {
                 return "Loading...";
               }
-
               return (
                 <LoginController drizzle={drizzle} drizzleState={drizzleState}>
-                  <ComponentContainer drizzle={drizzle} drizzleState={drizzleState} />
+                  {/* <ComponentContainer drizzle={drizzle} drizzleState={drizzleState} /> */}
+                  <Router>
+                      <Route path="/" component={Home} exact/>
+                      <Route path="/manage" component={TokenManage} exact/>
+                      <Route path="/compliance" component={Compliance} exact/>
+                  </Router>
                 </LoginController>
               );
             }}

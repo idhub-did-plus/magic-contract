@@ -102,7 +102,6 @@ export default class TokenComplianceConfigurationComponent extends Component {
         const config = this.props.drizzle.contracts["ComplianceConfiguration"];
         let method = config.methods["getConfiguration"];
         this.dataKey = method.cacheCall(addr);
-       
         
     }
     currentConfig = ()=>{

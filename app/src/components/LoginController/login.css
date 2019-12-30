@@ -1,0 +1,84 @@
+.loginController{
+    height:100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    color:#fff;
+    position: relative;
+}
+.loginController .container{
+    overflow:hidden;
+    margin-left: 180px;
+    width:33%;
+    position: absolute;
+    top:6%
+}
+.loginController p{
+    font-size: 24px;
+    margin-bottom: 3%;
+    font-weight: 400!important;
+    margin-top: 15%;
+    margin-bottom: 10%;
+}
+.loginController .login{
+    width: 421px;
+    height: 417px;
+    background: url('../../assets/log\ 框@2x.png') rgba(22,25,32,1);
+    background-size: cover;
+    overflow: hidden;
+}
+.loginController .login .select{
+    width: 70%;
+    height: 11%;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: 15%;
+    padding-top: 3%;
+    background:rgba(22,25,32,0.22);
+    border-radius:4px;
+    border:1px solid rgba(191,225,255,0.22);
+    color:#fff;
+    font-size: 18px;
+ }
+ .loginController .login .select span{
+     width: 16px;
+     height: 16px;
+     border-radius: 50%;
+     border:1px solid rgba(191,225,255,0.22);
+     background:rgba(22,25,32,1);
+     float: right;
+ }
+ .loginController .login .select .icon{
+    background: url('../../assets/选中@2x.png') no-repeat;
+    background-size: cover;
+    border:none;
+    width: 18px;
+    height: 18px;
+ }
+.loginController .login .select:nth-child(1){
+    margin-top: 31%;
+}
+.loginController .login .select:nth-child(2){
+    margin-top: 5%;
+}
+.loginController .bg{
+    width: 874px;
+    height:782px;
+    background: url('../../assets//login\ bg@2x.png');
+    background-size: cover;
+    position: absolute;
+    right:0;
+}
+.loginController .login .logBtn{
+    width: 44%;
+    height: 10%;
+    margin-left: 28%;
+    margin-top: 18%;
+    text-align: center;
+    padding-top: 2.5%;
+    font-size: 18px;
+    background: url('../../assets/log\ button@2x.png');
+    background-size: cover;
+    color:#fff;
+    cursor: pointer;
+}

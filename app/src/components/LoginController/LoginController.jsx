@@ -1,18 +1,26 @@
 
-
+import "./login.css"
 import React, { Component, Children } from "react";
 import { DrizzleContext } from "@drizzle/react-plugin";
-import { loginFinished } from "../store/login/actions"
+import { loginFinished } from "../../store/login/actions"
 import { Dropdown, Button, Checkbox, Table, TableBody, TableCell, TableRow } from 'semantic-ui-react'
 
 
 
 export default class LoginController extends Component {
   constructor(props, context) {
-    super(props)
+    super(props);
+    this.state = {
+      checkFirst: true,
+      checkSecond :false,
+      spanDispaly: 'none',
+      checkDisplay: 'block',
+      claim:""
+    };
 
-    this.handleClaimChange = this.handleClaimChange.bind(this);
+    // this.handleClaimChange = this.handleClaimChange.bind(this);
     this.login = this.login.bind(this);
+    this.handleCheck = this.handleCheck.bind(this);
 
   }
   async componentDidMount() {
@@ -23,15 +31,29 @@ export default class LoginController extends Component {
     //this.props.drizzle.store.dispatch(login());
 
   }
-  handleClaimChange(key, text, value) {
+  // handleClaimChange(key, text, value) {
 
-    this.claim = text.value;
+  //   this.claim = text.value;
 
+  // }
+  handleCheck(){
+    this.setState(prevState => ({
+      checkFirst:!prevState.checkFirst,
+      checkSecond:!prevState.checkSecond,
+      spanDispaly: prevState.checkFirst ? "none":"block",
+      checkDisplay: prevState.checkFirst ? "block":"none"
+    }))
   }
   async login(event) {
-    if (this.claim == undefined) {
-      alert("choose claim please!")
-      return
+    // if (this.claim == undefined) {
+    //   alert("choose claim please!")
+    //   return
+    // }
+    if(this.state.checkFirst){
+      this.claim = "complianceManager"
+    }
+    if(this.state.checkSecond){
+      this.claim = "tokenIssuer"
     }
     var myDate = new Date();
 		var timestamp = myDate.getTime();
@@ -105,27 +127,46 @@ export default class LoginController extends Component {
     return (
       // Display a loading indicator.
       
-      <main className="login">
-        <h1>⚙️</h1>
-        <p>Login dapp...</p>
-        <Dropdown
-          placeholder='Select Country'
+      // <main className="login">
+      //   <h1>⚙️</h1>
+      //   <p>Login dapp...</p>
+      //   <Dropdown
+      //     placeholder='Select Country'
 
-          search
-          selection
-          options={countryOptions}
-          onChange={this.handleClaimChange}
-        />
-         <button class="ui primary button"  onClick={this.login}>Login</button>
+      //     search
+      //     selection
+      //     options={countryOptions}
+      //     onChange={this.handleClaimChange}
+      //   />
+      //    <button class="ui primary button"  onClick={this.login}>Login</button>
 
-      </main>
+      // </main>
+      <div className="loginController">
+                <div className="container">
+                    <p>Please select your indetity to log in</p>
+                    <div className="login">
+                        <div className="select" onClick={this.handleCheck}>
+                            compliance Manager
+                            <span style={{display: this.state.spanDispaly}}></span>
+                            <span className="icon" style={{display: this.state.checkDisplay}}></span>
+                        </div>
+                        <div className="select" onClick={this.handleCheck}>
+                            token Issuer
+                            <span style={{display: this.state.checkDisplay}}></span>
+                            <span className="icon" style={{display: this.state.spanDispaly}}></span>
+                        </div>
+                        <div className="logBtn" onClick={this.login}>Login</div>
+                    </div>
+                </div>
+                <div className="bg"></div>
+            </div>
     )
   }
 }
 
-const countryOptions = [
-  { key: 'complianceManager', value: 'complianceManager', text: 'complianceManager' },
-  { key: 'tokenIssuer', value: 'tokenIssuer', text: 'tokenIssuer' },
+// const countryOptions = [
+//   { key: 'complianceManager', value: 'complianceManager', text: 'complianceManager' },
+//   { key: 'tokenIssuer', value: 'tokenIssuer', text: 'tokenIssuer' },
 
-]
+// ]
 
