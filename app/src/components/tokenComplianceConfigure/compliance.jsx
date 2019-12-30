@@ -55,6 +55,7 @@ class TokenComplianceConfigurationComponent extends Component{
             alert("please input right address");
         }else{
             ComplianceServiceRegistry.methods.register(token,service).send({
+                from:this.props.drizzleState.accounts[0],
                 gasLimit:300000
             });
         }
@@ -86,7 +87,8 @@ class TokenComplianceConfigurationComponent extends Component{
         if(!this.utils.isAddress(token)){
             alert("please input right address");
         }else{
-            ComplianceServiceRegistry.methods.getConfiguration(token,configuration).send({
+            ComplianceServiceRegistry.methods.setConfiguration(token,configuration).send({
+                from:this.props.drizzleState.accounts[0],
                 gasLimit:300000
             });
         }
@@ -206,7 +208,7 @@ class TokenComplianceConfigurationComponent extends Component{
                                 </div>
                             </div>
                         </div>
-                        <div className="swiper-slide">
+                        {/* <div className="swiper-slide">
                             <div className='bg'></div>
                             <div className="questionBox">
                                 <div className="question">
@@ -219,7 +221,7 @@ class TokenComplianceConfigurationComponent extends Component{
                                     <input type="text" className="input"/>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="swiper-slide">
                             <div className='bg'></div>
                             <div className="questionBox">
@@ -229,7 +231,7 @@ class TokenComplianceConfigurationComponent extends Component{
                                         <span></span>
                                         Token Compliance
                                     </h2>
-                                    <p className="detail">c. Please enter your component.  </p>
+                                    <p className="detail">b. Please enter your component.  </p>
                                     <div className="select">
                                         <span className="text" ref={el=>this.option1=el}>{this.state.option1}</span>
                                         <span className="icon" onClick={this.handleSelect1}></span>
@@ -290,7 +292,7 @@ class TokenComplianceConfigurationComponent extends Component{
                                         Token Compliance
                                     </h2>
                                     <p className="detail">
-                                        d. Please check that the information you filled in is correct？If the confirmation is correct, click the 
+                                        c. Please check that the information you filled in is correct？If the confirmation is correct, click the 
                                         submit button. 
                                     </p>
                                     <div className="show"><span ref={el=>this.str=el}>{this.state.end}</span><span className="del" onClick={this.del}></span></div>
