@@ -11,10 +11,11 @@ export default class LoginController extends Component {
   constructor(props, context) {
     super(props);
     this.state = {
-      checkFirst: true,
-      checkSecond :false,
-      spanDispaly: 'none',
-      checkDisplay: 'block',
+      // checkFirst: true,
+      // checkSecond :false,
+      // spanDispaly: 'none',
+      // checkDisplay: 'block',
+      display: "block",
       claim:""
     };
 
@@ -44,10 +45,24 @@ export default class LoginController extends Component {
       checkDisplay: prevState.checkFirst ? "block":"none"
     }))
   }
+  // handleCheck(){
+  //   this.setState({
+  //     checkFirst:!this.state.checkFirst,
+  //     checkSecond:!this.state.checkSecond,
+  //     spanDispaly: this.state.checkFirst ? "none":"block",
+  //     checkDisplay: this.state.checkFirst ? "block":"none"
+  //   })
+  // }
   async login(event) {
     // if (this.claim == undefined) {
     //   alert("choose claim please!")
     //   return
+    // }
+    // if(this.state.checkFirst){
+    //   this.claim = "tokenIssuer"
+    // }
+    // if(this.state.checkSecond){
+    //   this.claim = "complianceManager"
     // }
     if(this.state.checkFirst){
       this.claim = "complianceManager"

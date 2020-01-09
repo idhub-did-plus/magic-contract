@@ -56,7 +56,7 @@ class TokenComplianceConfigurationComponent extends Component{
         }else{
             ComplianceServiceRegistry.methods.register(token,service).send({
                 from:this.props.drizzleState.accounts[0],
-                gasLimit:300000
+                gas:3000000
             });
         }
         
@@ -89,7 +89,7 @@ class TokenComplianceConfigurationComponent extends Component{
         }else{
             ComplianceServiceRegistry.methods.setConfiguration(token,configuration).send({
                 from:this.props.drizzleState.accounts[0],
-                gasLimit:300000
+                gas:3000000
             });
         }
     }
