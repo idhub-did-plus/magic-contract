@@ -3,11 +3,13 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, NavLink, Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
 import { Button, Form, Checkbox, Table, TableBody, TableCell, TableRow } from 'semantic-ui-react'
 import { deployFinished1400 } from "../../store/token/actions";
+import { DrizzleContext } from "@drizzle/react-plugin";
 
 import ERC1400 from "../../contracts/ERC1400.json";
 var contract = require("@truffle/contract");
+import TokenListComponent from "./TokenListComponent"
 
-export default class Erc1400Component extends Component {
+class Erc1400IssueComponent extends Component {
   constructor(props) {
     super(props);
 
@@ -71,7 +73,7 @@ export default class Erc1400Component extends Component {
 
     return (
       <div className="mysection">
-       
+        <TokenListComponent />
         <div
           onChange={this.handleInputChange}
         >
@@ -111,4 +113,17 @@ export default class Erc1400Component extends Component {
       </div>
     )
   }
+}
+
+export default (props) => {
+  return (
+    <DrizzleContext.Consumer>
+      {drizzleContext => {
+        return (
+          <Erc1400IssueComponent {...drizzleContext} {...props} />
+        );
+      }}
+    </DrizzleContext.Consumer>
+
+  )
 }

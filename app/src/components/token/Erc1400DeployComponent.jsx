@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 
-import { BrowserRouter as Router, NavLink, Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
-import { Button, Form, Checkbox, Table, TableBody, TableCell, TableRow } from 'semantic-ui-react'
+// import { BrowserRouter as Router, NavLink, Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
+import {  Form, Checkbox } from 'semantic-ui-react'
 import { deployFinished1400 } from "../../store/token/actions";
+import { DrizzleContext } from "@drizzle/react-plugin";
+import TokenListComponent from "./TokenListComponent"
 
 import ERC1400 from "../../contracts/ERC1400.json";
 var contract = require("@truffle/contract");
 
-export default class Erc1400Component extends Component {
+
+class Erc1400DeployComponent extends Component {
   constructor(props) {
     super(props);
 
@@ -62,6 +65,8 @@ export default class Erc1400Component extends Component {
       })
 
     return;
+    //部署成功后跳转至配置与发行入口
+    
   }
  async save(token) {
     try {
@@ -111,7 +116,7 @@ export default class Erc1400Component extends Component {
 
     return (
       <div className="mysection">
-
+        <TokenListComponent />
         <div
           onChange={this.handleInputChange}
         >
@@ -133,8 +138,8 @@ export default class Erc1400Component extends Component {
           </Form.Field>
 
 
-          <div role="list" class="ui list">
-            {this.formData.controllers.map(el => <div role="listitem" class="item">{el}</div>)}
+          <div role="list" className="ui list">
+            {this.formData.controllers.map((el,index) => <div role="listitem" className="item" key={index}>{el}</div>)}
 
           </div>
           <Form.Field>
@@ -152,4 +157,17 @@ export default class Erc1400Component extends Component {
       </div>
     )
   }
+}
+
+export default (props) => {
+  return (
+    <DrizzleContext.Consumer>
+      {drizzleContext => {
+        return (
+          <Erc1400DeployComponent {...drizzleContext} {...props} />
+        );
+      }}
+    </DrizzleContext.Consumer>
+
+  )
 }

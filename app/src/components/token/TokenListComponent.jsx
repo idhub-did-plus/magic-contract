@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Table } from 'semantic-ui-react';
+import { DrizzleContext } from "@drizzle/react-plugin";
 
-export default class TokenListComponent extends Component {
+class TokenListComponent extends Component {
   constructor(props) {
     super(props);
 
@@ -65,12 +66,12 @@ export default class TokenListComponent extends Component {
           </Table.Header>
 
           <Table.Body>
-            {this.props.drizzleState.deployedTokens.map(el =>{
+            {this.props.drizzleState.deployedTokens.map((el,index) =>{
                     const select = ()=>{
                         if(this.props.select!=undefined)
                             this.props.select(el.contractAddress) 
                     }
-             return  (<Table.Row  onClick={select} >
+             return  (<Table.Row  onClick={select} key={index}>
                 <Table.Cell>{el.name}</Table.Cell>
                 <Table.Cell>{el.symbol}</Table.Cell>
                 <Table.Cell>{el.decimals.toString()}</Table.Cell>
@@ -87,4 +88,17 @@ export default class TokenListComponent extends Component {
       </div>
     )
   }
+}
+
+export default (props) => {
+  return (
+    <DrizzleContext.Consumer>
+      {drizzleContext => {
+        return (
+          <TokenListComponent {...drizzleContext} {...props} />
+        );
+      }}
+    </DrizzleContext.Consumer>
+
+  )
 }

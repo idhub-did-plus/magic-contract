@@ -1,5 +1,5 @@
-import React, { Component, Children } from "react";
-import { BrowserRouter as Router, NavLink, Route, Switch } from "react-router-dom";
+import React, { Component } from "react";
+import { BrowserRouter as  Router, NavLink } from "react-router-dom";
 import { DrizzleContext } from "@drizzle/react-plugin";
 import "./index.css"
 
@@ -32,11 +32,13 @@ class Header extends Component {
   render(){
     return (
       <ul className="topmenu">
-          <li>
+          <NavLink to="/">
+            <li>
               <div style={{width:'44px',height:'44px',marginLeft:'100px',marginTop:'30px'}} className="logo">
               </div>
               <p className="logoText">MagicCircle</p>
-          </li>
+            </li>
+          </NavLink>
           <li>
           <div className="inOut" onClick={this.handleLogin}>{this.state.inOut}</div>
           </li>

@@ -13,7 +13,8 @@ class TokenComplianceConfigurationComponent extends Component{
             option3:"stCompliance-0.0.1-US",
             condition:[],
             swiper:null,
-            end:""
+            end:"",
+            tokenAddress:""
         }
 
         this.handleRegister = this.handleRegister.bind(this);
@@ -24,6 +25,11 @@ class TokenComplianceConfigurationComponent extends Component{
         this.del = this.del.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.continue = this.continue.bind(this);
+    }
+    componentWillMount(){
+        this.setState({
+            tokenAddress:this.props.location.search.substring(9)
+        })
     }
     componentDidMount(){
         //滑动滚轮实现表单翻页效果
@@ -161,8 +167,8 @@ class TokenComplianceConfigurationComponent extends Component{
                                         <span></span>
                                         Register
                                     </h2>
-                                    <p className="detail">a. Please enter your token address.</p>
-                                    <input ref={el=>this.tokenAddr=el} type="text" className="input"/>
+                                    <p className="detail">a. Please check your token address.</p>
+                                    <input ref={el=>this.tokenAddr=el} type="text" className="input" defaultValue={this.state.tokenAddress} />
                                 </div>
                             </div>
                         </div>
@@ -203,8 +209,8 @@ class TokenComplianceConfigurationComponent extends Component{
                                         <span></span>
                                         Token Compliance
                                     </h2>
-                                    <p className="detail">a. Please enter your token address.</p>
-                                    <input type="text" className="input" ref={el=>this.tokenAddress=el}/>
+                                    <p className="detail">a. Please check your token address.</p>
+                                    <input type="text" className="input" ref={el=>this.tokenAddress=el} defaultValue={this.state.tokenAddress} />
                                 </div>
                             </div>
                         </div>

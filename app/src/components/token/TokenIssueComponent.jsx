@@ -6,9 +6,10 @@ import { deployFinished1400 } from "../../store/token/actions";
 
 import ERC1400 from "../../contracts/ERC1400.json";
 import TokenListComponent from "./TokenListComponent";
+import { DrizzleContext } from "@drizzle/react-plugin";
 var contract = require("@truffle/contract");
 
-export default class TokenIssueComponent extends Component {
+class TokenIssueComponent extends Component {
   constructor(props) {
     super(props);
     this.formData = { controllers: [] };
@@ -101,4 +102,17 @@ export default class TokenIssueComponent extends Component {
       </div>
     )
   }
+}
+
+export default (props) => {
+  return (
+    <DrizzleContext.Consumer>
+      {drizzleContext => {
+        return (
+          <TokenIssueComponent {...drizzleContext} {...props} />
+        );
+      }}
+    </DrizzleContext.Consumer>
+
+  )
 }

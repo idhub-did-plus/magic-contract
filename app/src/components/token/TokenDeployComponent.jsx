@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import Erc1400DeployComponent from "./Erc1400DeployComponent";
 import Erc20DeployComponent from "./Erc20DeployComponent";
 import Erc777DeployComponent from "./Erc777DeployComponent";
 import TokenListComponent from "./TokenListComponent";
-import TokenStatisticsComponent from "./TokenStatisticsComponent";
+// import TokenStatisticsComponent from "./TokenStatisticsComponent";
 import { BrowserRouter as Router, NavLink, Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
 
 import { DrizzleContext } from "@drizzle/react-plugin";

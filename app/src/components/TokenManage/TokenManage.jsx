@@ -1,16 +1,18 @@
 import React from "react";
-import { BrowserRouter as Router, NavLink, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, NavLink } from "react-router-dom";
 import "./TokenManage.css"
 import Header from "../common/Header"
-import { Component, Children } from "react";
+import { Component } from "react";
+import { DrizzleContext } from "@drizzle/react-plugin";
 
-export default class TokenManage extends Component {
+class TokenManage extends Component {
   constructor(){
     super()
     
     this.state = {
       shadowDisplay:"none",
-      detailDisplay:"none"
+      detailDisplay:"none",
+      detailContent: null
     }
 
   }
@@ -24,84 +26,92 @@ export default class TokenManage extends Component {
             
             {/* content */}
             <div className="bottom">
-                <h1><a href=""></a>Manage your security tokens</h1>
+                <h1><span className="icon"></span>Manage your security tokens</h1>
                 <div className="manageBox">
-                  <div>
-                    <p>Create New Security Token</p>
-                    <button>GET START</button>
-                  </div>
-                  <div>
-                    <section className="open" onClick={this.showDetail.bind(this,"aaa")}></section>
-                    <p>
-                      Symbol
-                      <br/>
-                      <span>0x21B761B8db1e5279E367d78b488bAA2c0ff4111A</span>  
-                    </p>
-                    <section className="btnBox">
-                      <NavLink to="compliance"><button class="configure">Configure</button></NavLink>
-                      <button class="issue">Issue</button>
-                    </section>
-                  </div>
-                  <div>
-                    <section className="open" onClick={this.showDetail.bind(this,"bbb")}></section>
-                    <p>
-                      Symbol
-                      <br/>
-                      <span>0x87CCC36B36398330c17f0450C2C779A2f18Ab461</span>  
-                    </p>
-                    <section className="btnBox">
-                      <NavLink to="compliance"><button class="configure">Configure</button></NavLink>
-                      <button class="issue">Issue</button>
-                    </section>
-                  </div>
+                    <div>
+                      <p>Create New Security Token</p>
+                      <NavLink to="deploy"><button>GET START</button></NavLink>
+                    </div>
+                        {
+                          this.props.drizzleState.deployedTokens.map((el,index) =>{
+                            return(
+                              <div key={index}>
+                                <section className="open" onClick={this.showDetail.bind(this,el)}></section>
+                                <p>
+                                  {el.symbol}
+                                  <br/>
+                                  <span>{el.contractAddress}</span>  
+                                </p>
+                                <section className="btnBox">
+                                  <NavLink to={`compliance?address=${el.contractAddress}`}><button className="configure">Configure</button></NavLink>
+                                  <NavLink to={`issue?address=${el.contractAddress}`}><button className="issue">Issue</button></NavLink>
+                                </section>
+                              </div>
+                            ) 
+                          })
+                        }
                 </div>
             </div>
             {/* 遮罩层 */}
             <div className="shadow" style={{display:this.state.shadowDisplay}} onClick={this.closeShadow.bind(this)}></div>
             {/* 详细信息 */}
             <div className="showDetail" style={{display:this.state.detailDisplay}}>
-                <ul>
-                  <li>
-                    <span>Name</span>
-                    <p>1</p>
-                  </li>
-                  <li>
-                    <span>Symbol</span>
-                    <p>1</p>
-                  </li>
-                  <li>
-                    <span>TokenAddress</span>
-                    <p>1</p>
-                  </li>
-                  <li>
-                    <span>Decimals</span>
-                    <p>1</p>
-                  </li>
-                  <li>
-                    <span>Controllers</span>
-                    <p>
-                        <section>1</section>
-                        <section>2</section>
-                        <section>3</section>
-                    </p>
-                  </li>
-                  <li>
-                    <span>DeployAccount</span>
-                    <p>1</p>
-                  </li>
-                  <li>
-                    <span>Congifuration</span>
-                    <p>111</p>
-                  </li>
-                </ul>
+              {
+                this.state.detailContent?(
+                  <ul>
+                      <li>
+                        <span>Name</span>
+                        <p>{this.state.detailContent.name}</p>
+                      </li>
+                      <li>
+                        <span>Symbol</span>
+                        <p>{this.state.detailContent.symbol}</p>
+                      </li>
+                      <li>
+                        <span>TokenAddress</span>
+                        <p>{this.state.detailContent.contractAddress}</p>
+                      </li>
+                      <li>
+                        <span>Decimals</span>
+                        <p>{this.state.detailContent.decimals.words[0]}</p>
+                      </li>
+                      <li>
+                        <span>Controllers</span>
+                        <div>
+                            {
+                              this.state.detailContent.controllers.map((item,index)=>{
+                                return (
+                                    <p key={index}>{item}<br/></p>
+                                )
+                              })
+                            }
+                        </div>
+                      </li>
+                      <li>
+                        <span>RegistryAddress</span>
+                        <p>{this.state.detailContent.registryAddress}</p>
+                      </li>
+                      <li>
+                        <span>DeployAccount</span>
+                        <p>{this.state.detailContent.deployAccount}</p>
+                      </li>
+                      <li>
+                        <span>Congifuration</span>
+                        <p>111</p>
+                      </li>
+                  </ul>
+                ):(null)
+              }
+                
             </div>
         </div>
     );
   }
-  showDetail(){
+  showDetail(content){
     this.setState({
       shadowDisplay:"block",
-      detailDisplay:"block"
+      detailDisplay:"block",
+      detailContent: content
     })
   }
   closeShadow(){
@@ -111,6 +121,19 @@ export default class TokenManage extends Component {
     })
   }
   
+}
+
+export default (props) => {
+  return (
+    <DrizzleContext.Consumer>
+      {drizzleContext => {
+        return (
+          <TokenManage {...drizzleContext} {...props} />
+        );
+      }}
+    </DrizzleContext.Consumer>
+
+  )
 }
 
 

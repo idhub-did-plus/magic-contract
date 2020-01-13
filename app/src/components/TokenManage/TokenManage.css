@@ -1,15 +1,11 @@
 
-.bottom{
-    height:85%;
-    overflow: hidden;
-}
 .bottom h1{
     color:#fff;
     font-weight: 400;
     margin-top: 50px;
     margin-left: 100px;
 }
-.bottom h1 a {
+.bottom h1 .icon {
     display: inline-block;
     width:10px;
     height:10px;
@@ -19,15 +15,15 @@
 }
 .bottom .manageBox{
     width:80%;
-    height:70%;
-    margin:60px auto;
-    display: flex;
-    justify-content: space-between;
+    margin:40px auto;
     padding:0;
+    overflow: hidden;
 }
 .bottom .manageBox div{
     width:31%;
-    height:100%;
+    float: left;
+    margin-right: 28px;
+    margin-top: 20px;
     background:url('../../assets/token\ bg@2x.png') rgba(33,35,43,0.66) no-repeat;
     background-size: cover;
     box-shadow:0px 2px 10px 0px rgba(36,110,176,0.78);
@@ -67,6 +63,7 @@
     display: inline-block;
     height:45px;
     width: 80%;
+    margin-bottom: 10%;
 }
 .bottom .manageBox div .btnBox .configure{
     float: left;
@@ -76,6 +73,7 @@
 }
 .bottom .manageBox div:nth-of-type(1) button{
     width: 75%;
+    margin-bottom: 11%;
 }
 .bottom .manageBox div:nth-of-type(1) p{
     width:60%;
@@ -100,6 +98,7 @@
 /* 详细信息遮罩层 */
 .all{
     position: relative;
+    overflow: auto;
 }
 .shadow{
     width: 100%;

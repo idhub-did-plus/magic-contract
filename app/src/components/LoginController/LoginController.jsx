@@ -11,10 +11,6 @@ export default class LoginController extends Component {
   constructor(props, context) {
     super(props);
     this.state = {
-      // checkFirst: true,
-      // checkSecond :false,
-      // spanDispaly: 'none',
-      // checkDisplay: 'block',
       display: "block",
       claim:""
     };
@@ -38,36 +34,18 @@ export default class LoginController extends Component {
 
   // }
   handleCheck(){
-    this.setState(prevState => ({
-      checkFirst:!prevState.checkFirst,
-      checkSecond:!prevState.checkSecond,
-      spanDispaly: prevState.checkFirst ? "none":"block",
-      checkDisplay: prevState.checkFirst ? "block":"none"
-    }))
+    this.setState({
+      display: this.state.display == "block" ? "none": "block"
+    })
   }
-  // handleCheck(){
-  //   this.setState({
-  //     checkFirst:!this.state.checkFirst,
-  //     checkSecond:!this.state.checkSecond,
-  //     spanDispaly: this.state.checkFirst ? "none":"block",
-  //     checkDisplay: this.state.checkFirst ? "block":"none"
-  //   })
-  // }
   async login(event) {
     // if (this.claim == undefined) {
     //   alert("choose claim please!")
     //   return
     // }
-    // if(this.state.checkFirst){
-    //   this.claim = "tokenIssuer"
-    // }
-    // if(this.state.checkSecond){
-    //   this.claim = "complianceManager"
-    // }
-    if(this.state.checkFirst){
+    if(this.manager.style.display == "block"){
       this.claim = "complianceManager"
-    }
-    if(this.state.checkSecond){
+    }else{
       this.claim = "tokenIssuer"
     }
     var myDate = new Date();
@@ -162,13 +140,13 @@ export default class LoginController extends Component {
                     <div className="login">
                         <div className="select" onClick={this.handleCheck}>
                             compliance Manager
-                            <span style={{display: this.state.spanDispaly}}></span>
-                            <span className="icon" style={{display: this.state.checkDisplay}}></span>
+                            <span style={{display: this.state.display == "block" ? "none":"block"}}></span>
+                            <span className="icon" style={{display: this.state.display}} ref={el=>this.manager = el}></span>
                         </div>
                         <div className="select" onClick={this.handleCheck}>
                             token Issuer
-                            <span style={{display: this.state.checkDisplay}}></span>
-                            <span className="icon" style={{display: this.state.spanDispaly}}></span>
+                            <span style={{display: this.state.display}}></span>
+                            <span className="icon" style={{display: this.state.display == "block" ? "none":"block"}}></span>
                         </div>
                         <div className="logBtn" onClick={this.login}>Login</div>
                     </div>
