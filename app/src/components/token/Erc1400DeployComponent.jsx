@@ -62,11 +62,16 @@ class Erc1400DeployComponent extends Component {
         };
         this.props.drizzle.store.dispatch(deployFinished1400(payload))
         this.save(payload)
-      })
-
-    return;
-    //部署成功后跳转至配置与发行入口
+      }).then(
+        //部署成功后跳转至配置与发行入口
+          setTimeout(()=>{
+            this.props.history.push({
+              pathname:"/manage"
+            })
+          },3000)
+      )
     
+    return;
   }
  async save(token) {
     try {

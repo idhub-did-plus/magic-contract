@@ -92,7 +92,6 @@ function Registry(props) {
       <ContractForm contract="ComplianceServiceRegistry" method="register" labels={["token address", "compliance service address"]} />
     </div>
   )
-
 }
 function Configuration(props) {
 

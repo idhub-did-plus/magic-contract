@@ -2,6 +2,7 @@ import React,{Component} from "react"
 import "./compliance.css"
 import Swiper from "swiper"
 import { DrizzleContext } from "@drizzle/react-plugin";
+import ContractForm from "../contract/ContractForm"
 
 class TokenComplianceConfigurationComponent extends Component{
     constructor(props){
@@ -51,8 +52,10 @@ class TokenComplianceConfigurationComponent extends Component{
         const abi = this.contracts["ComplianceServiceRegistry"].abi;
         const address = this.contracts["ComplianceServiceRegistry"].address;
         var web3 = this.props.drizzle.web3;
-        
-        var ComplianceServiceRegistry = new web3.eth.Contract(abi,address);
+        console.log(web3,this.contracts)
+        var ComplianceServiceRegistry = new web3.eth.Contract(abi,address,{
+            from: this.props.drizzleState.accounts[0]
+        });
         
         var token = this.tokenAddr.value;
         var service = this.serviceAddr.value;
@@ -60,9 +63,10 @@ class TokenComplianceConfigurationComponent extends Component{
         if(!this.utils.isAddress(token)||!this.utils.isAddress(service)){
             alert("please input right address");
         }else{
+            console.log(ComplianceServiceRegistry.methods)
             ComplianceServiceRegistry.methods.register(token,service).send({
                 from:this.props.drizzleState.accounts[0],
-                gas:3000000
+                gas:30000
             });
         }
         
@@ -95,33 +99,45 @@ class TokenComplianceConfigurationComponent extends Component{
         }else{
             ComplianceServiceRegistry.methods.setConfiguration(token,configuration).send({
                 from:this.props.drizzleState.accounts[0],
-                gas:3000000
+                gas:300000
             });
         }
     }
     //处理下拉框相关逻辑，实现合规条件拼接
     handleSelect1(){
-        this.state.display = !this.state.display
+        this.setState({
+            display: !this.state.display
+        })
         this.ul1.style.display = this.state.display ? "block":"none"
     }
     handleSelect2(){
-        this.state.display = !this.state.display
+        this.setState({
+            display: !this.state.display
+        })
         this.ul2.style.display = this.state.display ? "block":"none"
     }
     handleSelect3(){
-        this.state.display = !this.state.display
+        this.setState({
+            display: !this.state.display
+        })
         this.ul3.style.display = this.state.display ? "block":"none"
     }
     handleOption1(value){
-        this.state.option1 = value
+        this.setState({
+            option1: value
+        })
         this.ul1.style.display = "none"
     }
     handleOption2(value){
-        this.state.option2 = value
+        this.setState({
+            option2: value
+        })
         this.ul2.style.display = "none"
     }
     handleOption3(value){
-        this.state.option3 = value
+        this.setState({
+            option3: value
+        })
         this.ul3.style.display = "none"
     }
     handleAdd(){
@@ -183,6 +199,7 @@ class TokenComplianceConfigurationComponent extends Component{
                                     </h2>
                                     <p className="detail">b. Please enter your compliance service address.</p>
                                     <input ref={el=>this.serviceAddr=el} type="text" className="input"/>
+                                    <ContractForm contract="ComplianceServiceRegistry" method="register" labels={["token address", "compliance service address"]} />
                                 </div>
                             </div>
                         </div> 
