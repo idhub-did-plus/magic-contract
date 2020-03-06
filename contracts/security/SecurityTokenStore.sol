@@ -168,5 +168,184 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
             allowances[_partition][_from[i]][_to[i]] = _amounts[i];
         }
     }
+
+
+    /////////////////////////////
+    // Modules Fuctions
+    /////////////////////////////
+
+    function addModule(address _partition, address _module) external {
+        _isAuthorized();
+        require(modulesByAddress[_partition][_module].module == address(0), "Module Existed");
+        modules[_partition].push(_module);
+        uint8[] memory types = IModule(_module).getTypes();
+        uint256[] memory indexes = new uint256[](types.length);
+        for (uint i=0; i<types.length; i++) {
+            modulesByType[_partition][types[i]].push(_module);
+            indexes[i] = modulesByType[_partition][types[i]].length;
+        }
+        Module memory module = Module(modules.length, _module, address(0), types, indexes);
+        modulesByAddress[_partition][_module] = module;
+    }
+
+    function removeModule(address _partition, address _module) external {
+        _isAuthorized();
+        require(modulesByAddress[_partition][_module].module != address(0), "Module Not Existed");
+        uint index = modulesByAddress[_partition][_module].index - 1;
+        if (index != modules.length - 1) {
+            modules[_partition][index] = modules[_partition][modules.length - 1];
+        }
+        modules[_partition].length--;
+        uint8[] memory types = modulesByAddress[_partition][_module].types;
+        for (uint i=0; i<types.length; i++) {
+            address[] storage modulesPoint = modulesByType[_partition][types[i]];
+            uint index = modulesByAddress[_partition][_module].indexes[i];
+            if (index != modulesPoint.length - 1) {
+                modulesPoint[index] = modulesPoint[modulesPoint.length - 1];
+            }
+            modulesPoint.length--;
+        }
+        delete modulesByAddress[_partition][_module];
+        // delete modulesByType[_module];
+    }
+
+    //////////////////////////
+    /// Transfer Fuctions
+    //////////////////////////
+
+    function canTransfer(
+        address _partition,
+        address _caller,
+        address _from, 
+        address _to, 
+        uint256 _value, 
+        bytes memory _data
+    ) 
+        external 
+    {
+        _isAuthorized();
+        _canTransfer(modulesByType[_partition][TRANSFER_KEY], _partition, _caller, _from, _to, _value, _data);
+    }
+
+    function transferWithData(
+        address _partition,
+        address _caller,
+        address _from, 
+        address _to, 
+        uint256 _value, 
+        bytes memory _data
+    ) 
+        external 
+    {
+        _isAuthorized();
+        _transferWithData(modulesByType[_partition][TRANSFER_KEY], _partition, _caller, _from, _to, _value, _data);
+    }
+
+    function _canTransfer(
+        address[] memory _modules,
+        address _partition,
+        address _caller,
+        address _from, 
+        address _to, 
+        uint256 _value, 
+        bytes memory _data
+    ) 
+        internal 
+        view 
+        checkGranularity(_value) 
+        returns(byte, bytes32) 
+    {
+        // bool isInvalid = false;
+        // bool isValid = false;
+        // bool isForceValid = false;
+        (bool isInvalid, byte status, bytes32 appCode) = _checkInsufficient(_partition, _caller, _from, _to, _value);
+        if (isInvalid) return (status, appCode);
+        // Use the local variables to avoid the stack too deep error
+        // bytes32 appCode = bytes32(0);
+        for (uint256 i = 0; i < _modules.length; i++) {
+            (ITransferManager.Result valid, byte error, bytes32 reason) = ITransferManager(_modules[i]).canTransfer(_from, _to, _value, _data);
+            if (valid == ITransferManager.Result.INVALID) {
+                // isInvalid = true;
+                appCode = reason;
+                status = error;
+            } /*else if (valid == ITransferManager.Result.VALID) {
+                isValid = true;
+            } else if (valid == ITransferManager.Result.FORCE_VALID) {
+                isForceValid = true;
+            }*/
+        }
+        // Use the local variables to avoid the stack too deep error
+        // isValid = isForceValid ? true : (isInvalid ? false : isValid);
+
+        // Balance overflow can never happen due to totalsupply being a uint256 as well
+        // else if (!KindMath.checkAdd(balanceOf(_to), _value))
+        //     return (0x50, bytes32(0));
+        return (status, appCode);
+        // return (isValid, isValid ? bytes32(StatusCodes.code(StatusCodes.Status.TransferSuccess)): appCode);
+    }
+
+    function _transferWithData(
+        address[] memory _modules,
+        address _partition,
+        address _caller,
+        address _from, 
+        address _to, 
+        uint256 _value, 
+        bytes memory _data
+    ) 
+        internal 
+    {
+        // bool isInvalid = false;
+        bool isValid = true;
+        bool isForceValid = false;
+        (bool isInvalid, byte status, bytes32 appCode) = _checkInsufficient(_partition, _caller, _from, _to, _value);
+        require(!isInvalid);
+        // Use the local variables to avoid the stack too deep error
+        // bytes32 appCode = bytes32(0);
+        for (uint256 i = 0; i < _modules.length; i++) {
+            // (ITransferManager.Result valid, byte error, bytes32 reason) = ITransferManager(_modules[i]).transfer(_from, _to, _value, _data);
+            ITransferManager.Result valid = ITransferManager(_modules[i]).transfer(_from, _to, _value, _data);
+            if (valid == ITransferManager.Result.INVALID) {
+                isInvalid = true;
+                // appCode = reason;
+                // status = error;
+            } else if (valid == ITransferManager.Result.VALID) {
+                isValid = true;
+            } else if (valid == ITransferManager.Result.FORCE_VALID) {
+                isForceValid = true;
+            }
+        }
+        // Use the local variables to avoid the stack too deep error
+        isValid = isForceValid ? true : (isInvalid ? false : isValid);
+
+        _adjustInvestorCount(_from, _to, _value, _balanceOf(_to), _balanceOf(_from));
+
+        if (isValid == true) {
+            uint[] memory amounts = new uint[](2);
+            amounts[0] = _balanceOf(_from).sub(_value);
+            amounts[1] = _balanceOf(_to).add(_value);
+            address[] memory holders = new address[](2);
+            holders[0] = _from;
+            holders[1] = _to;
+            ITokenStore(tokenStore).setBalancesMulti(holders, amounts);
+        }
+
+        _isValidTransfer(isValid);
+        // Balance overflow can never happen due to totalsupply being a uint256 as well
+        // else if (!KindMath.checkAdd(balanceOf(_to), _value))
+        //     return (0x50, bytes32(0));
+        // return (status, appCode);
+        // return (isValid, isValid ? bytes32(StatusCodes.code(StatusCodes.Status.TransferSuccess)): appCode);
+    }
+
+    function _checkInsufficient(address _partition, address _caller, address _from, address _to, uint _value) internal view returns(bool, byte, bytes32) {
+        if (balances[_partition][_from] < _value) return(true, StatusCodes.code(StatusCodes.Status.InsufficientBalance), bytes32(0));
+        if (_caller != _from && allowances[_partition][_from][_caller] < _value) return(true, StatusCodes.code(StatusCodes.Status.InsufficientAllowance), bytes32(0));
+        return(false, StatusCodes.code(StatusCodes.Status.TransferSuccess), bytes32(0));
+    }
+
+    function _isValidTransfer(bool _isTransfer) internal pure {
+        require(_isTransfer, "Transfer Invalid");
+    }
 }
 

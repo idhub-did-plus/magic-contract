@@ -82,7 +82,15 @@ contract SecurityTokenStorage {
         string uri; // URI of the document that exist off-chain
     }
 
-    
+/*
+    /////////////////////////////
+    /// Controller datastructure
+    /////////////////////////////
+
+    address[] public controllers;
+    mapping(address => uint) public controllerIndexes;
+*/
+
     //////////////////////////
     /// Module datastructure
     //////////////////////////
@@ -95,15 +103,15 @@ contract SecurityTokenStorage {
         uint256[] indexes;
     }
 
+    mapping(address => address[]) public modules;
+    mapping(address => mapping(address => Module)) public modulesByAddress;
+    mapping(address => mapping(uint8 => address[])) public modulesByType;
+
     address public owner;
 
     uint256 public granularity;
     // Number of investors with non-zero balance
     uint256 public holderCount;
-
-    address[] public modules;
-    mapping(address => Module) public modulesByAddress;
-    mapping(uint8 => address[]) public modulesByType;
 
     bool internal isHalted;
     bool internal issuable;
