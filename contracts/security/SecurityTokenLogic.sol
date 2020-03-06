@@ -81,27 +81,27 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     /////////////////////////////
 
     function name() external view returns (string memory) {
-        return _name();
+        return ITokenStore(tokenStore).getName(address(this));
     }
 
     function symbol() external view returns (string memory) {
-        return _symbol();
+        return ITokenStore(tokenStore).getSymbol(address(this));
     }
 
     function decimals() external view returns (uint8) {
-        return _decimals();
+        return ITokenStore(tokenStore).getDecimals(address(this));
     }
 
     function totalSupply() external view returns (uint256) {
-    	return _totalSupply();
+    	return ITokenStore(tokenStore).getTotalSupply(address(this));
     }
 
     function balanceOf(address account) external view returns (uint256) {
-    	return _balanceOf(account);
+    	return ITokenStore(tokenStore).getBalances(address(this), account);
     }
 
     function allowance(address owner, address spender) external view returns (uint256) {
-        return _allowance(owner, spender);
+        return ITokenStore(tokenStore).getAllowances(address(this), owner, spender);
     }
 
     /**
@@ -112,7 +112,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
      * Emits a {Transfer} event.
      */
     function transfer(address recipient, uint256 amount) external returns (bool) {
-        _transferWithData(modulesByType[TRANSFER_KEY], msg.sender, recipient, amount, new bytes(0));
+        _transferWithData(address(this), msg.sender, msg.sender, recipient, amount, new bytes(0));
         emit Transfer(msg.sender, recipient, amount);
         return true;
     }
@@ -132,7 +132,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
      * Emits an {Approval} event.
      */
     function approve(address spender, uint256 amount) external returns (bool) {
-        ITokenStore(tokenStore).setAllowances(msg.sender, spender, amount);
+        ITokenStore(tokenStore).setAllowances(address(this), msg.sender, spender, amount);
         emit Approval(msg.sender, spender, amount);
         return true;
     }
@@ -147,9 +147,33 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
      * Emits a {Transfer} event.
      */
     function transferFrom(address sender, address recipient, uint256 amount) external returns (bool) {
-        _transferWithData(modulesByType[TRANSFER_KEY], sender, recipient, amount, new bytes(0));
+        _transferWithData(address(this), msg.sender, sender, recipient, amount, new bytes(0));
         emit Transfer(sender, recipient, amount);
         return true;
+    }
+
+    // 仅用于其它partition调用
+    function baseTransfer(address partition, address caller, address sender, address recipient, uint256 amount, bytes calldata _data) external returns (bool) {
+        // _isAuthorized(); 权限检查占位
+        _transferWithData(partition, caller, sender, recipient, amount, _data);
+        return true;
+    }
+
+
+    /////////////////////////////
+    // Modules Fuctions
+    /////////////////////////////
+
+    function addModule(address _partition, address _module) external {
+        // _isAuthorized(); 权限检查占位
+        require(_module != address(0), "Invalid Module");
+        require(_partition != address(0), "Invalid Module");
+        ITokenStore(tokenStore).addModule(_partition, _module);
+    }
+
+    function removeModule(address _partition, address _module) external {
+        // _isAuthorized(); 权限检查占位
+        ITokenStore(tokenStore).removeModule(_partition, _module);
     }
 
 
@@ -159,21 +183,29 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
 
     // Transfer Validity
     function canTransfer(address _to, uint256 _value, bytes calldata _data) external view returns (byte, bytes32) {
-        return _canTransfer(modulesByType[TRANSFER_KEY], msg.sender, _to, _value, _data);
+        // return _canTransfer(modulesByType[TRANSFER_KEY], msg.sender, _to, _value, _data);
+        return _canTransfer(address(this), msg.sender, msg.sender, _to, _value, _data);
     }
 
     function canTransferFrom(address _from, address _to, uint256 _value, bytes calldata _data) external view returns (byte, bytes32) {
-        return _canTransfer(modulesByType[TRANSFER_KEY], _from, _to, _value, _data);
+        // return _canTransfer(modulesByType[TRANSFER_KEY], _from, _to, _value, _data);
+        return _canTransfer(address(this), msg.sender, _from, _to, _value, _data);
+    }
+
+    // 仅用于其它partition调用
+    function baseCanTransfer(address _partition, address _caller, address _sender, address _recipient, uint256 _amount, bytes calldata _data) external returns (bool) {
+        // _isAuthorized(); 权限检查占位
+        return _canTransfer(_partition, _caller, _sender, _recipient, _amount, _data);
     }
 
     // Transfers
     function transferWithData(address _to, uint256 _value, bytes calldata _data) external {
-        _transferWithData(modulesByType[TRANSFER_KEY], msg.sender, _to, _value, _data);
+        _transferWithData(address(this), msg.sender, _to, _value, _data);
         emit Transfer(msg.sender, _to, _value);
     }
 
     function transferFromWithData(address _from, address _to, uint256 _value, bytes calldata _data) external {
-        _transferWithData(modulesByType[TRANSFER_KEY], _from, _to, _value, _data);
+        _transferWithData(address(this), _from, _to, _value, _data);
         emit Transfer(_from, _to, _value);
     }
 
@@ -219,32 +251,6 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     function controllerRedeem(address _tokenHolder, uint256 _value, bytes calldata _data, bytes calldata _operatorData) external checkGranularity(_value) {
         tokenController.controllerRedeem(_tokenHolder, _value, _data, _operatorData);
         emit ControllerRedemption(msg.sender, _tokenHolder, _value, _data, _operatorData);
-    }
-
-
-    /////////////////////////////
-    // ERC1643Interfaces 
-    /////////////////////////////
-
-    function getDocument(bytes32 _name) external view returns (string memory, bytes32, uint256) {
-        return tokenDocument.getDocument(_name);
-        
-    }
-
-    function getAllDocuments() external view returns (bytes32[] memory) {
-        /*TokenDocument.Document[] memory docs = tokenDocument.getAllDocument(_name);
-        byte32[] memory hashes = new bytes32[](docs.length);
-        for (uint i=0; i<docs.length; i++) hashes[i] = docs[i].docHash;
-        return hashes;*/
-        return tokenDocument.getAllDocuments();
-    }
-
-    function setDocument(bytes32 _name, string calldata _uri, bytes32 _documentHash) external {
-        tokenDocument.setDocument(_name, _uri, _documentHash);
-    }
-
-    function removeDocument(bytes32 _name) external {
-        tokenDocument.removeDocument(_name);
     }
 
 
@@ -378,181 +384,41 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         tokenPartition.operatorRedeemByPartition(_partition, _tokenHolder, _value, _data, _operatorData);
     }
 
-    /////////////////////////////
-    // Modules 
-    /////////////////////////////
-
-    function addModule(address _module) external {
-        require(modulesByAddress[_module].module == address(0), "Module Existed");
-        require(_module != address(0), "Invalid Module");
-        modules.push(_module);
-        uint8[] memory types = IModule(_module).getTypes();
-        uint256[] memory indexes = new uint256[](types.length);
-        for (uint i=0; i<types.length; i++) {
-            modulesByType[types[i]].push(_module);
-            indexes[i] = modulesByType[types[i]].length;
-        }
-        Module memory module = Module(modules.length, _module, address(0), types, indexes);
-        modulesByAddress[_module] = module;
-    }
-
-    function removeModule(address _module) external {
-        require(modulesByAddress[_module].module != address(0), "Module Not Existed");
-        uint index = modulesByAddress[_module].index - 1;
-        if (index != modules.length - 1) {
-            modules[index] = modules[modules.length - 1];
-        }
-        modules.length--;
-        uint8[] memory types = modulesByAddress[_module].types;
-        for (uint i=0; i<types.length; i++) {
-            address[] storage modulesPoint = modulesByType[types[i]];
-            uint index = modulesByAddress[_module].indexes[i];
-            if (index != modulesPoint.length - 1) {
-                modulesPoint[index] = modulesPoint[modulesPoint.length - 1];
-            }
-            modulesPoint.length--;
-        }
-        delete modulesByAddress[_module];
-        // delete modulesByType[_module];
-    }
-
 
     /////////////////////////////
     // Internal Functions 
     /////////////////////////////
-
-    function _name() internal view returns (string memory) {
-        return tokenStore.getName();
-    }
-
-    function _symbol() internal view returns (string memory) {
-        return tokenStore.getSymbol();
-    }
-
-    function _decimals() internal view returns (uint8) {
-        return tokenStore.getDecimals();
-    }
-
-    function _totalSupply() internal view returns (uint256) {
-        return tokenStore.getTotalSupply();
-    }
-
-    function _balanceOf(address account) internal view returns (uint256) {
-        return tokenStore.getBalances(account);
-    }
-
-    function _allowance(address owner, address spender) internal view returns (uint256) {
-        return tokenStore.getAllowances(owner, spender);
-    }
     
     function _isIssuable() internal view returns (bool) {
         return issuable;
     }
 
-    function _checkInsufficient(address _caller, address _from, address _to, uint _value) internal view returns(bool, byte, bytes32) {
-        if (_balanceOf(_from) < _value) return(true, StatusCodes.code(StatusCodes.Status.InsufficientBalance), bytes32(0));
-        if (_caller != _from && _allowance(_from, _caller) < _value) return(true, StatusCodes.code(StatusCodes.Status.InsufficientAllowance), bytes32(0));
-        return(false, StatusCodes.code(StatusCodes.Status.TransferSuccess), bytes32(0));
-    }
-
-    function _isValidTransfer(bool _isTransfer) internal pure {
-        require(_isTransfer, "Transfer Invalid");
-    }
-
     function _canTransfer(
-        address[] memory _modules,
+        address _partition,
+        address _caller,
         address _from, 
         address _to, 
         uint256 _value, 
         bytes memory _data
     ) 
         internal 
-        view 
-        checkGranularity(_value) 
-        returns(byte, bytes32) 
+        checkGranularity(_value)
     {
-        // bool isInvalid = false;
-        // bool isValid = false;
-        // bool isForceValid = false;
-        (bool isInvalid, byte status, bytes32 appCode) = _checkInsufficient(msg.sender, _from, _to, _value);
-        if (isInvalid) return (status, appCode);
-        // Use the local variables to avoid the stack too deep error
-        // bytes32 appCode = bytes32(0);
-        for (uint256 i = 0; i < _modules.length; i++) {
-            (ITransferManager.Result valid, byte error, bytes32 reason) = ITransferManager(_modules[i]).canTransfer(_from, _to, _value, _data);
-            if (valid == ITransferManager.Result.INVALID) {
-                // isInvalid = true;
-                appCode = reason;
-                status = error;
-            } /*else if (valid == ITransferManager.Result.VALID) {
-                isValid = true;
-            } else if (valid == ITransferManager.Result.FORCE_VALID) {
-                isForceValid = true;
-            }*/
-        }
-        // Use the local variables to avoid the stack too deep error
-        // isValid = isForceValid ? true : (isInvalid ? false : isValid);
-
-        // Balance overflow can never happen due to totalsupply being a uint256 as well
-        // else if (!KindMath.checkAdd(balanceOf(_to), _value))
-        //     return (0x50, bytes32(0));
-        return (status, appCode);
-        // return (isValid, isValid ? bytes32(StatusCodes.code(StatusCodes.Status.TransferSuccess)): appCode);
+        ITokenStore(tokenStore).canTransfer(_partition, _caller, _from, _to, _value, _data);
     }
 
     function _transferWithData(
-        address[] memory _modules,
+        address _partition,
+        address _caller,
         address _from, 
         address _to, 
         uint256 _value, 
         bytes memory _data
     ) 
         internal 
-        checkGranularity(_value) 
-        // view 
-        // returns(byte, bytes32) 
+        checkGranularity(_value)
     {
-        // bool isInvalid = false;
-        bool isValid = true;
-        bool isForceValid = false;
-        (bool isInvalid, byte status, bytes32 appCode) = _checkInsufficient(msg.sender, _from, _to, _value);
-        require(!isInvalid);
-        // Use the local variables to avoid the stack too deep error
-        // bytes32 appCode = bytes32(0);
-        for (uint256 i = 0; i < _modules.length; i++) {
-            // (ITransferManager.Result valid, byte error, bytes32 reason) = ITransferManager(_modules[i]).transfer(_from, _to, _value, _data);
-            ITransferManager.Result valid = ITransferManager(_modules[i]).transfer(_from, _to, _value, _data);
-            if (valid == ITransferManager.Result.INVALID) {
-                isInvalid = true;
-                // appCode = reason;
-                // status = error;
-            } else if (valid == ITransferManager.Result.VALID) {
-                isValid = true;
-            } else if (valid == ITransferManager.Result.FORCE_VALID) {
-                isForceValid = true;
-            }
-        }
-        // Use the local variables to avoid the stack too deep error
-        isValid = isForceValid ? true : (isInvalid ? false : isValid);
-
-        _adjustInvestorCount(_from, _to, _value, _balanceOf(_to), _balanceOf(_from));
-
-        if (isValid == true) {
-            uint[] memory amounts = new uint[](2);
-            amounts[0] = _balanceOf(_from).sub(_value);
-            amounts[1] = _balanceOf(_to).add(_value);
-            address[] memory holders = new address[](2);
-            holders[0] = _from;
-            holders[1] = _to;
-            ITokenStore(tokenStore).setBalancesMulti(holders, amounts);
-        }
-
-        _isValidTransfer(isValid);
-        // Balance overflow can never happen due to totalsupply being a uint256 as well
-        // else if (!KindMath.checkAdd(balanceOf(_to), _value))
-        //     return (0x50, bytes32(0));
-        // return (status, appCode);
-        // return (isValid, isValid ? bytes32(StatusCodes.code(StatusCodes.Status.TransferSuccess)): appCode);
+        ITokenStore(tokenStore).transferWithData(_partition, _caller, _from, _to, _value, _data);
     }
 
     function _adjustInvestorCount(
