@@ -289,7 +289,7 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
         // return (isValid, isValid ? bytes32(StatusCodes.code(StatusCodes.Status.TransferSuccess)): appCode);
     }
 
-/*    function _transferWithData(
+    function _transferWithData(
         address[] memory _modules,
         address _partition,
         address _caller,
@@ -342,7 +342,7 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
         // return (status, appCode);
         // return (isValid, isValid ? bytes32(StatusCodes.code(StatusCodes.Status.TransferSuccess)): appCode);
     }
-*/
+
     function _checkInsufficient(address _partition, address _caller, address _from, address _to, uint _value) internal view returns(bool, byte, bytes32) {
         if (balances[_partition][_from] < _value) return(true, StatusCodes.code(StatusCodes.Status.InsufficientBalance), bytes32(0));
         if (_caller != _from && allowances[_partition][_from][_caller] < _value) return(true, StatusCodes.code(StatusCodes.Status.InsufficientAllowance), bytes32(0));

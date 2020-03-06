@@ -14,9 +14,9 @@ interface ITransferManager {
     /**
      * @notice Determines if the transfer between these two accounts can happen
      */
-    function transfer(address _from, address _to, uint256 _amount, bytes calldata _data) external returns(Result result);
+    function transfer(address _partition, address _from, address _to, uint256 _amount, bytes calldata _data) external returns(Result result);
 
-    function canTransfer(address _from, address _to, uint256 _amount, bytes calldata _data) external view returns(Result result, byte status, bytes32 partition);
+    function canTransfer(address _partition, address _from, address _to, uint256 _amount, bytes calldata _data) external view returns(Result result, byte status, bytes32 partition);
 
     /**
      * @notice return the amount of tokens for a given user as per the partition
