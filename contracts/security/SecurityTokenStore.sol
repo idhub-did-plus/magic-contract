@@ -2,6 +2,7 @@ pragma solidity 0.5.8;
 
 import "./SecurityTokenStorage.sol";
 import "./datastore/DataStore.sol";
+import "./interfaces/ITransferManager.sol";
 
 contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
     function _isAuthorized() internal view {
@@ -157,6 +158,10 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
     // mutil data setter
     function setBalancesMulti(address _partition, address[] calldata _holders, uint[] calldata _amounts) external {
         _isAuthorized();
+        _setBalancesMulti(_partition, _holders, _amounts);
+    }
+
+    function _setBalancesMulti(address _partition, address[] calldata _holders, uint[] calldata _amounts) internal {
         for (uint256 i = 0; i < _holders.length; i++) {
             balances[_partition][_holders[i]] = _amounts[i];
         }
@@ -263,7 +268,7 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
         // Use the local variables to avoid the stack too deep error
         // bytes32 appCode = bytes32(0);
         for (uint256 i = 0; i < _modules.length; i++) {
-            (ITransferManager.Result valid, byte error, bytes32 reason) = ITransferManager(_modules[i]).canTransfer(_from, _to, _value, _data);
+            (ITransferManager.Result valid, byte error, bytes32 reason) = ITransferManager(_modules[i]).canTransfer(_partition, _from, _to, _value, _data);
             if (valid == ITransferManager.Result.INVALID) {
                 // isInvalid = true;
                 appCode = reason;
@@ -284,7 +289,7 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
         // return (isValid, isValid ? bytes32(StatusCodes.code(StatusCodes.Status.TransferSuccess)): appCode);
     }
 
-    function _transferWithData(
+/*    function _transferWithData(
         address[] memory _modules,
         address _partition,
         address _caller,
@@ -304,7 +309,7 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
         // bytes32 appCode = bytes32(0);
         for (uint256 i = 0; i < _modules.length; i++) {
             // (ITransferManager.Result valid, byte error, bytes32 reason) = ITransferManager(_modules[i]).transfer(_from, _to, _value, _data);
-            ITransferManager.Result valid = ITransferManager(_modules[i]).transfer(_from, _to, _value, _data);
+            ITransferManager.Result valid = ITransferManager(_modules[i]).transfer(_partition, _from, _to, _value, _data);
             if (valid == ITransferManager.Result.INVALID) {
                 isInvalid = true;
                 // appCode = reason;
@@ -318,16 +323,16 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
         // Use the local variables to avoid the stack too deep error
         isValid = isForceValid ? true : (isInvalid ? false : isValid);
 
-        _adjustInvestorCount(_from, _to, _value, _balanceOf(_to), _balanceOf(_from));
+        _adjustInvestorCount(_partition, _from, _to, _value, balances[_partition][_to], balances[_partition][_from]);
 
         if (isValid == true) {
             uint[] memory amounts = new uint[](2);
-            amounts[0] = _balanceOf(_from).sub(_value);
-            amounts[1] = _balanceOf(_to).add(_value);
+            amounts[0] = balances[_partition][_from].sub(_value);
+            amounts[1] = balances[_partition][_to].add(_value);
             address[] memory holders = new address[](2);
             holders[0] = _from;
             holders[1] = _to;
-            ITokenStore(tokenStore).setBalancesMulti(holders, amounts);
+            _setBalancesMulti(_partition, holders, amounts);
         }
 
         _isValidTransfer(isValid);
@@ -337,7 +342,7 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
         // return (status, appCode);
         // return (isValid, isValid ? bytes32(StatusCodes.code(StatusCodes.Status.TransferSuccess)): appCode);
     }
-
+*/
     function _checkInsufficient(address _partition, address _caller, address _from, address _to, uint _value) internal view returns(bool, byte, bytes32) {
         if (balances[_partition][_from] < _value) return(true, StatusCodes.code(StatusCodes.Status.InsufficientBalance), bytes32(0));
         if (_caller != _from && allowances[_partition][_from][_caller] < _value) return(true, StatusCodes.code(StatusCodes.Status.InsufficientAllowance), bytes32(0));
@@ -346,6 +351,50 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
 
     function _isValidTransfer(bool _isTransfer) internal pure {
         require(_isTransfer, "Transfer Invalid");
+    }
+
+    function _adjustInvestorCount(
+        address _partition,
+        address _from,
+        address _to,
+        uint256 _value,
+        uint256 _balanceTo,
+        uint256 _balanceFrom
+    )
+        internal 
+    {
+        // uint256 holderCount = _holderCount;
+        if ((_value == 0) || (_from == _to)) {
+            return;
+        }
+        // Check whether receiver is a new token holder
+        if ((_balanceTo == 0) && (_to != address(0))) {
+            holderCounts[_partition] = holderCounts[_partition].add(1);
+            if (!_isExistingInvestor(_partition, _to)) {
+                insertAddress(_getKey(INVESTORSKEY, _partition), _to);
+                //KYC data can not be present if added is false and hence we can set packed KYC as uint256(1) to set added as true
+                setUint256(_getKey(WHITELIST, _partition, _to), uint256(1));
+            }
+        }
+        // Check whether sender is moving all of their tokens
+        if (_value == _balanceFrom) {
+            holderCounts[_partition] = holderCount[_partition].sub(1);
+        }
+        return;
+    }
+
+    function _isExistingInvestor(address _partition, address _investor) internal view returns(bool) {
+        uint256 data = getUint256(_getKey(WHITELIST, _partition, _investor));
+        //extracts `added` from packed `whitelistData`
+        return uint8(data) == 0 ? false : true;
+    }
+
+    function _getKey(bytes32 _key1, address _key2) internal pure returns(bytes32) {
+        return bytes32(keccak256(abi.encodePacked(_key1, _key2)));
+    }
+
+    function _getKey(bytes32 _key1, address _key2, address _key3) internal pure returns(bytes32) {
+        return bytes32(keccak256(abi.encodePacked(_key1, _key2, _key3)));
     }
 }
 

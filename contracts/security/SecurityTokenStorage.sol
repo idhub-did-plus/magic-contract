@@ -107,11 +107,13 @@ contract SecurityTokenStorage {
     mapping(address => mapping(address => Module)) public modulesByAddress;
     mapping(address => mapping(uint8 => address[])) public modulesByType;
 
+    mapping(address => uint) public holderCounts;
+
     address public owner;
 
     uint256 public granularity;
     // Number of investors with non-zero balance
-    uint256 public holderCount;
+    // uint256 public holderCount;
 
     bool internal isHalted;
     bool internal issuable;
