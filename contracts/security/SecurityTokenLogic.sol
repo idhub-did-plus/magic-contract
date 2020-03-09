@@ -132,7 +132,8 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
      * Emits an {Approval} event.
      */
     function approve(address spender, uint256 amount) external returns (bool) {
-        ITokenStore(tokenStore).setAllowances(address(this), msg.sender, spender, amount);
+        // ITokenStore(tokenStore).setAllowances(address(this), msg.sender, spender, amount);
+        _approve(address(this), msg.sender, spender, amount);
         emit Approval(msg.sender, spender, amount);
         return true;
     }
@@ -156,6 +157,13 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     function baseTransfer(address partition, address caller, address sender, address recipient, uint256 amount, bytes calldata _data) external returns (bool) {
         // _isAuthorized(); 权限检查占位
         _transferWithData(partition, caller, sender, recipient, amount, _data);
+        return true;
+    }
+
+    // 仅用于其它partition调用
+    function baseApprove(address partition, address sender, address recipient, uint256 amount) external returns (bool) {
+        // _isAuthorized(); 权限检查占位
+        _approve(partition, sender, recipient, amount);
         return true;
     }
 
@@ -421,43 +429,16 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         ITokenStore(tokenStore).transferWithData(_partition, _caller, _from, _to, _value, _data);
     }
 
-    function _adjustInvestorCount(
-        address _from,
-        address _to,
-        uint256 _value,
-        uint256 _balanceTo,
-        uint256 _balanceFrom
-    )
+    function _approve(
+        address _partition,
+        address _from, 
+        address _to, 
+        uint256 _value
+    ) 
         internal 
+        checkGranularity(_value)
     {
-        // uint256 holderCount = _holderCount;
-        if ((_value == 0) || (_from == _to)) {
-            return;
-        }
-        // Check whether receiver is a new token holder
-        if ((_balanceTo == 0) && (_to != address(0))) {
-            holderCount = holderCount.add(1);
-            if (!_isExistingInvestor(_to)) {
-                IDataStore(address(tokenStore)).insertAddress(INVESTORSKEY, _to);
-                //KYC data can not be present if added is false and hence we can set packed KYC as uint256(1) to set added as true
-                IDataStore(address(tokenStore)).setUint256(_getKey(WHITELIST, _to), uint256(1));
-            }
-        }
-        // Check whether sender is moving all of their tokens
-        if (_value == _balanceFrom) {
-            holderCount = holderCount.sub(1);
-        }
-        return;
-    }
-
-    function _isExistingInvestor(address _investor) internal view returns(bool) {
-        uint256 data = IDataStore(address(tokenStore)).getUint256(_getKey(WHITELIST, _investor));
-        //extracts `added` from packed `whitelistData`
-        return uint8(data) == 0 ? false : true;
-    }
-
-    function _getKey(bytes32 _key1, address _key2) internal pure returns(bytes32) {
-        return bytes32(keccak256(abi.encodePacked(_key1, _key2)));
+        ITokenStore(tokenStore).setAllowances(_partition, _from, _to, _value);
     }
 }
 
