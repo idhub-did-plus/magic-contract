@@ -5,9 +5,25 @@ import "./datastore/DataStore.sol";
 import "./interfaces/ITransferManager.sol";
 
 contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
+    using SafeMath for uint256;
+
     function _isAuthorized() internal view {
         require(msg.sender == _owner, "Unauthorized");
     }
+
+    function getPermission(
+        address _partition,
+        address _from,
+        address _to,
+        byte32 _perm
+    ) 
+        external 
+        view 
+        returns (bool) 
+    {
+        return perms[_partition][_from][_to][_perm];
+    }
+
     // data getter
 
     //////////////////////////

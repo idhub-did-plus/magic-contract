@@ -20,6 +20,13 @@ import "./tokendoc/TokenDocumentStorage.sol";
 contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     using SafeMath for uint256;
 
+    address internal constant ALL_PARTITION = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+
+    bytes32 internal constant PARTITION = ; //keccak256(abi.encodePacked("PARTITION"))
+    bytes32 internal constant OPERATOR = ; //keccak256(abi.encodePacked("OPERATOR"))
+    bytes32 internal constant DOCUMENT_MANAGEMENT = ; //keccak256(abi.encodePacked("DOCUMENT MANAGEMENT"))
+    bytes32 internal constant MODULE_MANAGEMENT = ; //keccak256(abi.encodePacked("MODULE MANAGEMENT"))
+
     address public tokenStore;
 
     // Document Events
@@ -29,6 +36,10 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     modifier checkGranularity(uint256 _value) {
         require(_value % granularity == 0, "Invalid granularity");
         _;
+    }
+
+    function checkPermission(address _partition, address _from, address _to, bytes32 _perm) external view returns(bool) {
+        return _checkPermission(_partition, _from, _to, _perm);
     }
 
 
@@ -56,7 +67,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
      * @param _documentHash hash (of the contents) of the document.
      */
     function setDocument(bytes32 _name, string calldata _uri, bytes32 _documentHash) external {
-        // _isAuthorized();
+        require(_checkPermission(address(this), msg.sender, address(this), DOCUMENT_MANAGEMENT), "Permission Error");
         require(_name != bytes32(0), "Bad name");
         require(bytes(_uri).length > 0, "Bad uri");
         ITokenStore(tokenStore).setDocument(_name, _uri, _documentHash);
@@ -69,7 +80,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
      * @param _name Name of the document. It should be unique always
      */
     function removeDocument(bytes32 _name) external {
-        // _isAuthorized();
+        require(_checkPermission(address(this), msg.sender, address(this), DOCUMENT_MANAGEMENT), "Permission Error");
         ITokenStore(tokenStore).removeDocument(_name);
         (string memory uri, bytes32 docHash, ) = ITokenStore(tokenStore).getDocument(_name);
         emit DocumentRemoved(_name, uri, docHash);
@@ -155,14 +166,14 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
 
     // 仅用于其它partition调用
     function baseTransfer(address partition, address caller, address sender, address recipient, uint256 amount, bytes calldata _data) external returns (bool) {
-        // _isAuthorized(); 权限检查占位
+        require(_checkPermission(address(this), msg.sender, address(this), PARTITION), "Must called by partition contract.");
         _transferWithData(partition, caller, sender, recipient, amount, _data);
         return true;
     }
 
     // 仅用于其它partition调用
     function baseApprove(address partition, address sender, address recipient, uint256 amount) external returns (bool) {
-        // _isAuthorized(); 权限检查占位
+        require(_checkPermission(address(this), msg.sender, address(this), PARTITION), "Must called by partition contract.");
         _approve(partition, sender, recipient, amount);
         return true;
     }
@@ -173,14 +184,14 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     /////////////////////////////
 
     function addModule(address _partition, address _module) external {
-        // _isAuthorized(); 权限检查占位
+        require(_checkPermission(address(this), msg.sender, address(this), MODULE_MANAGEMENT), "Permission Error");
         require(_module != address(0), "Invalid Module");
         require(_partition != address(0), "Invalid Module");
         ITokenStore(tokenStore).addModule(_partition, _module);
     }
 
     function removeModule(address _partition, address _module) external {
-        // _isAuthorized(); 权限检查占位
+        require(_checkPermission(address(this), msg.sender, address(this), MODULE_MANAGEMENT), "Permission Error");
         ITokenStore(tokenStore).removeModule(_partition, _module);
     }
 
@@ -191,18 +202,15 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
 
     // Transfer Validity
     function canTransfer(address _to, uint256 _value, bytes calldata _data) external view returns (byte, bytes32) {
-        // return _canTransfer(modulesByType[TRANSFER_KEY], msg.sender, _to, _value, _data);
         return _canTransfer(address(this), msg.sender, msg.sender, _to, _value, _data);
     }
 
     function canTransferFrom(address _from, address _to, uint256 _value, bytes calldata _data) external view returns (byte, bytes32) {
-        // return _canTransfer(modulesByType[TRANSFER_KEY], _from, _to, _value, _data);
         return _canTransfer(address(this), msg.sender, _from, _to, _value, _data);
     }
 
     // 仅用于其它partition调用
     function baseCanTransfer(address _partition, address _caller, address _sender, address _recipient, uint256 _amount, bytes calldata _data) external returns (bool) {
-        // _isAuthorized(); 权限检查占位
         return _canTransfer(_partition, _caller, _sender, _recipient, _amount, _data);
     }
 
@@ -295,13 +303,14 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         returns (bytes32) 
     {
         address partitionAddress = ITokenStore(tokenStore).getPartitionAddress(_partition);
-        uint[] memory amounts = new uint[](2);
-        amounts[0] = balances[partitionAddress][msg.sender].sub(_value);
-        amounts[1] = balances[partitionAddress][_to].add(_value);
+        _transferWithData(_partition, msg.sender, msg.sender, _to, _value, new bytes(0));
+        /*uint[] memory amounts = new uint[](2);
+        amounts[0] = ITokenStore(tokenStore).getBalances(partitionAddress, msg.sender).sub(_value);
+        amounts[1] = ITokenStore(tokenStore).getBalances(partitionAddress, _to).add(_value);
         address[] memory holders = new address[](2);
         holders[0] = msg.sender;
         holders[1] = _to;
-        ITokenStore(tokenStore).setBalancesMulti(_partition, holders, amounts);
+        ITokenStore(tokenStore).setBalancesMulti(partitionAddress, holders, amounts);*/
         emit TransferByPartition(_partition, msg.sender, msg.sender, _to, _value, _data, new bytes(0));
         return _partition;
     }
@@ -318,7 +327,13 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         checkGranularity(_value) 
         returns (bytes32)
     {
+        require(_checkPermission(_partition, msg.sender, _from, OPERATOR) || 
+            _checkPermission(ALL_PARTITION, msg.sender, _from, OPERATOR), 
+            "Permission Error");
+        address partitionAddress = ITokenStore(tokenStore).getPartitionAddress(_partition);
+        _transferWithData(_partition, _from, _from, _to, _value, new bytes(0));
         emit TransferByPartition(_partition, msg.sender, _from, _to, _value, _data, _operatorData);
+        return _partition;
     }
 
     function canTransferByPartition(
@@ -333,14 +348,19 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         checkGranularity(_value) 
         returns (byte, bytes32, bytes32) 
     {
+        address partitionAddress = ITokenStore(tokenStore).getPartitionAddress(_partition);
+        return _canTransfer(partitionAddress, _from, _from, _to, _value, _data);
     }
 
     // Operator Information
     // These functions are present in the STGetter
     function isOperator(address _operator, address _tokenHolder) external view returns (bool) {
+        return _checkPermission(ALL_PARTITION, _operator, _tokenHolder, OPERATOR);
     }
 
     function isOperatorForPartition(bytes32 _partition, address _operator, address _tokenHolder) external view returns (bool) {
+        address partitionAddress = ITokenStore(tokenStore).getPartitionAddress(_partition);
+        return _checkPermission(partitionAddress, _operator, _tokenHolder, OPERATOR);
     }
 
     // Operator Management
@@ -428,6 +448,10 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         checkGranularity(_value)
     {
         ITokenStore(tokenStore).setAllowances(_partition, _from, _to, _value);
+    }
+
+    function _checkPermission(address _partition, address _from, address _to, bytes32 _perm) internal view returns(bool) {
+        return ITokenStore(tokenStore).getPermission(_partition, _from, _to, _perm);
     }
 }
 
