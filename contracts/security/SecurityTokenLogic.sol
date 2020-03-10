@@ -24,6 +24,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
 
     bytes32 internal constant PARTITION = ; //keccak256(abi.encodePacked("PARTITION"))
     bytes32 internal constant OPERATOR = ; //keccak256(abi.encodePacked("OPERATOR"))
+    bytes32 internal constant CONTROLLER = ; //keccak256(abi.encodePacked("CONTROLLER"))
     bytes32 internal constant DOCUMENT_MANAGEMENT = ; //keccak256(abi.encodePacked("DOCUMENT MANAGEMENT"))
     bytes32 internal constant MODULE_MANAGEMENT = ; //keccak256(abi.encodePacked("MODULE MANAGEMENT"))
 
@@ -256,15 +257,17 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     /////////////////////////////
 
     function isControllable() external view returns (bool) {
+        return _checkPermission(address(this), msg.sender, address(this), CONTROLLER);
     }
 
     function controllerTransfer(address _from, address _to, uint256 _value, bytes calldata _data, bytes calldata _operatorData) external checkGranularity(_value) {
-        tokenController.controllerTransfer(_from, _to, _value, _data, _operatorData);
+        require(_checkPermission(address(this), msg.sender, address(this), CONTROLLER), "Caller is not controller.");
+        _transferWithData(address(this), _from, _from, _to, _value, new bytes(0));
         emit ControllerTransfer(msg.sender, _from, _to, _value, _data, _operatorData);
     }
 
     function controllerRedeem(address _tokenHolder, uint256 _value, bytes calldata _data, bytes calldata _operatorData) external checkGranularity(_value) {
-        tokenController.controllerRedeem(_tokenHolder, _value, _data, _operatorData);
+        require(_checkPermission(address(this), msg.sender, address(this), CONTROLLER), "Caller is not controller.");
         emit ControllerRedemption(msg.sender, _tokenHolder, _value, _data, _operatorData);
     }
 
