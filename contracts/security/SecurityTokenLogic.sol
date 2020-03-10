@@ -27,12 +27,9 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     bytes32 internal constant CONTROLLER = ; //keccak256(abi.encodePacked("CONTROLLER"))
     bytes32 internal constant DOCUMENT_MANAGEMENT = ; //keccak256(abi.encodePacked("DOCUMENT MANAGEMENT"))
     bytes32 internal constant MODULE_MANAGEMENT = ; //keccak256(abi.encodePacked("MODULE MANAGEMENT"))
+    bytes32 internal constant PERMISSION_MANAGEMENT = ; //keccak256(abi.encodePacked("PERMISSION MANAGEMENT"))
 
     address public tokenStore;
-
-    // Document Events
-    event DocumentRemoved(bytes32 indexed _name, string _uri, bytes32 _documentHash);
-    event DocumentUpdated(bytes32 indexed _name, string _uri, bytes32 _documentHash);
 
     modifier checkGranularity(uint256 _value) {
         require(_value % granularity == 0, "Invalid granularity");
@@ -41,6 +38,11 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
 
     function checkPermission(address _partition, address _from, address _to, bytes32 _perm) external view returns(bool) {
         return _checkPermission(_partition, _from, _to, _perm);
+    }
+
+    function changePermission(address _partition, address _from, address _to, bytes32 _perm, bytes32 _value) external view returns(bool) {
+        require(_checkPermission(address(this), msg.sender, address(this), PERMISSION_MANAGEMENT), "Permission Error.");
+        return _changePermission(_partition, _from, _to, _perm, _value);
     }
 
 
@@ -458,6 +460,10 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
 
     function _checkPermission(address _partition, address _from, address _to, bytes32 _perm) internal view returns(bool) {
         return ITokenStore(tokenStore).getPermission(_partition, _from, _to, _perm);
+    }
+
+    function _changePermission(address _partition, address _from, address _to, bytes32 _perm, bool _value) internal view returns(bool) {
+        return ITokenStore(tokenStore).setPermission(_partition, _from, _to, _perm, _value);
     }
 }
 
