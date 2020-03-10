@@ -256,7 +256,6 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     /////////////////////////////
 
     function isControllable() external view returns (bool) {
-        tokenController.isControllable(msg.sender);
     }
 
     function controllerTransfer(address _from, address _to, uint256 _value, bytes calldata _data, bytes calldata _operatorData) external checkGranularity(_value) {
@@ -365,18 +364,22 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
 
     // Operator Management
     function authorizeOperator(address _operator) external {
+        IDataStore(tokenStore).setPermission(ALL_PARTITION, _operator, msg.sender, OPERATOR, true);
         emit AuthorizedOperator(_operator, msg.sender);
     }
 
     function revokeOperator(address _operator) external {
+        IDataStore(tokenStore).setPermission(ALL_PARTITION, _operator, msg.sender, OPERATOR, false);
         emit RevokedOperator(_operator, msg.sender);
     }
 
     function authorizeOperatorByPartition(bytes32 _partition, address _operator) external {
+        IDataStore(tokenStore).setPermission(_partition, _operator, msg.sender, OPERATOR, true);
         emit AuthorizedOperatorByPartition(_partition, _operator, msg.sender);
     }
 
     function revokeOperatorByPartition(bytes32 _partition, address _operator) external {
+        IDataStore(tokenStore).setPermission(_partition, _operator, msg.sender, OPERATOR, false);
         emit RevokedOperatorByPartition(_partition, _operator, msg.sender);
     }
 

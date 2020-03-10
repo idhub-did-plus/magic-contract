@@ -141,6 +141,19 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
     }
 
 
+    function setPermission(
+        address _partition,
+        address _from,
+        address _to,
+        byte32 _perm,
+        bool _value
+    ) 
+        external  
+    {
+        _isAuthorized();
+        perms[_partition][_from][_to][_perm] = _value;
+    }
+
     function setName(address _partition, string calldata _name) external {
         _isAuthorized();
         names[_partition] = _name;
