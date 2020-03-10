@@ -276,13 +276,12 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         view 
         returns (uint256) 
     {
-        tokenPartition.balanceOfByPartition(_partition, _tokenHolder);
+        ITokenStore(tokenStore).balanceOfByPartition(_partition, _tokenHolder);
     }
 
     function partitionsOf(address _tokenHolder) external view returns (bytes32[] memory) {
-        tokenPartition.partitionsOf(_tokenHolder);
+        ITokenStore(tokenStore).partitionsOf(_tokenHolder);
     }
-    // function totalSupply() external view returns (uint256);
 
     // Token Transfers
     function transferByPartition(
@@ -295,9 +294,16 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         checkGranularity(_value) 
         returns (bytes32) 
     {
-        // _data = bytes(uint160(msg.sender));
-        tokenPartition.transferByPartition(_partition, msg.sender, _to, _value, _data);
+        address partitionAddress = ITokenStore(tokenStore).getPartitionAddress(_partition);
+        uint[] memory amounts = new uint[](2);
+        amounts[0] = balances[partitionAddress][msg.sender].sub(_value);
+        amounts[1] = balances[partitionAddress][_to].add(_value);
+        address[] memory holders = new address[](2);
+        holders[0] = msg.sender;
+        holders[1] = _to;
+        ITokenStore(tokenStore).setBalancesMulti(_partition, holders, amounts);
         emit TransferByPartition(_partition, msg.sender, msg.sender, _to, _value, _data, new bytes(0));
+        return _partition;
     }
 
     function operatorTransferByPartition(
@@ -312,10 +318,6 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         checkGranularity(_value) 
         returns (bytes32)
     {
-        require(tokenPartition.isOperator(msg.sender, _from) || 
-            tokenPartition.isOperatorForPartition(_partition, msg.sender, _from), 
-            "Invalid Operator");
-        tokenPartition.operatorTransferByPartition(_partition, _from, _to, _value, _data, _operatorData);
         emit TransferByPartition(_partition, msg.sender, _from, _to, _value, _data, _operatorData);
     }
 
@@ -331,48 +333,39 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         checkGranularity(_value) 
         returns (byte, bytes32, bytes32) 
     {
-        tokenPartition.canTransferByPartition(_from, _to, _partition, _value, _data);
     }
 
     // Operator Information
     // These functions are present in the STGetter
     function isOperator(address _operator, address _tokenHolder) external view returns (bool) {
-        tokenPartition.isOperator(_operator, _tokenHolder);
     }
 
     function isOperatorForPartition(bytes32 _partition, address _operator, address _tokenHolder) external view returns (bool) {
-        tokenPartition.isOperatorForPartition(_partition, _operator, _tokenHolder);
     }
 
     // Operator Management
     function authorizeOperator(address _operator) external {
-        tokenPartition.authorizeOperator(_operator, msg.sender);
         emit AuthorizedOperator(_operator, msg.sender);
     }
 
     function revokeOperator(address _operator) external {
-        tokenPartition.revokeOperator(_operator, msg.sender);
         emit RevokedOperator(_operator, msg.sender);
     }
 
     function authorizeOperatorByPartition(bytes32 _partition, address _operator) external {
-        tokenPartition.authorizeOperatorByPartition(_partition, _operator, msg.sender);
         emit AuthorizedOperatorByPartition(_partition, _operator, msg.sender);
     }
 
     function revokeOperatorByPartition(bytes32 _partition, address _operator) external {
-        tokenPartition.authorizeOperatorByPartition(_partition, _operator, msg.sender);
         emit RevokedOperatorByPartition(_partition, _operator, msg.sender);
     }
 
     // Issuance / Redemption
     function issueByPartition(bytes32 _partition, address _tokenHolder, uint256 _value, bytes calldata _data) external checkGranularity(_value) {
-        tokenPartition.issueByPartition(_partition, _tokenHolder, _value, _data);
         emit IssuedByPartition(_partition, _tokenHolder, _value, _data);
     }
 
     function redeemByPartition(bytes32 _partition, uint256 _value, bytes calldata _data) external checkGranularity(_value) {
-        tokenPartition.redeemByPartition(_partition, msg.sender, _value, _data);
         emit RedeemedByPartition(_partition, msg.sender, msg.sender, _value, _data, _data);
     }
 
@@ -386,10 +379,6 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         external 
         checkGranularity(_value) 
     {
-        require(tokenPartition.isOperator(msg.sender, _tokenHolder) || 
-            tokenPartition.isOperatorForPartition(_partition, msg.sender, _tokenHolder), 
-            "Invalid Operator");
-        tokenPartition.operatorRedeemByPartition(_partition, _tokenHolder, _value, _data, _operatorData);
     }
 
 

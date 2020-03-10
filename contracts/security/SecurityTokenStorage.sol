@@ -34,25 +34,13 @@ contract SecurityTokenStorage {
     /////////////////////////////
     /// Partition datastructure
     /////////////////////////////
-    
-    // mapping to store the partitions details in the Partition
-    mapping(bytes32 => Partition) public partitions;
-    // mapping to store the partitions details in the Partition
-    mapping(address => Partition) public partitionsByAddress;
+
+    mapping(bytes32 => bytes32) public docNamesOfPartition;
+    mapping(bytes32 => address) public partitionToAddress;
     // mapping to store the partition name indexes
     mapping(bytes32 => uint256) public partitionIndexs;
 
-    mapping(address => address[]) public operators;
-    mapping(address => mapping(address => uint)) public operatorIndexs;
-
     bytes32[] public partitionNames;
-
-    struct Partition {
-        bytes32 docName; // Name of the related document
-        mapping(address => address[]) operators;
-        mapping(address => uint) balances;
-        mapping(address => mapping(address => uint)) operatorIndexs;
-    }
 
 
     ///////////////////////////////

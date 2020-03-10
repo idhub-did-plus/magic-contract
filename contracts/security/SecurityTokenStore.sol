@@ -214,6 +214,58 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
         // delete modulesByType[_module];
     }
 
+
+    //////////////////////////
+    /// Partition Fuctions
+    //////////////////////////
+
+    function setPartition(bytes32 _partition, bytes32 _docName) external {
+        _isAuthorized();
+        _setPartition(_partition, _docName);
+    }
+
+    function getPartitionAddress(bytes32 _partition) external view returns (address) {
+        return partitionToAddress[_partition];
+    }
+
+    // Token Information
+    function balanceOfByPartition(bytes32 _partition, address _tokenHolder) external view returns (uint256) {
+        return _balanceOfByPartition(_partition, _tokenHolder);
+    }
+
+    function partitionsOf(address _tokenHolder) external view returns (bytes32[] memory) {
+        uint count;
+        // bytes32[] memory _partitionNames = new bytes32[](partitionNames.length);
+        for (uint i=0; i<partitionNames.length; i++) {
+            if (_balanceOfByPartition(partitionNames[i], _tokenHolder) != 0) {
+                count += 1;
+                // _partitionNames.push(partitionNames[i]);
+            }
+        }
+        bytes32[] memory _partitionNames = new bytes32[](count);
+        count = 0;
+        for (uint i=0; i<partitionNames.length; i++) {
+            if (_balanceOfByPartition(partitionNames[i], _tokenHolder) != 0) {
+                // count += 1;
+                _partitionNames[count] = partitionNames[i];
+                count += 1;
+            }
+        }
+        return _partitionNames;
+    }
+
+    function _balanceOfByPartition(bytes32 _partition, address _tokenHolder) internal view returns (uint256) {
+        return balances[partitionToAddress[_partition]][_tokenHolder];
+    }
+    
+    function _setPartition(bytes32 _partition, bytes32 _docName) internal {
+        // bytes32 docName = bytes32(_data);
+        docNamesOfPartition[_partition] = _docName;
+        partitionNames.push(_partition);
+        partitionIndexs[_partition] = partitionNames.length;
+    }
+
+
     //////////////////////////
     /// Transfer Fuctions
     //////////////////////////
