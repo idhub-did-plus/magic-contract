@@ -3,6 +3,8 @@ pragma solidity 0.5.8;
 import "./SecurityTokenStorage.sol";
 import "./datastore/DataStore.sol";
 import "./interfaces/ITransferManager.sol";
+import "./partition/Partition.sol";
+import "./partition/PartitionLogic.sol";
 
 contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
     using SafeMath for uint256;
@@ -266,9 +268,9 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
     /// Partition Fuctions
     //////////////////////////
 
-    function setPartition(bytes32 _partition, bytes32 _docName) external {
+    function setPartition(address _partitionAddress, bytes32 _partition, bytes32 _docName) external {
         _isAuthorized();
-        _setPartition(_partition, _docName);
+        _setPartition(_partitionAddress, _partition, _docName);
     }
 
     function getPartitionAddress(bytes32 _partition) external view returns (address) {
@@ -305,8 +307,9 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
         return balances[partitionToAddress[_partition]][_tokenHolder];
     }
     
-    function _setPartition(bytes32 _partition, bytes32 _docName) internal {
+    function _setPartition(addresss _partitionAddress, bytes32 _partition, bytes32 _docName) internal {
         // bytes32 docName = bytes32(_data);
+        partitionToAddress[_partition] = _partitionAddress;
         docNamesOfPartition[_partition] = _docName;
         partitionNames.push(_partition);
         partitionIndexs[_partition] = partitionNames.length;

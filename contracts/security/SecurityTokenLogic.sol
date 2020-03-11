@@ -23,6 +23,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     address internal constant ALL_PARTITION = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
 
     bytes32 internal constant PARTITION = ; //keccak256(abi.encodePacked("PARTITION"))
+    bytes32 internal constant ISSUER = ; //keccak256(abi.encodePacked("ISSUER"))
     bytes32 internal constant OPERATOR = ; //keccak256(abi.encodePacked("OPERATOR"))
     bytes32 internal constant CONTROLLER = ; //keccak256(abi.encodePacked("CONTROLLER"))
     bytes32 internal constant DOCUMENT_MANAGEMENT = ; //keccak256(abi.encodePacked("DOCUMENT MANAGEMENT"))
@@ -31,8 +32,8 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
 
     address public tokenStore;
 
-    modifier checkGranularity(uint256 _value) {
-        require(_value % granularity == 0, "Invalid granularity");
+    modifier checkGranularity(address _partition, uint256 _value) {
+        require(_value % ITokenStore(tokenStore).getGranularity(_partition) == 0, "Invalid granularity");
         _;
     }
 
@@ -233,7 +234,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         return _isIssuable();
     }
 
-    function issue(address _tokenHolder, uint256 _value, bytes calldata _data) external checkGranularity(_value) {
+    function issue(address _tokenHolder, uint256 _value, bytes calldata _data) external checkGranularity(address(this), _value) {
         require(_isIssuable(), "Security Can Not Issue");
         ITokenStore(tokenStore).setBalances(_tokenHolder, _balanceOf(_tokenHolder).add(_value));
         ITokenStore(tokenStore).setTotalSupply(_totalSupply().add(_value));
@@ -241,13 +242,13 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     }
 
     // Token Redemption
-    function redeem(uint256 _value, bytes calldata _data) external checkGranularity(_value) {
+    function redeem(uint256 _value, bytes calldata _data) external checkGranularity(address(this), _value) {
         ITokenStore(tokenStore).setBalances(msg.sender, _balanceOf(msg.sender).sub(_value));
         ITokenStore(tokenStore).setTotalSupply(_totalSupply().sub(_value));
         _adjustInvestorCount(msg.sender, address(0), _value, 0, _balanceOf(msg.sender));
     }
 
-    function redeemFrom(address _tokenHolder, uint256 _value, bytes calldata _data) external checkGranularity(_value) {
+    function redeemFrom(address _tokenHolder, uint256 _value, bytes calldata _data) external checkGranularity(address(this), _value) {
         ITokenStore(tokenStore).setBalances(_tokenHolder, _balanceOf(_tokenHolder).sub(_value));
         ITokenStore(tokenStore).setTotalSupply(_totalSupply().sub(_value));
         _adjustInvestorCount(_tokenHolder, address(0), _value, 0, _balanceOf(_tokenHolder));
@@ -262,13 +263,13 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         return _checkPermission(address(this), msg.sender, address(this), CONTROLLER);
     }
 
-    function controllerTransfer(address _from, address _to, uint256 _value, bytes calldata _data, bytes calldata _operatorData) external checkGranularity(_value) {
+    function controllerTransfer(address _from, address _to, uint256 _value, bytes calldata _data, bytes calldata _operatorData) external checkGranularity(address(this), _value) {
         require(_checkPermission(address(this), msg.sender, address(this), CONTROLLER), "Caller is not controller.");
         _transferWithData(address(this), _from, _from, _to, _value, new bytes(0));
         emit ControllerTransfer(msg.sender, _from, _to, _value, _data, _operatorData);
     }
 
-    function controllerRedeem(address _tokenHolder, uint256 _value, bytes calldata _data, bytes calldata _operatorData) external checkGranularity(_value) {
+    function controllerRedeem(address _tokenHolder, uint256 _value, bytes calldata _data, bytes calldata _operatorData) external checkGranularity(address(this), _value) {
         require(_checkPermission(address(this), msg.sender, address(this), CONTROLLER), "Caller is not controller.");
         emit ControllerRedemption(msg.sender, _tokenHolder, _value, _data, _operatorData);
     }
@@ -277,6 +278,40 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     /////////////////////////////
     // ERC1410Interfaces 
     /////////////////////////////
+
+    function setNewPartition(
+        bytes32 _partition,
+        bytes32 _docName,
+        string memory _name,
+        string memory _symbol,
+        uint8 _decimals,
+        uint _granularity
+    ) external {
+        require(_checkPermission(address(this), msg.sender, address(this), ISSUER), "Permission Error");
+        logic = new PartitionLogic();
+        partition = new Partition(address(this), tokenStore, address(logic));
+        ITokenStore(tokenStore).setName(address(partition), _name);
+        ITokenStore(tokenStore).setSymbol(address(partition), _symbol);
+        ITokenStore(tokenStore).setDecimals(address(partition), _decimals);
+        ITokenStore(tokenStore).setGranularity(address(partition), _granularity);
+        ITokenStore(tokenStore).setPartition(address(partition), _partition, _docName);
+    }
+
+    function setPartition(
+        address _partition,
+        bytes32 _docName,
+        string memory _name,
+        string memory _symbol,
+        uint8 _decimals,
+        uint _granularity
+    ) external {
+        require(_checkPermission(address(this), msg.sender, address(this), ISSUER), "Permission Error");
+        ITokenStore(tokenStore).setName(_partition, _name);
+        ITokenStore(tokenStore).setSymbol(_partition, _symbol);
+        ITokenStore(tokenStore).setDecimals(_partition, _decimals);
+        ITokenStore(tokenStore).setGranularity(_partition, _granularity);
+        ITokenStore(tokenStore).setPartition(_partition, _partition, _docName);
+    }
 
     // Token Information
     // function balanceOf(address _tokenHolder) external view returns (uint256);
@@ -303,7 +338,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         bytes calldata _data
     ) 
         external 
-        checkGranularity(_value) 
+        checkGranularity(_partition, _value) 
         returns (bytes32) 
     {
         address partitionAddress = ITokenStore(tokenStore).getPartitionAddress(_partition);
@@ -328,7 +363,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         bytes calldata _operatorData
     ) 
         external 
-        checkGranularity(_value) 
+        checkGranularity(_partition, _value) 
         returns (bytes32)
     {
         require(_checkPermission(_partition, msg.sender, _from, OPERATOR) || 
@@ -349,7 +384,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     ) 
         external 
         view 
-        checkGranularity(_value) 
+        checkGranularity(_partition, _value) 
         returns (byte, bytes32, bytes32) 
     {
         address partitionAddress = ITokenStore(tokenStore).getPartitionAddress(_partition);
@@ -389,11 +424,11 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     }
 
     // Issuance / Redemption
-    function issueByPartition(bytes32 _partition, address _tokenHolder, uint256 _value, bytes calldata _data) external checkGranularity(_value) {
+    function issueByPartition(bytes32 _partition, address _tokenHolder, uint256 _value, bytes calldata _data) external checkGranularity(_partition, _value) {
         emit IssuedByPartition(_partition, _tokenHolder, _value, _data);
     }
 
-    function redeemByPartition(bytes32 _partition, uint256 _value, bytes calldata _data) external checkGranularity(_value) {
+    function redeemByPartition(bytes32 _partition, uint256 _value, bytes calldata _data) external checkGranularity(_partition, _value) {
         emit RedeemedByPartition(_partition, msg.sender, msg.sender, _value, _data, _data);
     }
 
@@ -405,7 +440,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         bytes calldata _operatorData
     ) 
         external 
-        checkGranularity(_value) 
+        checkGranularity(_partition, _value) 
     {
     }
 
@@ -427,7 +462,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         bytes memory _data
     ) 
         internal 
-        checkGranularity(_value)
+        checkGranularity(_partition, _value)
     {
         ITokenStore(tokenStore).canTransfer(_partition, _caller, _from, _to, _value, _data);
     }
@@ -441,7 +476,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         bytes memory _data
     ) 
         internal 
-        checkGranularity(_value)
+        checkGranularity(_partition, _value)
     {
         ITokenStore(tokenStore).transferWithData(_partition, _caller, _from, _to, _value, _data);
     }
@@ -453,7 +488,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         uint256 _value
     ) 
         internal 
-        checkGranularity(_value)
+        checkGranularity(_partition, _value)
     {
         ITokenStore(tokenStore).setAllowances(_partition, _from, _to, _value);
     }

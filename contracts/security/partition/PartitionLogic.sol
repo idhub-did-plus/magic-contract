@@ -10,11 +10,6 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     address public securityToken;
     address public tokenStore;
 
-    modifier checkGranularity(uint256 _value) {
-        require(_value % granularity == 0, "Invalid granularity");
-        _;
-    }
-
     /////////////////////////////
     // ERC20Interfaces
     /////////////////////////////
