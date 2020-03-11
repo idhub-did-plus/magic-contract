@@ -96,10 +96,7 @@ contract SecurityTokenStorage {
     mapping(address => mapping(uint8 => address[])) public modulesByType;
 
     mapping(address => uint) public holderCounts;
-
-    address public owner;
-
-    uint256 public granularity;
+    mapping(address => uint) public granularity;
     // Number of investors with non-zero balance
     // uint256 public holderCount;
 

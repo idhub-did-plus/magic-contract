@@ -11,6 +11,14 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
         require(msg.sender == _owner, "Unauthorized");
     }
 
+    constructor() public {
+        _owner = msg.sender;
+    }
+
+    function changeOwner(address _newOwner) external onlyOwner {
+        _owner = _newOwner;
+    }
+
     function getPermission(
         address _partition,
         address _from,
@@ -49,6 +57,10 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
 
     function getDecimals(address _partition) external view returns(uint8) {
         return decimals[_partition];
+    }
+
+    function getGranularity(address _partition) external view returns(uint) {
+        return granularity[_partition];
     }
 
     function getTotalSupply(address _partition) external view returns(uint) {
@@ -167,6 +179,12 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
     function setDecimals(address _partition, uint8 _decimals) external {
         _isAuthorized();
         decimals[_partition] = _decimals;
+    }
+
+    // granularity
+    function setGranularity(address _partition, uint _granularity) external {
+        _isAuthorized();
+        granularity[_partition] = _granularity;
     }
 
     function setTotalSupply(address _partition, uint _totalSupply) external {
