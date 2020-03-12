@@ -77,7 +77,23 @@ contract SecurityTokenStore is SecurityTokenStorage, DataStore  {
         return allowances[_partition][_from][_to];
     }
 
+    function getIssuable() external view returns (bool) {
+        return issuable;
+    }
+
     // data setter
+
+    function issue(address _partition, address _tokenHolder, uint256 _value) external {
+        _isAuthorized();
+        balances[_partition][_tokenHolder] = balances[_partition][_tokenHolder].add(_value);
+        totalSupplys[_partition] = totalSupplys[_partition].add(_value);
+        _adjustInvestorCount(_partition, address(0), _tokenHolder, _value, _balanceOf(_tokenHolder), 0);
+    }
+
+    function setIssuable(bool _issuable) external {
+        _isAuthorized();
+        issuable = _issuable;
+    }
 
     //////////////////////////
     /// Document Fuctions

@@ -234,24 +234,28 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
         return _isIssuable();
     }
 
+    function setIssuable(bool _issuable) external {
+        require(_checkPermission(address(this), msg.sender, address(this), ISSUER), "Permission Error");
+        ITokenStore(tokenStore).setIssuable(_issuable);
+    }
+
     function issue(address _tokenHolder, uint256 _value, bytes calldata _data) external checkGranularity(address(this), _value) {
+        require(_checkPermission(address(this), msg.sender, address(this), ISSUER), "Permission Error");
         require(_isIssuable(), "Security Can Not Issue");
-        ITokenStore(tokenStore).setBalances(_tokenHolder, _balanceOf(_tokenHolder).add(_value));
-        ITokenStore(tokenStore).setTotalSupply(_totalSupply().add(_value));
-        _adjustInvestorCount(address(0), _tokenHolder, _value, _balanceOf(_tokenHolder), 0);
+        ITokenStore(tokenStore).issue(address(this), _tokenHolder, _value);
     }
 
     // Token Redemption
     function redeem(uint256 _value, bytes calldata _data) external checkGranularity(address(this), _value) {
-        ITokenStore(tokenStore).setBalances(msg.sender, _balanceOf(msg.sender).sub(_value));
-        ITokenStore(tokenStore).setTotalSupply(_totalSupply().sub(_value));
-        _adjustInvestorCount(msg.sender, address(0), _value, 0, _balanceOf(msg.sender));
+        // ITokenStore(tokenStore).setBalances(msg.sender, _balanceOf(msg.sender).sub(_value));
+        // ITokenStore(tokenStore).setTotalSupply(_totalSupply().sub(_value));
+        // _adjustInvestorCount(msg.sender, address(0), _value, 0, _balanceOf(msg.sender));
     }
 
     function redeemFrom(address _tokenHolder, uint256 _value, bytes calldata _data) external checkGranularity(address(this), _value) {
-        ITokenStore(tokenStore).setBalances(_tokenHolder, _balanceOf(_tokenHolder).sub(_value));
-        ITokenStore(tokenStore).setTotalSupply(_totalSupply().sub(_value));
-        _adjustInvestorCount(_tokenHolder, address(0), _value, 0, _balanceOf(_tokenHolder));
+        // ITokenStore(tokenStore).setBalances(_tokenHolder, _balanceOf(_tokenHolder).sub(_value));
+        // ITokenStore(tokenStore).setTotalSupply(_totalSupply().sub(_value));
+        // _adjustInvestorCount(_tokenHolder, address(0), _value, 0, _balanceOf(_tokenHolder));
     }
 
 
@@ -425,6 +429,8 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
 
     // Issuance / Redemption
     function issueByPartition(bytes32 _partition, address _tokenHolder, uint256 _value, bytes calldata _data) external checkGranularity(_partition, _value) {
+        require(_checkPermission(address(this), msg.sender, address(this), ISSUER), "Permission Error");
+        ITokenStore(tokenStore).issue(_partition, _tokenHolder, _value);
         emit IssuedByPartition(_partition, _tokenHolder, _value, _data);
     }
 
@@ -450,7 +456,7 @@ contract SecurityTokenLogic is IERC20, IERC1410, IERC1594, IERC1643, IERC1644 {
     /////////////////////////////
     
     function _isIssuable() internal view returns (bool) {
-        return issuable;
+        return ITokenStore(tokenStore).getIssuable();
     }
 
     function _canTransfer(
